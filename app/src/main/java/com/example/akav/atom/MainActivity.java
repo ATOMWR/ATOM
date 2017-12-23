@@ -1,10 +1,13 @@
 package com.example.akav.atom;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
+    private Button buttonid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -12,5 +15,17 @@ public class MainActivity extends AppCompatActivity {
         //new comment
 
         //Let's do it
+        buttonid=(Button)findViewById(R.id.button);
+        buttonid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),Main2Activity.class));
+            }
+
+            });
+
     }
+
+
+
 }
