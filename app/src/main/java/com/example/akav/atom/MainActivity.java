@@ -30,10 +30,14 @@ public class MainActivity extends AppCompatActivity {
 
         mLogin = (Button) findViewById(R.id.login_button);
 
-        if (isValidUser()) {
-            mLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+
+        mLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Set up Progress/Loading Bar
+
+                if (isValidUser()) {
                     Intent goHome = new Intent(MainActivity.this, HomeActivity.class);
 
                     //Only for testing purpose.
@@ -43,9 +47,12 @@ public class MainActivity extends AppCompatActivity {
                     goHome.setData(userNameUri);
 
                     startActivity(goHome);
+                } else {
+                    // Display Error
+                    // Stop Progress/Loading Bar
                 }
-            });
-        }
+            }
+        });
     }
 
     // To Validate Enterd Credentials.
