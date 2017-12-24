@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mUserName;
     private EditText mPassword;
     private Button mLogin;
+    private Button showpw;
     private String userId;
     private String password;
 
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         authenticateUser();
+
     }
 
     // To Authenticate User.
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
                     startActivity(goHome);
                 } else {
+                    error();
                     // Display Error
                     // Stop Progress/Loading Bar
                 }
@@ -56,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // To Validate Enterd Credentials.
+    private void error(){
+        Toast.makeText(this, "invalid credentials", Toast.LENGTH_SHORT).show();
+    }
     private boolean isValidUser() {
 
         mUserName = (EditText) findViewById(R.id.user_id);
@@ -65,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
         password = mPassword.getText().toString();
 
         // Validation Code
-
-        return true;
+        if(userId.equals("username")&&password.equals("password"))
+            return true;
+        else
+            return false;
     }
 }
