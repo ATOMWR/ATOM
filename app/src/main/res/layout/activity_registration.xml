@@ -1,15 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_registration"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="16dp"
     android:orientation="vertical"
     tools:context="com.example.akav.atom.RegistrationActivity">
 
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/full_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/full_name"
+                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
+                android:hint="Name"
+                android:layout_height="wrap_content"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/email_address"
+                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E Mail Address"
+                android:inputType="textEmailAddress"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phone_no_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/phone_number"
+                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile Number"
+                android:inputType="phone"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:passwordToggleEnabled="true"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/password"
+                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pf_number_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/pf_number"
+                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Unique PF Number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorPrimary"
+            android:text="Register"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/goto_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="Go to login page"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+</RelativeLayout>

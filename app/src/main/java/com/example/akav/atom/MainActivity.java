@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mUserName;
     private EditText mPassword;
     private Button mLogin;
+    private Button mRegister;
     private Button showpw;
     private String userId;
     private String password;
@@ -22,6 +23,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRegister = (Button) findViewById(R.id.goto_register_button);
+
+        mRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gotoRegisterIntent = new Intent(MainActivity.this, RegistrationActivity.class);
+                startActivity(gotoRegisterIntent);
+            }
+        });
 
         authenticateUser();
 
@@ -40,15 +51,15 @@ public class MainActivity extends AppCompatActivity {
                 // Set up Progress/Loading Bar
 
                 if (isValidUser()) {
-                    Intent goHome = new Intent(MainActivity.this, HomeActivity.class);
+                    Intent gotoHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
 
                     //Only for testing purpose.
                     mUserName = (EditText) findViewById(R.id.user_id);
                     userId = mUserName.getText().toString();
                     Uri userNameUri = Uri.parse(userId);
-                    goHome.setData(userNameUri);
+                    gotoHomeIntent.setData(userNameUri);
 
-                    startActivity(goHome);
+                    startActivity(gotoHomeIntent);
                 } else {
                     error();
                     // Display Error
@@ -60,8 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
     // To Validate Enterd Credentials.
     private void error(){
-        Toast.makeText(this, "invalid credentials", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
     }
+
     private boolean isValidUser() {
 
         mUserName = (EditText) findViewById(R.id.user_id);

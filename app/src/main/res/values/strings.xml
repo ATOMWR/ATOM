@@ -9,4 +9,21 @@
 
     <!--For Login Button-->
     <string name="login">Login</string>
+
+    <!--For Registration activity title-->
+    <string name="register_activity_title">Register</string>
+
+    <!--For Home activity title-->
+    <string name="home_title">Home</string>
+
+    <!--List of category for Spinner-->
+
+    <string-array name="category_array">
+        <item>Category 1</item>
+        <item>Category 2</item>
+        <item>Category 3</item>
+        <item>Category 4</item>
+        <item>Category 5</item>
+    </string-array>
+
 </resources>
