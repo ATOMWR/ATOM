@@ -19,11 +19,11 @@
     <!--List of category for Spinner-->
 
     <string-array name="category_array">
-        <item>Category 1</item>
-        <item>Category 2</item>
-        <item>Category 3</item>
-        <item>Category 4</item>
-        <item>Category 5</item>
+        <item>Running </item>
+        <item>Operating</item>
+        <item>Shift</item>
+        <item>Others</item>
+        
     </string-array>
 
 </resources>

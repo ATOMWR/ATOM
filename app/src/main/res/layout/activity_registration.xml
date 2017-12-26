@@ -11,6 +11,7 @@
     tools:context="com.example.akav.atom.RegistrationActivity">
 
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,13 +106,13 @@
 
 
         <Button
-            android:id="@+id/register_button"
+            android:id="@+id/qrcodebutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@color/colorPrimary"
-            android:text="Register"
+            android:text="Generate QRCode"
             android:textColor="#FFFFFF" />
 
         <Button
