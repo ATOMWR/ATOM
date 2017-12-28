@@ -55,7 +55,7 @@ public class RegistrationActivity extends AppCompatActivity {
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         gotoLogin = (Button) findViewById(R.id.goto_login_button);
         registerButton = (Button) findViewById(R.id.qrcodebutton);
-        uniquepfno=(EditText)findViewById(R.id.pf_number);
+        uniquepfno = (EditText) findViewById(R.id.pf_number);
 
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -68,11 +68,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Uri nameUri = Uri.parse(fullName);
                 gotoHomeIntent.setData(nameUri);
                 startActivity(gotoHomeIntent);*/
-            alert();
-
-
-
-
+                alert();
             }
         });
 
@@ -104,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         categorySpinner.setAdapter(genderSpinnerAdapter);
 
-        // Set the integer mSelected to the constant values
+        // Set the category String based on spinner selection
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -118,7 +114,8 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
-    public void alert(){
+
+    public void alert() {
 
         AlertDialog.Builder alertadd = new AlertDialog.Builder(
                 RegistrationActivity.this);
@@ -129,23 +126,22 @@ public class RegistrationActivity extends AppCompatActivity {
         final View view = factory.inflate(R.layout.qrcode, null);
 
         // ImageView image= (ImageView) view.findViewById(R.id.imageView);
-       // image.setImageResource(R.drawable.logo);
-        VCard abhay=new VCard(fullNameEditText.getText().toString())
+        // image.setImageResource(R.drawable.logo);
+        VCard abhay = new VCard(fullNameEditText.getText().toString())
                 .setEmail(emailEditText.getText().toString())
-                .setTitle("PFNumber:"+uniquepfno.getText().toString())
+                .setTitle("PFNumber:" + uniquepfno.getText().toString())
                 .setPhoneNumber(phoneNumberEditText.getText().toString())
                 .setAddress(category);
 
-        Bitmap myBitmap= QRCode.from(abhay).bitmap();
-        final ImageView image=(ImageView) view. findViewById(imageView);
+        Bitmap myBitmap = QRCode.from(abhay).bitmap();
+        final ImageView image = (ImageView) view.findViewById(imageView);
         image.setImageBitmap(myBitmap);
-
 
 
         alertadd.setView(view);
         alertadd.setNeutralButton("SAVE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dlg, int sumthin) {
-                BitmapDrawable draw = (BitmapDrawable)image.getDrawable();
+                BitmapDrawable draw = (BitmapDrawable) image.getDrawable();
                 Bitmap bitmap = draw.getBitmap();
 
                 FileOutputStream outStream = null;
@@ -176,14 +172,16 @@ public class RegistrationActivity extends AppCompatActivity {
         alertadd.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
-               dialog.dismiss();
-            } });
+                dialog.dismiss();
+            }
+        });
 
 
         alertadd.show();
 
     }
-    private void savemessage(){
+
+    private void savemessage() {
         Toast.makeText(this, "QRcode saved for verification in future", Toast.LENGTH_SHORT).show();
     }
 }
