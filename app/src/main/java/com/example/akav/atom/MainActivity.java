@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         password = mPassword.getText().toString();
 
         // Validation Code
-        if(userId.equals("username")&&password.equals("password"))
+        if(userId.equals("u")&&password.equals("p"))
             return true;
         else
             return false;

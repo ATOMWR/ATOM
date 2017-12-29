@@ -14,8 +14,7 @@
     <item
         android:id="@+id/edit_profile"
         android:title="Edit Profile"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/password_change"

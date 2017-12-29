@@ -7,4 +7,66 @@
     android:layout_height="match_parent"
     tools:context="com.example.akav.atom.OvertimeActivity">
 
+    <RelativeLayout
+        android:id="@+id/date_picker_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <DatePicker
+            android:id="@+id/date_Picker_OT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date_Picker_OT"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/go_back_from_ot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/colorAccent"
+                android:text="Go back"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/select_date_from_ot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/colorAccent"
+                android:text="Select This Date"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <!--Add a complete OT form later in this Relative Layout-->
+
+    <RelativeLayout
+        android:id="@+id/ot_form_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+
 </RelativeLayout>
