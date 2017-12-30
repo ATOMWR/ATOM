@@ -5,68 +5,263 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context="com.example.akav.atom.OvertimeActivity">
 
     <RelativeLayout
-        android:id="@+id/date_picker_layout"
+        android:id="@+id/cycle_list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <DatePicker
-            android:id="@+id/date_Picker_OT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"/>
+        <RelativeLayout
+            android:id="@+id/prev_cycle_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Previous Cycles"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:id="@+id/ot_previous_cycle_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorAccent"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/ot_cycle_1_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="01/01/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="TO"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/ot_cycle_1_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="14/01/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="2"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ot_previous_cycle_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorAccent"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/ot_cycle_2_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="15/01/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="2"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textAlignment="center"
+                        android:text="TO"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/ot_cycle_2_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="28/01/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="2"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ot_previous_cycle_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorAccent"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/ot_cycle_3_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="29/01/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="2"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textAlignment="center"
+                        android:text="TO"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/ot_cycle_3_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="11/02/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="2"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/current_cycle_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/date_Picker_OT"
-            android:orientation="horizontal">
+            android:layout_marginBottom="32dp"
+            android:layout_below="@+id/prev_cycle_list_layout">
 
-            <Button
-                android:id="@+id/go_back_from_ot"
+            <LinearLayout
+                android:id="@+id/ot_current_cycle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:background="@color/colorAccent"
-                android:text="Go back"
-                android:textColor="#FFFFFF" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/select_date_from_ot"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="16dp"
-                android:background="@color/colorAccent"
-                android:text="Select This Date"
-                android:textColor="#FFFFFF" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="16dp"
+                    android:text="Current Active Cycle"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#FFFFFF" />
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/colorAccent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ot_current_cycle_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="12/02/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:padding="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TO"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:padding="16dp" />
+
+                    <TextView
+                        android:id="@+id/ot_current_cycle_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="26/02/2017"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:padding="16dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
-
-    <!--Add a complete OT form later in this Relative Layout-->
-
     <RelativeLayout
-        android:id="@+id/ot_form_layout"
+        android:id="@+id/previous_cycle_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/date_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:layout_centerInParent="true" />
+            android:text="Replace with previous cycle Grid View"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:background="@color/colorPrimary"
+            android:layout_centerInParent="true"/>
+
+        <!--Grid View for previous Cycle Here-->
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/current_cycle_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Replace with current cycle Grid View"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:background="@color/colorPrimary"
+            android:layout_centerInParent="true"/>
+
+        <!--Grid View for current Cycle Here-->
+
+    </RelativeLayout>
 
 </RelativeLayout>

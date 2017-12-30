@@ -2,3 +2,4 @@
 *.gradle
 *.pro
 *.iml
+build.gradle
