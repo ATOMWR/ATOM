@@ -15,69 +15,103 @@ import java.util.Date;
 
 public class OvertimeActivity extends AppCompatActivity {
 
-    private RelativeLayout cycleListLayout;
-    private RelativeLayout previousCycleListLayout;
     private LinearLayout previousCycle1;
     private LinearLayout previousCycle2;
     private LinearLayout previousCycle3;
-    private RelativeLayout currentCycleLayout;
     private LinearLayout currentCycle;
 
-    private RelativeLayout previousCycleGridLayout;
+    private TextView prevCycle1Start;
+    private TextView prevCycle1End;
 
-    private RelativeLayout currentCycleGridLayout;
+    private TextView prevCycle2Start;
+    private TextView prevCycle2End;
+
+    private TextView prevCycle3Start;
+    private TextView prevCycle3End;
+
+    private TextView currentCycleStart;
+    private TextView currentCycleEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime);
 
-        cycleListLayout = (RelativeLayout) findViewById(R.id.cycle_list_layout);
         previousCycle1 = (LinearLayout) findViewById(R.id.ot_previous_cycle_1);
         previousCycle2 = (LinearLayout) findViewById(R.id.ot_previous_cycle_2);
         previousCycle3 = (LinearLayout) findViewById(R.id.ot_previous_cycle_3);
 
+        prevCycle1Start = (TextView) findViewById(R.id.ot_cycle_1_start);
+        prevCycle1End = (TextView) findViewById(R.id.ot_cycle_1_end);
+
+        prevCycle2Start = (TextView) findViewById(R.id.ot_cycle_2_start);
+        prevCycle2End = (TextView) findViewById(R.id.ot_cycle_2_end);
+
+        prevCycle3Start = (TextView) findViewById(R.id.ot_cycle_3_start);
+        prevCycle3End = (TextView) findViewById(R.id.ot_cycle_3_end);
+
+        currentCycleStart = (TextView) findViewById(R.id.ot_current_cycle_start);
+        currentCycleEnd = (TextView) findViewById(R.id.ot_current_cycle_end);
+
         currentCycle = (LinearLayout) findViewById(R.id.ot_current_cycle);
-
-        previousCycleGridLayout = (RelativeLayout) findViewById(R.id.previous_cycle_grid_view);
-        currentCycleGridLayout = (RelativeLayout) findViewById(R.id.current_cycle_grid_view);
-
-        previousCycleGridLayout.setVisibility(View.GONE);
-        currentCycleGridLayout.setVisibility(View.GONE);
 
         previousCycle1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cycleListLayout.setVisibility(View.GONE);
-                currentCycleGridLayout.setVisibility(View.GONE);
-                previousCycleGridLayout.setVisibility(View.VISIBLE);
+                String prevCycle1StartDate = prevCycle1Start.getText().toString();
+                String prevCycle1EndDate = prevCycle1End.getText().toString();
+
+                Intent prevCycle1ToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
+
+                prevCycle1ToGrid.putExtra("startDate", prevCycle1StartDate);
+                prevCycle1ToGrid.putExtra("endDate", prevCycle1EndDate);
+
+                startActivity(prevCycle1ToGrid);
             }
         });
 
         previousCycle2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cycleListLayout.setVisibility(View.GONE);
-                currentCycleGridLayout.setVisibility(View.GONE);
-                previousCycleGridLayout.setVisibility(View.VISIBLE);
+                String prevCycle2StartDate = prevCycle2Start.getText().toString();
+                String prevCycle2EndDate = prevCycle2End.getText().toString();
+
+                Intent prevCycle2ToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
+
+                prevCycle2ToGrid.putExtra("startDate", prevCycle2StartDate);
+                prevCycle2ToGrid.putExtra("endDate", prevCycle2EndDate);
+
+                startActivity(prevCycle2ToGrid);
             }
         });
 
         previousCycle3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cycleListLayout.setVisibility(View.GONE);
-                currentCycleGridLayout.setVisibility(View.GONE);
-                previousCycleGridLayout.setVisibility(View.VISIBLE);
+                String prevCycle3StartDate = prevCycle3Start.getText().toString();
+                String prevCycle3EndDate = prevCycle3End.getText().toString();
+
+                Intent prevCycle3ToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
+
+                prevCycle3ToGrid.putExtra("startDate", prevCycle3StartDate);
+                prevCycle3ToGrid.putExtra("endDate", prevCycle3EndDate);
+
+                startActivity(prevCycle3ToGrid);
             }
         });
 
         currentCycle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cycleListLayout.setVisibility(View.GONE);
-                previousCycleGridLayout.setVisibility(View.GONE);
-                currentCycleGridLayout.setVisibility(View.VISIBLE);
+                String currentCycleStartDate = currentCycleStart.getText().toString();
+                String currentCycleEndDate = currentCycleEnd.getText().toString();
+
+                Intent currentCycleToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
+
+                currentCycleToGrid.putExtra("startDate", currentCycleStartDate);
+                currentCycleToGrid.putExtra("endDate", currentCycleEndDate);
+
+                startActivity(currentCycleToGrid);
             }
         });
 

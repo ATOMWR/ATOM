@@ -22,7 +22,7 @@
             android:padding="16dp"
             android:background="@color/colorPrimary"
             android:textColor="#FFFFFF"
-            android:text="Fill Overtime Voucher"/>
+            android:text="Overtime Allowance"/>
 
         <Button
             android:id="@+id/fill_ta"
@@ -31,7 +31,7 @@
             android:padding="16dp"
             android:layout_marginTop="16dp"
             android:background="@color/colorPrimary"
-            android:text="Fill Travel Allowance Voucher"
+            android:text="Travel Allowance"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
