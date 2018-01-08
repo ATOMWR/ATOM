@@ -32,7 +32,8 @@
             android:label="Travel Allowance" />
         <activity
             android:name=".OvertimeGridActivity"
-            android:label="Select Date"/>
+            android:label="Select Date" />
+        <activity android:name=".OvertimeForm"></activity>
     </application>
 
 </manifest>

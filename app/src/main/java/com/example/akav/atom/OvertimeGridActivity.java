@@ -44,6 +44,8 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
                  st=parent.getItemAtPosition(position).toString();
                 msg();
+                Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
+                startActivity(gotoOTFormIntent);
             }
         });
 

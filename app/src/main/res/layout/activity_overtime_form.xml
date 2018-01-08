@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_overtime_form"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.akav.atom.OvertimeForm">
+
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/ShiftSpinner"
+        android:layout_below="@+id/selectshift"
+        android:layout_alignParentStart="true"
+        android:layout_width="130dp" />
+
+    <TextView
+        android:text="Shift:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:id="@+id/selectshift"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:text="Rostered Duty:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/roasterlabel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:layout_below="@+id/ShiftSpinner"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:text="- -:- - to - -:- -"
+        android:layout_width="130dp"
+        android:layout_height="30dp"
+        android:id="@+id/rostertext"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:layout_below="@+id/roasterlabel"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
+
+    <Button
+        android:text="Start time"
+        android:layout_width="wrap_content"
+        android:id="@+id/startbutton"
+        android:layout_height="35dp"
+        android:layout_above="@+id/starttime"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="--:--"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/starttime"
+        android:layout_alignBaseline="@+id/endtime"
+        android:layout_alignBottom="@+id/endtime"
+        android:layout_alignStart="@+id/simpleTimePicker" />
+
+    <TextView
+        android:text="--:--"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endtime"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/actuallabel"
+        android:layout_marginStart="12dp" />
+
+    <Button
+        android:text="End Time"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:id="@+id/endbutton"
+        android:layout_above="@+id/endtime"
+        android:layout_toEndOf="@+id/actuallabel" />
+
+    <TextView
+        android:text="Actual Duty Hours:"
+        android:layout_height="wrap_content"
+        android:id="@+id/actuallabel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:layout_width="190dp"
+        android:layout_above="@+id/startbutton"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Description:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/desclabel"
+        android:layout_marginTop="52dp"
+        android:layout_below="@+id/starttime"
+        android:layout_alignParentStart="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:hint="Reason......"
+        android:layout_below="@+id/desclabel"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submitbutt"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/rostertext"
+        android:layout_marginBottom="36dp" />
+</RelativeLayout>
