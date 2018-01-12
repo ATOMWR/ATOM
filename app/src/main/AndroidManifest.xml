@@ -33,7 +33,15 @@
         <activity
             android:name=".OvertimeGridActivity"
             android:label="Select Date" />
-        <activity android:name=".OvertimeForm"></activity>
+
+        <activity
+            android:name=".OvertimeForm"
+            android:label="Fill OverTime Form"/>
+
+        <activity
+            android:name=".AdminHomeActivity"
+            android:label="Admin Home"/>
+
     </application>
 
 </manifest>

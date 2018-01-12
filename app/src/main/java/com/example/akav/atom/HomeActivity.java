@@ -24,9 +24,9 @@ public class HomeActivity extends AppCompatActivity {
         setTitle("Home");
 
         Intent loginInfo = getIntent();
-        Uri userIdUri = loginInfo.getData();
+        String userId = loginInfo.getStringExtra("userName");
 
-        Toast.makeText(this, "Welcome " + userIdUri + "!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Welcome " + userId + "!", Toast.LENGTH_SHORT).show();
 
         fillOT = (Button) findViewById(R.id.fill_ot);
         fillTA = (Button) findViewById(R.id.fill_ta);

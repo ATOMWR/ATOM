@@ -15,9 +15,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mLogin;
     private Button mRegister;
-    private Button showpw;
     private String userId;
     private String password;
+
+    private Boolean isAdmin;
+    private Boolean isRegularUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +45,27 @@ public class MainActivity extends AppCompatActivity {
 
         mLogin = (Button) findViewById(R.id.login_button);
 
-
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                getUserDetails();
+
                 // Set up Progress/Loading Bar
 
                 if (isValidUser()) {
-                    Intent gotoHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                    Intent gotoUserHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                    Intent gotoAdminHomeIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
 
-                    //Only for testing purpose.
-                    mUserName = (EditText) findViewById(R.id.user_id);
-                    userId = mUserName.getText().toString();
-                    Uri userNameUri = Uri.parse(userId);
-                    gotoHomeIntent.setData(userNameUri);
+                    if(isAdmin){
+                        gotoAdminHomeIntent.putExtra("userId", userId);
+                        startActivity(gotoAdminHomeIntent);
+                    }
+                    else{
+                        gotoUserHomeIntent.putExtra("userName", userId);
+                        startActivity(gotoUserHomeIntent);
+                    }
 
-                    startActivity(gotoHomeIntent);
                 } else {
                     error();
                     // Display Error
@@ -76,16 +82,43 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isValidUser() {
 
+        if(isAdmin(userId, password)){
+            isAdmin = true;
+            isRegularUser = false;
+            return true;
+        }
+        else if(isRegularUser(userId, password)){
+            isRegularUser = true;
+            isAdmin = false;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isRegularUser(String userId, String password) {
+        // Validation Code
+        if(userId.equals("u")&&password.equals("p")){
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isAdmin(String userId, String password) {
+        // Validation Code
+        if(userId.equals("a")&&password.equals("p")){
+            return true;
+        }
+
+        return false;
+    }
+
+    private void getUserDetails() {
+
         mUserName = (EditText) findViewById(R.id.user_id);
         mPassword = (EditText) findViewById(R.id.password);
 
         userId = mUserName.getText().toString();
         password = mPassword.getText().toString();
-
-        // Validation Code
-        if(userId.equals("u")&&password.equals("p"))
-            return true;
-        else
-            return false;
     }
 }
