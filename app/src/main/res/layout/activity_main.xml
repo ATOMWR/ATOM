@@ -66,6 +66,25 @@
             android:text="Register"
             android:textColor="#FFFFFF" />
 
+        <!--This Button is temporary for testing-->
+        <Button
+            android:id="@+id/temp_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorPrimary"
+            android:text="Add to database"
+            android:textColor="#FFFFFF" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp"/>
+
     </LinearLayout>
 
 </RelativeLayout>
