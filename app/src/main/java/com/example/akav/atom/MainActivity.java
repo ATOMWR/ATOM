@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
                 flag = true;
 
-                // Start the AsyncTask to fetch the earthquake data
+                // Start the AsyncTask
                 MainAsyncTask task = new MainAsyncTask();
                 task.execute(INSERT_DATA_URL);
             }
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         getUserDetails();
 
         // Remove Comments once the getData.php on Server is written.
-        // Start the AsyncTask to fetch the earthquake data
+        // Start the AsyncTask
         // MainAsyncTask task = new MainAsyncTask();
         // task.execute(GET_DATA_URL);
 
@@ -193,6 +193,14 @@ public class MainActivity extends AppCompatActivity {
     private String addData(String url){
 
         getUserDetails();
+
+        if(userId == "" || password == ""){
+            return "false";
+        }
+
+        if(userId == null || password == null){
+            return "false";
+        }
 
         //Create URI
         Uri baseUri = Uri.parse(url);

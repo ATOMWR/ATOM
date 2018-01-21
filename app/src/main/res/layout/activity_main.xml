@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@color/colorPrimary"
-            android:text="Add to database"
+            android:text="Add above UID and PW to DB"
             android:textColor="#FFFFFF" />
 
         <ProgressBar
