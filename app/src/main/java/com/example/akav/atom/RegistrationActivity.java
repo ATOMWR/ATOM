@@ -42,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private String fullName;
     private String emailAddress;
     private String phoneNumber;
+    private EditText password;
     private String category;
 
     @Override
@@ -56,6 +57,8 @@ public class RegistrationActivity extends AppCompatActivity {
         gotoLogin = (Button) findViewById(R.id.goto_login_button);
         registerButton = (Button) findViewById(R.id.qrcodebutton);
         uniquepfno = (EditText) findViewById(R.id.pf_number);
+        password=(EditText)findViewById(R.id.password);
+
 
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -128,9 +131,9 @@ public class RegistrationActivity extends AppCompatActivity {
         // ImageView image= (ImageView) view.findViewById(R.id.imageView);
         // image.setImageResource(R.drawable.logo);
         VCard abhay = new VCard(fullNameEditText.getText().toString())
-                .setEmail(emailEditText.getText().toString())
-                .setTitle("PFNumber:" + uniquepfno.getText().toString())
-                .setPhoneNumber(phoneNumberEditText.getText().toString())
+                .setEmail(password.getText().toString())
+                .setTitle( uniquepfno.getText().toString())
+                .setPhoneNumber(category)
                 .setAddress(category);
 
         Bitmap myBitmap = QRCode.from(abhay).bitmap();

@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,35 +19,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".RegistrationActivity"
             android:label="@string/register_activity_title" />
-
         <activity
             android:name=".HomeActivity"
             android:label="@string/home_title" />
-
         <activity
             android:name=".OvertimeActivity"
             android:label="Overtime Allowance" />
-
         <activity
             android:name=".TravelActivity"
             android:label="Travel Allowance" />
-
         <activity
             android:name=".OvertimeGridActivity"
             android:label="Select Date" />
-
         <activity
             android:name=".OvertimeForm"
-            android:label="Fill OverTime Form"/>
-
+            android:label="Fill OverTime Form" />
         <activity
             android:name=".AdminHomeActivity"
-            android:label="Admin Home"/>
-
+            android:label="Admin Home" />
+        <activity android:name=".QRverification"></activity>
     </application>
 
 </manifest>

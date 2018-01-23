@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
 
         <Button
             android:id="@+id/admin_ot"
@@ -33,6 +34,15 @@
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
+
+    <Button
+        android:text="Verify new employee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:id="@+id/verify_user" />
 
 
 </RelativeLayout>
