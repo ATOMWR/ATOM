@@ -157,7 +157,7 @@ public class QRverification extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String reg_url = "http://192.168.1.6/logout.php";
+            String reg_url = "http://atomwrapp.dx.am/registration.php";
             String method = params[0];
             if (method.equals("register")) {
 
