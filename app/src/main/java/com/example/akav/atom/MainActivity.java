@@ -34,17 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mLogin;
     private Button mRegister;
-    private Button temp;    //Temporary button for inserting.
     private String userId;
     private String password;
     private ProgressBar progressBar;
 
+    private Boolean isValidUser;
     private Boolean isAdmin;
-    private Boolean isRegularUser;
-    private Boolean flag;   //Set true when add data is clicked, false when login is clicked
 
-    private final String INSERT_DATA_URL = "https://railwayproject.000webhostapp.com/insertData.php";
-    private final String GET_DATA_URL = "https://railwayproject.000webhostapp.com/getData.php";
+    private final String LOGIN_URL = "http://atomwrapp.dx.am/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +51,14 @@ public class MainActivity extends AppCompatActivity {
         mLogin = (Button) findViewById(R.id.login_button);
         mRegister = (Button) findViewById(R.id.goto_register_button);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
         progressBar.setVisibility(View.INVISIBLE);
 
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-
-                flag = false;
-
-                authenticateUser();
+                validateUser();
             }
         });
 
@@ -76,34 +71,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Temporary Insert Button
-        temp = (Button) findViewById(R.id.temp_add);
-        temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-
-                flag = true;
-
-                // Start the AsyncTask
-                MainAsyncTask task = new MainAsyncTask();
-                task.execute(INSERT_DATA_URL);
-            }
-        });
 
     }
 
     // To Authenticate User.
-    private void authenticateUser() {
+    private void validateUser() {
 
         getUserDetails();
 
-        // Remove Comments once the getData.php on Server is written.
         // Start the AsyncTask
-        // MainAsyncTask task = new MainAsyncTask();
-        // task.execute(GET_DATA_URL);
+        MainAsyncTask task = new MainAsyncTask();
+        task.execute(LOGIN_URL);
 
-        if (isValidUser()) {
+    }
+
+    private void identifyUser(){
+
+        if (isValidUser) {
 
             progressBar.setVisibility(View.INVISIBLE);
 
@@ -115,62 +99,33 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(gotoAdminHomeIntent);
             }
             else{
-                gotoUserHomeIntent.putExtra("userName", userId);
+                gotoUserHomeIntent.putExtra("userId", userId);
                 startActivity(gotoUserHomeIntent);
             }
 
         } else {
             progressBar.setVisibility(View.INVISIBLE);
+            clearUserDetails();
             error();
         }
     }
 
-    // To Validate Enterd Credentials.
+    // Show Error
     private void error(){
-        Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_LONG).show();
     }
 
-    private boolean isValidUser() {
+    /**
+    * If returned JSON object contains false for 'validUser'
+     * then return false,
+     * else set isAdmin and isRegularUser based on
+     * JSON Objects fields.
+     * Make the Server script return JSON containing the booleans:
+     * 1. isValidUser
+     * 2. isAdmin
+     * 3. isRegularUser;
+     */
 
-        /**
-         * If returned JSON object contains false for 'validUser'
-         * then return false,
-         * else set isAdmin and isRegularUser based on
-         * JSON Objects fields.
-         * Make the Server script return JSON containing the booleans:
-         * 1. isValidUser
-         * 2. isAdmin
-         * 3. isRegularUser;
-         */
-
-        if(isAdmin(userId, password)){
-            isAdmin = true;
-            isRegularUser = false;
-            return true;
-        }
-        else if(isRegularUser(userId, password)){
-            isRegularUser = true;
-            isAdmin = false;
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isRegularUser(String userId, String password) {
-        // Validation Code
-        if(userId.equals("u")&&password.equals("p")){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAdmin(String userId, String password) {
-        // Validation Code
-        if(userId.equals("a")&&password.equals("p")){
-            return true;
-        }
-        return false;
-    }
 
     private void getUserDetails() {
 
@@ -190,23 +145,13 @@ public class MainActivity extends AppCompatActivity {
         mPassword.setText("");
     }
 
-    private String addData(String url){
-
-        getUserDetails();
-
-        if(userId == "" || password == ""){
-            return "false";
-        }
-
-        if(userId == null || password == null){
-            return "false";
-        }
+    private String userLogin(String url){
 
         //Create URI
         Uri baseUri = Uri.parse(url);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("userName", userId);
+        uriBuilder.appendQueryParameter("userId", userId);
         uriBuilder.appendQueryParameter("password", password);
 
         String insertUrl = uriBuilder.toString();
@@ -231,7 +176,11 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             JSONObject root = new JSONObject(jsonResponse);
-            result = root.getString("insertResult");
+
+            isValidUser = root.getBoolean("isValidUser");
+            isAdmin = root.getBoolean("isAdmin");
+
+            result = isValidUser.toString() + ", " + isAdmin.toString();
 
         } catch (JSONException e) {
             Log.e(MainActivity.class.getName(), "Error in Parsing", e);;
@@ -250,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000);
+            urlConnection.setReadTimeout(15000);
             urlConnection.setConnectTimeout(15000);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -294,15 +243,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... urls) {
-            String result = addData(urls[0]);
+            String result = userLogin(urls[0]);
             return result;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext(), "Added: " + result, Toast.LENGTH_SHORT).show();
-            clearUserDetails();
+            Toast.makeText(getApplicationContext(), "isValidUser, isAdmin = " + result, Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.INVISIBLE);
+
+            identifyUser();
         }
     }
 }

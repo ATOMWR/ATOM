@@ -19,7 +19,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_home);
 
         Intent loginInfo = getIntent();
-        String userId = loginInfo.getStringExtra("userName");
+        String userId = loginInfo.getStringExtra("userId");
 
         Toast.makeText(this, "Welcome Admin, " + userId, Toast.LENGTH_SHORT).show();
 
