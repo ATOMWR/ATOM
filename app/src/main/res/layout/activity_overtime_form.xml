@@ -62,8 +62,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/starttime"
         android:layout_alignBaseline="@+id/endtime"
-        android:layout_alignBottom="@+id/endtime"
-        android:layout_alignStart="@+id/simpleTimePicker" />
+        android:layout_alignBottom="@+id/endtime"/>
+
 
     <TextView
         android:text="--:--"
@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/descid"
         android:hint="Reason......"
         android:layout_below="@+id/desclabel"
         android:layout_alignParentStart="true"
@@ -120,4 +120,13 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/rostertext"
         android:layout_marginBottom="36dp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rostertext"
+        android:layout_toEndOf="@+id/endtime"
+        android:id="@+id/tv" />
+
 </RelativeLayout>

@@ -1,19 +1,33 @@
 package com.example.akav.atom;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Calendar;
+
 
 public class OvertimeForm extends AppCompatActivity {
 Spinner shift;
@@ -21,15 +35,23 @@ Spinner shift;
     String shiftselect;
     TextView start_time;
     TextView end_time;
+    EditText descp;
+
     Button startbutt,endbutt,submit;
-    String s1,e1,newe,news;
-    int s,e,d;
+    String s1,e1,newe,news,newsm,newem;
+    int s,e,dh,dm;
+
+
+
+    Calendar date1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime_form);
+
+        final TextView sample=(TextView)findViewById(R.id.tv);
 
         shift=(Spinner)findViewById(R.id.ShiftSpinner);
         start_time=(TextView)findViewById(R.id.starttime);
@@ -39,6 +61,7 @@ Spinner shift;
         startbutt=(Button)findViewById(R.id.startbutton);
         endbutt=(Button)findViewById(R.id.endbutton);
         submit=(Button)findViewById(R.id.submitbutt);
+        descp=(EditText)findViewById(R.id.descid);
 
 
 
@@ -55,6 +78,9 @@ Spinner shift;
 
 
         shiftSpinner();
+
+
+
         startbutt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,15 +131,29 @@ Spinner shift;
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                // d=e-s;
                // d-=8;
-                 news=s1.substring(0,2);
-                 newe=e1.substring(0,2);
+               // text=(TextView)findViewById(R.id.textView);
+                news=s1.substring(0,s1.indexOf(':'));
+                 newe=e1.substring(0,e1.indexOf(':'));
+                newsm=s1.substring(s1.indexOf(':')+1);
+                newem=e1.substring(e1.indexOf(':')+1);
+
                 int s=Integer.parseInt(news);
                 int e=Integer.parseInt(newe);
-                d=e-s-8;
-                msg();
+                int sm=Integer.parseInt(newsm);
+                int em=Integer.parseInt(newem);
+                dh=e-s-8;
+                dm=em-sm;
+                if(em<sm){
+                    dh--;
+                    dm+=60;
 
+                }
+               //sample.setText(dm);
+                //msg();
+                open();
             }
         });
     }
@@ -157,9 +197,130 @@ Spinner shift;
             }
         });
     }
+
+    //entry into ot table
+   public void open(){
+        String method="fill";
+
+        String name="user";
+        String pfno="101";
+        String shift=shiftselect;//"morning";
+       String actstart=news+":"+newsm;
+       String actend=newe+":"+newem;
+       String extra=dh+":"+dm;
+       String reason=descp.getText().toString();
+
+
+        // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
+
+        OvertimeForm.Backgroundtask backgroundtask=new OvertimeForm.Backgroundtask(this);
+        backgroundtask.execute(method,pfno,name,shift,actstart,actend,extra,reason);
+    }
+
+
+    class Backgroundtask extends AsyncTask<String,Void,String> {
+
+        Context ctx;
+
+        Backgroundtask(Context ctx) {
+            this.ctx = ctx;
+
+        }
+
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String reg_url = "http://atomwrapp.dx.am/otfilling.php";
+            String method = params[0];
+            if (method.equals("fill")) {
+
+
+
+
+                String  pfno= params[1];
+                String name = params[2];
+                String shift=params[3];
+                String actstart=params[4];
+                String actend=params[5];
+                String extra=params[6];
+                String reas=params[7];
+
+
+
+                try {
+                    URL url = new URL(reg_url);
+                    HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
+                    httpurlconnection.setRequestMethod("POST");
+
+                    httpurlconnection.setDoOutput(true);
+                    OutputStream OS = httpurlconnection.getOutputStream();
+                    BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+
+                    String newdata = URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") + "&" +
+                            URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
+                            URLEncoder.encode("shift", "UTF-8") + "=" + URLEncoder.encode(shift, "UTF-8") +"&" +
+                            URLEncoder.encode("strt", "UTF-8") + "=" + URLEncoder.encode(actstart, "UTF-8") + "&" +
+                            URLEncoder.encode("end", "UTF-8") + "=" + URLEncoder.encode(actend, "UTF-8") + "&" +
+                            URLEncoder.encode("extra", "UTF-8") + "=" + URLEncoder.encode(extra, "UTF-8") + "&" +
+                            URLEncoder.encode("reason", "UTF-8") + "=" + URLEncoder.encode(reas, "UTF-8") ;
+
+                    bufferedwriter.write(newdata);
+                    // Toast.makeText(ctx, "data written", Toast.LENGTH_LONG).show();
+
+                    bufferedwriter.flush();
+                    bufferedwriter.close();
+                    OS.close();
+                    InputStream IS = httpurlconnection.getInputStream();
+                    IS.close();
+
+
+
+                    return "successfull filled";
+
+
+                } catch (MalformedURLException e) {
+                    Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+                } catch (IOException e) {
+                    Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
+            // qr_result.setText(result);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void msg(){
-        Toast.makeText(this, "Extra duty hours is " + d + " hours.", Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "Submitted", Toast.LENGTH_LONG).show();
+
+        //String disp=df.format(date);
+       // Toast.makeText(this, disp, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Extra duty hours is "+dh +" : "+ dm +" hours.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Submitt", Toast.LENGTH_LONG).show();
     }
 
 }
