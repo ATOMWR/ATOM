@@ -32,7 +32,7 @@ import java.util.Calendar;
 public class OvertimeForm extends AppCompatActivity {
 Spinner shift;
 
-    String shiftselect;
+    String shiftselect,userId;
     TextView start_time;
     TextView end_time;
     EditText descp;
@@ -50,6 +50,7 @@ Spinner shift;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime_form);
+        userId=getIntent().getExtras().getString("userID");
 
         final TextView sample=(TextView)findViewById(R.id.tv);
 
@@ -145,6 +146,8 @@ Spinner shift;
                 int sm=Integer.parseInt(newsm);
                 int em=Integer.parseInt(newem);
                 dh=e-s-8;
+                if(dh<0)
+                    dh+=24;
                 dm=em-sm;
                 if(em<sm){
                     dh--;
@@ -202,7 +205,7 @@ Spinner shift;
    public void open(){
         String method="fill";
 
-        String name="user";
+        String name=userId;
         String pfno="101";
         String shift=shiftselect;//"morning";
        String actstart=news+":"+newsm;

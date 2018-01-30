@@ -3,12 +3,11 @@ package com.example.akav.atom;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +57,7 @@ public class OvertimeActivity extends AppCompatActivity {
 
         progressBarLayout = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         cycleList = (RelativeLayout) findViewById(R.id.cycle_list_layout);
+        final String userId=getIntent().getExtras().getString("userID");
 
         // Start the AsyncTask
         MainAsyncTask task = new MainAsyncTask();
@@ -136,6 +136,8 @@ public class OvertimeActivity extends AppCompatActivity {
 
                 currentCycleToGrid.putExtra("startDate", currentCycleStartDate);
                 currentCycleToGrid.putExtra("endDate", currentCycleEndDate);
+                currentCycleToGrid.putExtra("userID", userId);
+
 
                 startActivity(currentCycleToGrid);
             }

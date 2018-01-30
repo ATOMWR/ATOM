@@ -1,11 +1,8 @@
 package com.example.akav.atom;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +21,7 @@ public class HomeActivity extends AppCompatActivity {
         setTitle("Home");
 
         Intent loginInfo = getIntent();
-        String userId = loginInfo.getStringExtra("userId");
+        final String userId = loginInfo.getStringExtra("userId");
 
         Toast.makeText(this, "Welcome " + userId + "!", Toast.LENGTH_SHORT).show();
 
@@ -35,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent gotoOT = new Intent(HomeActivity.this, OvertimeActivity.class);
+                gotoOT.putExtra("userID",userId);
                 startActivity(gotoOT);
             }
         });

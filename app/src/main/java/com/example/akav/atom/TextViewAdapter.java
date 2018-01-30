@@ -21,10 +21,14 @@ import android.widget.TextView;
 public class TextViewAdapter extends BaseAdapter {
     private Context context;
     private final String[] textViewValues;
+    private int js;
 
-    public TextViewAdapter(Context context, String[] textViewValues) {
+
+    public TextViewAdapter(Context context, String[] textViewValues,int s) {
         this.context = context;
         this.textViewValues = textViewValues;
+        js=s;
+
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -42,7 +46,7 @@ public class TextViewAdapter extends BaseAdapter {
 
 
 
-            // get layout from mobile.xml
+            // get layout from item.xml
             gridView = inflater.inflate(R.layout.item, null);
 
             // set value into textview
@@ -51,14 +55,16 @@ public class TextViewAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
 
 
-            textView.setText(textViewValues[position]);
-            if(textView.getText().toString().equals(" 3 ")||textView.getText().toString().equals(" 8 "))
+            textView.setText(textViewValues[position].substring(0,2));
+
+          /*  if(textView.getText().toString().equals(" 3 ")||textView.getText().toString().equals(" 8 "))
                 gridView.setBackgroundColor(Color.parseColor("#E98D71"));
             else if(textView.getText().toString().equals(" 6 ")||textView.getText().toString().equals(" 9 "))
                 gridView.setBackgroundColor(Color.parseColor("#ADDF41"));
             else if(textView.getText().toString().equals(" 20 ")||textView.getText().toString().equals(" 15 "))
                 gridView.setBackgroundColor(Color.parseColor("#E3E358"));
-             else
+             else*/
+            if(js==0)
                 gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
 
 
@@ -69,7 +75,10 @@ public class TextViewAdapter extends BaseAdapter {
             gridView = (View) convertView;
 
         }
-        // gridView.setBackgroundColor(0xFF0000FF);
+       /* if(js==1)
+         gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
+        else
+            gridView.setBackgroundColor(Color.parseColor("#E3E358"));*/
         return gridView;
     }
 
