@@ -38,7 +38,7 @@ Spinner shift;
     EditText descp;
 
     Button startbutt,endbutt,submit;
-    String s1,e1,newe,news,newsm,newem;
+    String s1,e1,newe,news,newsm,newem,datestring;
     int s,e,dh,dm;
 
 
@@ -51,6 +51,7 @@ Spinner shift;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime_form);
         userId=getIntent().getExtras().getString("userID");
+        datestring=getIntent().getExtras().getString("date");
 
         final TextView sample=(TextView)findViewById(R.id.tv);
 
@@ -204,7 +205,7 @@ Spinner shift;
     //entry into ot table
    public void open(){
         String method="fill";
-
+        String datestr=datestring;
         String name=userId;
         String pfno="101";
         String shift=shiftselect;//"morning";
@@ -217,7 +218,7 @@ Spinner shift;
         // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
 
         OvertimeForm.Backgroundtask backgroundtask=new OvertimeForm.Backgroundtask(this);
-        backgroundtask.execute(method,pfno,name,shift,actstart,actend,extra,reason);
+        backgroundtask.execute(method,pfno,name,shift,actstart,actend,extra,reason,datestr);
     }
 
 
@@ -248,6 +249,7 @@ Spinner shift;
                 String actend=params[5];
                 String extra=params[6];
                 String reas=params[7];
+                String dat=params[8];
 
 
 
@@ -260,7 +262,8 @@ Spinner shift;
                     OutputStream OS = httpurlconnection.getOutputStream();
                     BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
 
-                    String newdata = URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") + "&" +
+                    String newdata = URLEncoder.encode("date", "UTF-8") + "=" + URLEncoder.encode(dat, "UTF-8") + "&" +
+                            URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") + "&" +
                             URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
                             URLEncoder.encode("shift", "UTF-8") + "=" + URLEncoder.encode(shift, "UTF-8") +"&" +
                             URLEncoder.encode("strt", "UTF-8") + "=" + URLEncoder.encode(actstart, "UTF-8") + "&" +

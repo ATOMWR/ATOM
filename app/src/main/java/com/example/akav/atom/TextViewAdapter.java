@@ -21,13 +21,15 @@ import android.widget.TextView;
 public class TextViewAdapter extends BaseAdapter {
     private Context context;
     private final String[] textViewValues;
-    private int js;
+    private String[] js;
+    private int[] ji;
 
 
-    public TextViewAdapter(Context context, String[] textViewValues,int s) {
+    public TextViewAdapter(Context context, String[] textViewValues,String[] s,int[] a) {
         this.context = context;
         this.textViewValues = textViewValues;
         js=s;
+        ji=a;
 
     }
 
@@ -55,7 +57,7 @@ public class TextViewAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
 
 
-            textView.setText(textViewValues[position].substring(0,2));
+            textView.setText(textViewValues[position].substring(8,10));
 
           /*  if(textView.getText().toString().equals(" 3 ")||textView.getText().toString().equals(" 8 "))
                 gridView.setBackgroundColor(Color.parseColor("#E98D71"));
@@ -64,8 +66,20 @@ public class TextViewAdapter extends BaseAdapter {
             else if(textView.getText().toString().equals(" 20 ")||textView.getText().toString().equals(" 15 "))
                 gridView.setBackgroundColor(Color.parseColor("#E3E358"));
              else*/
-            if(js==0)
+            int a=js.length;
+            for(int i=0;i<a;i++){
+                if(js[i].equals(textViewValues[position])) {
+                    if(ji[i]==0)
+                    gridView.setBackgroundColor(Color.parseColor("#E3E358"));
+                    else
+                        gridView.setBackgroundColor(Color.parseColor("#ADDF41"));
+                    break;
+                }
+                else
+
                 gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
+
+            }
 
 
 

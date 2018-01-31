@@ -10,16 +10,21 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,11 +32,15 @@ import java.util.Calendar;
 public class OvertimeGridActivity extends AppCompatActivity {
 
     private TextView selectedDate;
-    String st,JSON_STRING,jsonstring,userID;
+    String datestring,JSON_STRING,jsonstring,userID;
     String startDate,endDate;
     String[] s=new String[14];
+    String[] stringdatearray;
+    int[] inter_verification_status;
+
 
     JSONObject jo;
+    JSONArray ja;
     int ress;
 
     @Override
@@ -58,7 +67,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
         Calendar c=Calendar.getInstance();
         Calendar d=Calendar.getInstance();
-        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         try {
             c.setTime(sdf.parse(startDate));
             d.setTime(sdf.parse(endDate));
@@ -103,17 +112,18 @@ public class OvertimeGridActivity extends AppCompatActivity {
             s[i]=" "+(i+1)+" ";
         }*/
         GridView gridView=(GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(new TextViewAdapter(this, s,ress));
+        gridView.setAdapter(new TextViewAdapter(this, s,stringdatearray,inter_verification_status));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                st=parent.getItemAtPosition(position).toString();
+                datestring=parent.getItemAtPosition(position).toString();
                 msg();
-               // Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
-               // gotoOTFormIntent.putExtra("userID",userID);
-               // startActivity(gotoOTFormIntent);
+               Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
+               gotoOTFormIntent.putExtra("userID",userID);
+                gotoOTFormIntent.putExtra("date",datestring);
+               startActivity(gotoOTFormIntent);
             }
         });
 
@@ -126,7 +136,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
     }
     private void msg(){
-        Toast.makeText(OvertimeGridActivity.this, st, Toast.LENGTH_SHORT).show();
+        Toast.makeText(OvertimeGridActivity.this, stringdatearray[0], Toast.LENGTH_SHORT).show();
 
     }
 
@@ -139,7 +149,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            json_url = "http://atomwrapp.dx.am/temp.php";
+            json_url = "http://atomwrapp.dx.am/colorcoding.php";
         }
 
         @Override
@@ -147,8 +157,28 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
             try {
                 URL url = new URL(json_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = httpURLConnection.getInputStream();
+                HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
+                httpurlconnection.setRequestMethod("POST");
+
+                httpurlconnection.setDoOutput(true);
+                OutputStream OS = httpurlconnection.getOutputStream();
+                BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+
+                String newdata = URLEncoder.encode("stdate", "UTF-8") + "=" + URLEncoder.encode(startDate, "UTF-8") + "&" +
+                        URLEncoder.encode("eddate", "UTF-8") + "=" + URLEncoder.encode(endDate, "UTF-8")+ "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(userID, "UTF-8") ;
+
+
+                bufferedwriter.write(newdata);
+                // Toast.makeText(ctx, "data written", Toast.LENGTH_LONG).show();
+
+                bufferedwriter.flush();
+                bufferedwriter.close();
+                //httpurlconnection.disconnect();
+                OS.close();
+
+                //HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                InputStream inputStream = httpurlconnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder stringBuilder = new StringBuilder();
                 while ((JSON_STRING = bufferedReader.readLine()) != null) {
@@ -157,7 +187,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
                 }
                 bufferedReader.close();
                 inputStream.close();
-                httpURLConnection.disconnect();
+                httpurlconnection.disconnect();
 
                 return stringBuilder.toString().trim();
             } catch (MalformedURLException e) {
@@ -177,13 +207,27 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            //Toast.makeText(OvertimeGridActivity.this, result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
             jsonstring = result;
             //json();
             // return  result;
             try {
                 jo = new JSONObject(jsonstring);
-                ress = jo.getInt("data");
+                ja=jo.getJSONArray("dateresponse");
+                stringdatearray=new String[ja.length()];
+                inter_verification_status=new int[ja.length()];
+                int i=0;
+                int count=0;
+                while(count<ja.length()){
+                    JSONObject j=ja.getJSONObject(count);
+                    stringdatearray[i]=j.getString("date");
+                    inter_verification_status[i]=j.getInt("inter_verification");
+                    i++;
+                    count++;
+
+                }
+
+               // ress = jo.getInt("data");
                 msg();
                 gridviewcall();
 

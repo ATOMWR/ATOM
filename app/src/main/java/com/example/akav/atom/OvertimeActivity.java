@@ -177,8 +177,8 @@ public class OvertimeActivity extends AppCompatActivity {
             long startDateTimeStamp = root.getLong("Start Date");
             long endDateTimeStamp = root.getLong("End Date");
 
-            String currentStartDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date(startDateTimeStamp * 1000));
-            String currentEndDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date(endDateTimeStamp * 1000));
+            String currentStartDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(startDateTimeStamp * 1000));
+            String currentEndDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(endDateTimeStamp * 1000));
 
             currentCycleStart.setText(currentStartDate);
             currentCycleEnd.setText(currentEndDate);
