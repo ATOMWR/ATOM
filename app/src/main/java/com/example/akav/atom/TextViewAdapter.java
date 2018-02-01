@@ -67,19 +67,24 @@ public class TextViewAdapter extends BaseAdapter {
                 gridView.setBackgroundColor(Color.parseColor("#E3E358"));
              else*/
             int a=js.length;
-            for(int i=0;i<a;i++){
-                if(js[i].equals(textViewValues[position])) {
-                    if(ji[i]==0)
-                    gridView.setBackgroundColor(Color.parseColor("#E3E358"));
-                    else
-                        gridView.setBackgroundColor(Color.parseColor("#ADDF41"));
-                    break;
+                for (int i = 0; i < a; i++) {
+                    if(js[i].equals("nodate")) {
+                        gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
+                        break;
+                    }
+                    else if (js[i].equals(textViewValues[position])) {
+                        if (ji[i] == 0)
+                            gridView.setBackgroundColor(Color.parseColor("#E3E358"));
+                        else
+                            gridView.setBackgroundColor(Color.parseColor("#ADDF41"));
+                        break;
+                    } else
+
+                        gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
                 }
-                else
 
-                gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
 
-            }
+
 
 
 

@@ -214,18 +214,27 @@ public class OvertimeGridActivity extends AppCompatActivity {
             try {
                 jo = new JSONObject(jsonstring);
                 ja=jo.getJSONArray("dateresponse");
-                stringdatearray=new String[ja.length()];
-                inter_verification_status=new int[ja.length()];
+
                 int i=0;
                 int count=0;
-                while(count<ja.length()){
-                    JSONObject j=ja.getJSONObject(count);
-                    stringdatearray[i]=j.getString("date");
-                    inter_verification_status[i]=j.getInt("inter_verification");
-                    i++;
-                    count++;
+                if(ja.length()!=0) {
+                    stringdatearray=new String[ja.length()];
+                    inter_verification_status=new int[ja.length()];
+                    while (count < ja.length()) {
+                        JSONObject j = ja.getJSONObject(count);
+                        stringdatearray[i] = j.getString("date");
+                        inter_verification_status[i] = j.getInt("inter_verification");
+                        i++;
+                        count++;
 
+                    }
+                }else{
+                    stringdatearray=new String[1];
+                    inter_verification_status=new int[1];
+                    stringdatearray[i] = "nodate";
+                    inter_verification_status[i] =999;
                 }
+
 
                // ress = jo.getInt("data");
                 msg();
