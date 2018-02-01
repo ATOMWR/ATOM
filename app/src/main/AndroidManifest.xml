@@ -40,7 +40,8 @@
         <activity
             android:name=".AdminHomeActivity"
             android:label="Admin Home" />
-        <activity android:name=".QRverification"></activity>
+        <activity android:name=".QRverification" />
+        <activity android:name=".OvertimeFormListActivity"></activity>
     </application>
 
 </manifest>

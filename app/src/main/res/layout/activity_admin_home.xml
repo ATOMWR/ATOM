@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
+        android:padding="16dp"
         android:id="@+id/linearLayout">
 
         <Button
@@ -33,16 +34,25 @@
             android:text="Travel Allowance"
             android:textColor="#FFFFFF" />
 
+        <Button
+            android:text="Verify new employee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:background="@color/colorPrimary"
+            android:textColor="#FFFFFF"
+            android:id="@+id/verify_user" />
+
     </LinearLayout>
 
-    <Button
-        android:text="Verify new employee"
+    <ProgressBar
+        android:id="@+id/admin_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp"
-        android:id="@+id/verify_user" />
-
+        android:layout_below="@id/linearLayout"
+        android:layout_marginTop="32dp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
