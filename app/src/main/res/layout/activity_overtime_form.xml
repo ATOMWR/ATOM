@@ -16,7 +16,8 @@
         android:id="@+id/ShiftSpinner"
         android:layout_below="@+id/selectshift"
         android:layout_alignParentStart="true"
-        android:layout_width="130dp" />
+        android:layout_width="130dp"
+        android:layout_alignEnd="@+id/actuallabel" />
 
     <TextView
         android:text="Shift:"
@@ -122,11 +123,12 @@
         android:layout_marginBottom="36dp" />
 
     <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rostertext"
-        android:layout_toEndOf="@+id/endtime"
-        android:id="@+id/tv" />
+        android:id="@+id/shifttext"
+        android:layout_above="@+id/roasterlabel"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/ShiftSpinner"
+        android:layout_alignEnd="@+id/roasterlabel" />
 
 </RelativeLayout>

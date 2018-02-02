@@ -37,6 +37,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
     String[] s=new String[14];
     String[] stringdatearray;
     int[] inter_verification_status;
+    String t;
 
 
     JSONObject jo;
@@ -93,14 +94,6 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
         Backgroundtask backgroundtask = new Backgroundtask();
         backgroundtask.execute();
 
@@ -111,7 +104,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
         for(int i=0;i<s.length;i++){
             s[i]=" "+(i+1)+" ";
         }*/
-        GridView gridView=(GridView)findViewById(R.id.gridview);
+        final GridView gridView=(GridView)findViewById(R.id.gridview);
         gridView.setAdapter(new TextViewAdapter(this, s,stringdatearray,inter_verification_status));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,11 +112,17 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
 
                 datestring=parent.getItemAtPosition(position).toString();
-                msg();
+                t=view.getTag().toString();
+
+               // msg();
                Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
                gotoOTFormIntent.putExtra("userID",userID);
-                gotoOTFormIntent.putExtra("date",datestring);
-               startActivity(gotoOTFormIntent);
+                gotoOTFormIntent.putExtra("currdate",datestring);
+                gotoOTFormIntent.putExtra("tag",t);
+
+                msg();
+
+                startActivity(gotoOTFormIntent);
             }
         });
 
@@ -136,7 +135,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
     }
     private void msg(){
-        Toast.makeText(OvertimeGridActivity.this, stringdatearray[0], Toast.LENGTH_SHORT).show();
+        Toast.makeText(OvertimeGridActivity.this, "tag is:"+t, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -237,7 +236,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
 
                // ress = jo.getInt("data");
-                msg();
+              //  msg();
                 gridviewcall();
 
 

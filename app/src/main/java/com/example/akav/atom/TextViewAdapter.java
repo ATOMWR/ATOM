@@ -70,17 +70,24 @@ public class TextViewAdapter extends BaseAdapter {
                 for (int i = 0; i < a; i++) {
                     if(js[i].equals("nodate")) {
                         gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
+                        gridView.setTag(new String("no activity"));
                         break;
                     }
                     else if (js[i].equals(textViewValues[position])) {
-                        if (ji[i] == 0)
+                        if (ji[i] == 0) {
                             gridView.setBackgroundColor(Color.parseColor("#E3E358"));
-                        else
+                            gridView.setTag(new String("ot filled"));
+                        }
+                        else {
                             gridView.setBackgroundColor(Color.parseColor("#ADDF41"));
+                            gridView.setTag(new String("ot verified"));
+                        }
                         break;
-                    } else
+                    } else {
 
                         gridView.setBackgroundColor(Color.parseColor("#C8EFE0"));
+                        gridView.setTag(new String("no activity"));
+                    }
                 }
 
 
