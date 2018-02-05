@@ -71,14 +71,13 @@
                 android:layout_toRightOf="@id/shift"/>
 
             <TextView
-                android:id="@+id/platform"
+                android:id="@+id/shift_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Platform No.  :   "
-                android:layout_toLeftOf="@+id/platform_no"/>
+                android:layout_toRightOf="@+id/shift_on_form"/>
 
-            <TextView
-                android:id="@+id/platform_no"
+            <ImageView
+                android:id="@+id/verification_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"/>
@@ -181,9 +180,36 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reason    :  "/>
+
+            <TextView
+                android:id="@+id/reason_on_form"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/reason"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#111111"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <Button
@@ -219,8 +245,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_marginTop="12dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
             android:background="#111111"/>
 
     </LinearLayout>

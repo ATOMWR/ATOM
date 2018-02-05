@@ -20,12 +20,13 @@ public class OvertimeFormObject {
     private Integer interVerification;
     private Integer finalVerification;
 
-    private Integer notifyUser = 0;
+    private Integer verificationStatusImageId;
 
     public OvertimeFormObject(String date, String platformNumber,
                               String name, String shift, String actualStart,
                               String actualEnd, String extraHours,
-                              String reason) {
+                              String reason, Integer interVerification,
+                              Integer finalVerification) {
         this.date = date;
         this.platformNumber = platformNumber;
         this.name = name;
@@ -34,14 +35,12 @@ public class OvertimeFormObject {
         this.actualEnd = actualEnd;
         this.extraHours = extraHours;
         this.reason = reason;
+        this.interVerification = interVerification;
+        this.finalVerification = finalVerification;
     }
 
     public String getDate() {
         return date;
-    }
-
-    public String getPlatformNumber() {
-        return platformNumber;
     }
 
     public String getName() {
@@ -76,10 +75,6 @@ public class OvertimeFormObject {
         return finalVerification;
     }
 
-    public Integer getNotifyUser() {
-        return notifyUser;
-    }
-
     public void setInterVerification(Integer interVerification) {
         this.interVerification = interVerification;
     }
@@ -88,7 +83,19 @@ public class OvertimeFormObject {
         this.finalVerification = finalVerification;
     }
 
-    public void setNotifyUser(Integer notifyUser) {
-        this.notifyUser = notifyUser;
+    public Integer getVerificationStatusImageId() {
+        switch (interVerification) {
+            case 1:
+                verificationStatusImageId = R.drawable.check_mark;
+                break;
+
+            case 2:
+                verificationStatusImageId = R.drawable.exclamation_mark;
+                break;
+
+            default:
+                verificationStatusImageId = 0;
+        }
+        return verificationStatusImageId;
     }
 }

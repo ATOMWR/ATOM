@@ -6,9 +6,69 @@
     android:layout_height="match_parent"
     tools:context="com.example.akav.atom.OvertimeFormListActivity">
 
-    <ListView
-        android:id="@+id/list"
+    <LinearLayout
+        android:id="@+id/update_form_list_progress_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Updating Forms, Please Wait."/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/form_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/action_buttons">
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/undo_and_go_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:layout_marginRight="2dp"
+            android:text="Go Back"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/verify_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="2dp"
+            android:text="Verify List"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>
