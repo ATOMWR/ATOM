@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +105,7 @@ public class OvertimeActivity extends AppCompatActivity {
 
                 prevCycle2ToGrid.putExtra("startDate", prevCycle2StartDate);
                 prevCycle2ToGrid.putExtra("endDate", prevCycle2EndDate);
+                prevCycle2ToGrid.putExtra("userID", userId);
 
                 startActivity(prevCycle2ToGrid);
             }
@@ -121,6 +121,7 @@ public class OvertimeActivity extends AppCompatActivity {
 
                 prevCycle3ToGrid.putExtra("startDate", prevCycle3StartDate);
                 prevCycle3ToGrid.putExtra("endDate", prevCycle3EndDate);
+                prevCycle3ToGrid.putExtra("userID", userId);
 
                 startActivity(prevCycle3ToGrid);
             }
@@ -252,7 +253,7 @@ public class OvertimeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext(), "isValidUser, isAdmin = " + result, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "isValidUser, isAdmin = " + result, Toast.LENGTH_SHORT).show();
             progressBarLayout.setVisibility(View.GONE);
             cycleList.setVisibility(View.VISIBLE);
         }

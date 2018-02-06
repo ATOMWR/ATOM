@@ -48,6 +48,7 @@ Spinner shift;
     int s,e,dh,dm;
     String status,jsonstring,JSON_STRING;
     boolean formfillingallowed=true;
+    boolean confirmed=false;
     String update="f";
 
     JSONObject jo,j;
@@ -62,29 +63,27 @@ Spinner shift;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime_form);
-        userId=getIntent().getExtras().getString("userID");
-        datestring=getIntent().getExtras().getString("currdate");
-       //Toast.makeText(OvertimeForm.this,"tags; "+getIntent().getExtras().getString("tag"), Toast.LENGTH_LONG).show();
+        userId = getIntent().getExtras().getString("userID");
+        datestring = getIntent().getExtras().getString("currdate");
+        //Toast.makeText(OvertimeForm.this,"tags; "+getIntent().getExtras().getString("tag"), Toast.LENGTH_LONG).show();
 
-        status=getIntent().getExtras().getString("tag");
+        status = getIntent().getExtras().getString("tag");
 
 
+        shift = (Spinner) findViewById(R.id.ShiftSpinner);
 
-        shift=(Spinner)findViewById(R.id.ShiftSpinner);
+        start_time = (TextView) findViewById(R.id.starttime);
+        end_time = (TextView) findViewById(R.id.endtime);
+        roster = (TextView) findViewById(R.id.rostertext);
+        shiftvalue = (TextView) findViewById(R.id.shifttext);
 
-        start_time=(TextView)findViewById(R.id.starttime);
-        end_time=(TextView)findViewById(R.id.endtime);
-        roster=(TextView)findViewById(R.id.rostertext);
-        shiftvalue=(TextView)findViewById(R.id.shifttext);
+        startbutt = (Button) findViewById(R.id.startbutton);
+        endbutt = (Button) findViewById(R.id.endbutton);
+        submit = (Button) findViewById(R.id.submitbutt);
+        descp = (EditText) findViewById(R.id.descid);
 
-        startbutt=(Button)findViewById(R.id.startbutton);
-        endbutt=(Button)findViewById(R.id.endbutton);
-        submit=(Button)findViewById(R.id.submitbutt);
-        descp=(EditText)findViewById(R.id.descid);
-
-        if(status.equals("ot filled")||status.equals("ot verified")){
-            formfillingallowed=false;
-
+        if (status.equals("ot filled") || status.equals("ot notify")) {
+            formfillingallowed = false;
             startbutt.setEnabled(false);
             endbutt.setEnabled(false);
 
@@ -95,15 +94,37 @@ Spinner shift;
             descp.setEnabled(false);
 
 
-            String method="display";
-            OvertimeForm.Backgroundtask2 backgroundtask2=new OvertimeForm.Backgroundtask2(this);
-            backgroundtask2.execute(method,userId,datestring);
-
-
-
-
-
+            String method = "display";
+            OvertimeForm.Backgroundtask2 backgroundtask2 = new OvertimeForm.Backgroundtask2(this);
+            backgroundtask2.execute(method, userId, datestring);
         }
+
+         else if (status.equals("ot verified")) {
+             formfillingallowed = false;
+             confirmed = true;
+            startbutt.setEnabled(false);
+            endbutt.setEnabled(false);
+            submit.setEnabled(false);
+            submit.setText("Already verified");
+            err();
+
+            shift.setEnabled(false);
+            //descp.setText(retrievedesc);
+            descp.setEnabled(false);
+
+
+            String method = "display";
+            OvertimeForm.Backgroundtask2 backgroundtask2 = new OvertimeForm.Backgroundtask2(this);
+            backgroundtask2.execute(method, userId, datestring);
+         }
+
+
+
+
+
+
+
+
 
 
 
@@ -174,7 +195,7 @@ Spinner shift;
            submit.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   if(!formfillingallowed) {
+                   if(!formfillingallowed&&!confirmed) {
                        startbutt.setEnabled(true);
                        endbutt.setEnabled(true);
                        // submit.setEnabled(false);
@@ -185,6 +206,9 @@ Spinner shift;
                        shiftvalue.setText("");
                        update="t";
 
+                   }
+                   else if(!formfillingallowed&&confirmed){
+                       err();
                    }
                    else{
                        // d=e-s;
@@ -221,7 +245,9 @@ Spinner shift;
 
     }
 
-
+public void err(){
+    Toast.makeText(OvertimeForm.this,"Data for this date is already verified!!!", Toast.LENGTH_LONG).show();
+}
 
 
 
@@ -439,7 +465,7 @@ Spinner shift;
 
         @Override
         protected void onPostExecute(String res) {
-            Toast.makeText(ctx, "ret "+res, Toast.LENGTH_LONG).show();
+           // Toast.makeText(ctx, "ret "+res, Toast.LENGTH_LONG).show();
             // qr_result.setText(result);
             jsonstring = res;
 

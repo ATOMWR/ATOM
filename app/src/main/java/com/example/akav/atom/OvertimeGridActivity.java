@@ -125,7 +125,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
                 gotoOTFormIntent.putExtra("currdate",datestring);
                 gotoOTFormIntent.putExtra("tag",t);
 
-                msg();
+                //msg();
 
                 startActivity(gotoOTFormIntent);
             }
@@ -211,7 +211,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
             jsonstring = result;
             //json();
             // return  result;
