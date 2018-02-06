@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -148,10 +147,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 Bitmap bitmap = draw.getBitmap();
 
                 FileOutputStream outStream = null;
-                File sdCard = Environment.getExternalStorageDirectory();
-                File dir = new File(sdCard.getAbsolutePath() + "/Atom");
+              //  File sdCard = Environment.getDataDirectory();
+                File dir = new File("/storage/emulated/0/Atom");
                 dir.mkdirs();
                 String fileName = String.format("qrcode.jpg", System.currentTimeMillis());
+
                 File outFile = new File(dir, fileName);
 
                 try {
