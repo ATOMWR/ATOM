@@ -78,9 +78,13 @@ public class TextViewAdapter extends BaseAdapter {
                             gridView.setBackgroundColor(Color.parseColor("#E3E358"));
                             gridView.setTag(new String("ot filled"));
                         }
-                        else {
+                        else if (ji[i] == 1){
                             gridView.setBackgroundColor(Color.parseColor("#ADDF41"));
                             gridView.setTag(new String("ot verified"));
+                        }
+                        else if (ji[i] == 2){
+                            gridView.setBackgroundColor(Color.parseColor("#E98D71"));
+                            gridView.setTag(new String("ot notify"));
                         }
                         break;
                     } else {
