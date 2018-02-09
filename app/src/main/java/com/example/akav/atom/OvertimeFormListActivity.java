@@ -128,7 +128,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             JSONObject root = new JSONObject(formListJson);
             JSONArray forms = root.getJSONArray("forms");
 
-            for (int index = 0; index <forms.length(); index++){
+            for (int index = 0; index < forms.length(); index++){
 
                 JSONObject currentForm = forms.getJSONObject(index);
 

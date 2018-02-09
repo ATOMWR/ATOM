@@ -7,10 +7,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,29 +27,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class OvertimeActivity extends AppCompatActivity {
 
-    private LinearLayout previousCycle1;
-    private LinearLayout previousCycle2;
-    private LinearLayout previousCycle3;
     private LinearLayout currentCycle;
-
-    private TextView prevCycle1Start;
-    private TextView prevCycle1End;
-
-    private TextView prevCycle2Start;
-    private TextView prevCycle2End;
-
-    private TextView prevCycle3Start;
-    private TextView prevCycle3End;
 
     private TextView currentCycleStart;
     private TextView currentCycleEnd;
 
     private RelativeLayout progressBarLayout;
     private RelativeLayout cycleList;
+
+    private ArrayList<OtCycleDateObject> previousCycleDateList;
 
     public static final String GET_DATE_URL = "http://atomwrapp.dx.am/getOtCycleDates.php";
 
@@ -56,76 +51,24 @@ public class OvertimeActivity extends AppCompatActivity {
 
         progressBarLayout = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         cycleList = (RelativeLayout) findViewById(R.id.cycle_list_layout);
-        final String userId=getIntent().getExtras().getString("userID");
+        final String userId = getIntent().getExtras().getString("userID");
+
+        previousCycleDateList = new ArrayList<>();
 
         // Start the AsyncTask
         MainAsyncTask task = new MainAsyncTask();
         task.execute(GET_DATE_URL);
 
-        previousCycle1 = (LinearLayout) findViewById(R.id.ot_previous_cycle_1);
-        previousCycle2 = (LinearLayout) findViewById(R.id.ot_previous_cycle_2);
-        previousCycle3 = (LinearLayout) findViewById(R.id.ot_previous_cycle_3);
+        ListView cycleDateListView = (ListView) findViewById(R.id.prev_cycle_date_list_view);
 
-        prevCycle1Start = (TextView) findViewById(R.id.ot_cycle_1_start);
-        prevCycle1End = (TextView) findViewById(R.id.ot_cycle_1_end);
+        previousCycleDateListAdapter dateListAdapter = new previousCycleDateListAdapter(this, previousCycleDateList);
 
-        prevCycle2Start = (TextView) findViewById(R.id.ot_cycle_2_start);
-        prevCycle2End = (TextView) findViewById(R.id.ot_cycle_2_end);
-
-        prevCycle3Start = (TextView) findViewById(R.id.ot_cycle_3_start);
-        prevCycle3End = (TextView) findViewById(R.id.ot_cycle_3_end);
+        cycleDateListView.setAdapter(dateListAdapter);
 
         currentCycleStart = (TextView) findViewById(R.id.ot_current_cycle_start);
         currentCycleEnd = (TextView) findViewById(R.id.ot_current_cycle_end);
 
         currentCycle = (LinearLayout) findViewById(R.id.ot_current_cycle);
-
-        previousCycle1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String prevCycle1StartDate = prevCycle1Start.getText().toString();
-                String prevCycle1EndDate = prevCycle1End.getText().toString();
-
-                Intent prevCycle1ToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
-
-                prevCycle1ToGrid.putExtra("startDate", prevCycle1StartDate);
-                prevCycle1ToGrid.putExtra("endDate", prevCycle1EndDate);
-
-                startActivity(prevCycle1ToGrid);
-            }
-        });
-
-        previousCycle2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String prevCycle2StartDate = prevCycle2Start.getText().toString();
-                String prevCycle2EndDate = prevCycle2End.getText().toString();
-
-                Intent prevCycle2ToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
-
-                prevCycle2ToGrid.putExtra("startDate", prevCycle2StartDate);
-                prevCycle2ToGrid.putExtra("endDate", prevCycle2EndDate);
-                prevCycle2ToGrid.putExtra("userID", userId);
-
-                startActivity(prevCycle2ToGrid);
-            }
-        });
-
-        previousCycle3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String prevCycle3StartDate = prevCycle3Start.getText().toString();
-                String prevCycle3EndDate = prevCycle3End.getText().toString();
-
-                Intent prevCycle3ToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
-
-                prevCycle3ToGrid.putExtra("startDate", prevCycle3StartDate);
-                prevCycle3ToGrid.putExtra("endDate", prevCycle3EndDate);
-                prevCycle3ToGrid.putExtra("userID", userId);
-
-                startActivity(prevCycle3ToGrid);
-            }
-        });
 
         currentCycle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,14 +82,24 @@ public class OvertimeActivity extends AppCompatActivity {
                 currentCycleToGrid.putExtra("endDate", currentCycleEndDate);
                 currentCycleToGrid.putExtra("userID", userId);
 
-
                 startActivity(currentCycleToGrid);
             }
         });
 
+        cycleDateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                OtCycleDateObject cycleDate = previousCycleDateList.get(position);
+
+                String startDate = cycleDate.getStartDate();
+                String endDate = cycleDate.getEndDate();
+
+                Toast.makeText(OvertimeActivity.this, startDate + "  TO  " + endDate, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private String getCurrentCycleDates(String url){
+    private String getCycleDates(String url){
 
         //Create URI
         Uri baseUri = Uri.parse(url);
@@ -175,14 +128,28 @@ public class OvertimeActivity extends AppCompatActivity {
         try {
             JSONObject root = new JSONObject(jsonResponse);
 
+            // For Current Cycle Date
             long startDateTimeStamp = root.getLong("Start Date");
             long endDateTimeStamp = root.getLong("End Date");
 
-            String currentStartDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(startDateTimeStamp * 1000));
-            String currentEndDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(endDateTimeStamp * 1000));
+            String currentStartDate = new SimpleDateFormat("dd - MM - yyyy").format(new Date(startDateTimeStamp * 1000));
+            String currentEndDate = new SimpleDateFormat("dd - MM - yyyy").format(new Date(endDateTimeStamp * 1000));
 
             currentCycleStart.setText(currentStartDate);
             currentCycleEnd.setText(currentEndDate);
+
+            // For Previous Cycle Dates
+
+            JSONArray previousCycleArray = root.getJSONArray("Previous Cycle Dates");
+
+            for (int index = 0; index < previousCycleArray.length(); index++){
+                JSONObject cycleDates = previousCycleArray.getJSONObject(index);
+
+                Long startDate = cycleDates.getLong("Start Date");
+                Long endDate = cycleDates.getLong("End Date");
+
+                previousCycleDateList.add(new OtCycleDateObject(startDate, endDate));
+            }
 
             result = "" + startDateTimeStamp + ", " + endDateTimeStamp;
 
@@ -247,7 +214,7 @@ public class OvertimeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... urls) {
-            String result = getCurrentCycleDates(urls[0]);
+            String result = getCycleDates(urls[0]);
             return result;
         }
 
