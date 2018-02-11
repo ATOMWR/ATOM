@@ -39,6 +39,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
     String[] stringdatearray;
     int[] inter_verification_status;
     String t;
+    String fromcurrorprevcycle;
 
 
     JSONObject jo;
@@ -52,6 +53,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime_grid);
         final String uid = getIntent().getExtras().getString("userID");
+        fromcurrorprevcycle=getIntent().getExtras().getString("fromcyclelist");
         loadinglayout=(RelativeLayout)findViewById(R.id.load_layout);
         actuallayout=(RelativeLayout)findViewById(R.id.actual_layout);
 
@@ -118,16 +120,20 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
                 datestring=parent.getItemAtPosition(position).toString();
                 t=view.getTag().toString();
+                if(fromcurrorprevcycle.equals("cannotfill")&&!t.equals("ot notify")){
+                    cannotfill();
+                }
 
-               // msg();
-               Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
-               gotoOTFormIntent.putExtra("userID",userID);
-                gotoOTFormIntent.putExtra("currdate",datestring);
-                gotoOTFormIntent.putExtra("tag",t);
+               else {
+                    Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
+                    gotoOTFormIntent.putExtra("userID", userID);
+                    gotoOTFormIntent.putExtra("currdate", datestring);
+                    gotoOTFormIntent.putExtra("tag", t);
 
-                //msg();
+                    //msg();
 
-                startActivity(gotoOTFormIntent);
+                    startActivity(gotoOTFormIntent);
+                }
             }
         });
 
@@ -142,6 +148,9 @@ public class OvertimeGridActivity extends AppCompatActivity {
     private void msg(){
         Toast.makeText(OvertimeGridActivity.this, "tag is:"+t, Toast.LENGTH_SHORT).show();
 
+    }
+    private void cannotfill(){
+        Toast.makeText(OvertimeGridActivity.this, "Sorry,you cannot fill form as it is under verification.", Toast.LENGTH_SHORT).show();
     }
 
 

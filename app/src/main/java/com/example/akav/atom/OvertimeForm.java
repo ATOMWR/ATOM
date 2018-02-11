@@ -236,6 +236,7 @@ Spinner shift;
                        //sample.setText(dm);
                        //msg();
                        open();
+
                    }
                }
            });

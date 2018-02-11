@@ -76,11 +76,18 @@ public class OvertimeActivity extends AppCompatActivity {
                 String currentCycleStartDate = currentCycleStart.getText().toString();
                 String currentCycleEndDate = currentCycleEnd.getText().toString();
 
+                String sdc=currentCycleStartDate.substring(10,14)+"-"+currentCycleStartDate.substring(5,7)+"-"+currentCycleStartDate.substring(0,2);
+
+                String edc=currentCycleEndDate.substring(10,14)+"-"+currentCycleEndDate.substring(5,7)+"-"+currentCycleEndDate.substring(0,2);
+
                 Intent currentCycleToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
 
-                currentCycleToGrid.putExtra("startDate", currentCycleStartDate);
-                currentCycleToGrid.putExtra("endDate", currentCycleEndDate);
+
+                currentCycleToGrid.putExtra("startDate", sdc);
+                currentCycleToGrid.putExtra("endDate", edc);
                 currentCycleToGrid.putExtra("userID", userId);
+                currentCycleToGrid.putExtra("fromcyclelist", "canfill");
+
 
                 startActivity(currentCycleToGrid);
             }
@@ -93,6 +100,20 @@ public class OvertimeActivity extends AppCompatActivity {
 
                 String startDate = cycleDate.getStartDate();
                 String endDate = cycleDate.getEndDate();
+
+                String sd=startDate.substring(10,14)+"-"+startDate.substring(5,7)+"-"+startDate.substring(0,2);
+
+                String ed=endDate.substring(10,14)+"-"+endDate.substring(5,7)+"-"+endDate.substring(0,2);
+
+                Intent prevCycleToGrid = new Intent(OvertimeActivity.this, OvertimeGridActivity.class);
+
+                prevCycleToGrid.putExtra("startDate", sd);
+                prevCycleToGrid.putExtra("endDate", ed);
+                prevCycleToGrid.putExtra("userID", userId);
+                prevCycleToGrid.putExtra("fromcyclelist", "cannotfill");
+
+
+                startActivity(prevCycleToGrid);
 
                 Toast.makeText(OvertimeActivity.this, startDate + "  TO  " + endDate, Toast.LENGTH_SHORT).show();
             }
