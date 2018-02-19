@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -42,7 +41,8 @@
             android:name=".AdminHomeActivity"
             android:label="Admin Home" />
         <activity android:name=".QRverification" />
-        <activity android:name=".OvertimeFormListActivity"></activity>
+        <activity android:name=".OvertimeFormListActivity" />
+        <activity android:name=".AdminOvertimeActivity"></activity>
     </application>
 
 </manifest>

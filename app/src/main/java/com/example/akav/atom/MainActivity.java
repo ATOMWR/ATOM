@@ -195,8 +195,8 @@ public class MainActivity extends AppCompatActivity {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(15000);
-            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(30000);
+            urlConnection.setConnectTimeout(30000);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 

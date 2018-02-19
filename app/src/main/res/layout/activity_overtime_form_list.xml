@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
 
         <ProgressBar
@@ -21,10 +21,11 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/loading_forms_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Updating Forms, Please Wait."/>
+            android:text="Loading Forms, Please Wait."/>
 
     </LinearLayout>
 
@@ -32,7 +33,8 @@
         android:id="@+id/form_list_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/action_buttons">
+        android:layout_above="@+id/action_buttons"
+        android:visibility="gone">
 
         <ListView
             android:id="@+id/list"
@@ -55,7 +57,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:layout_marginRight="2dp"
-            android:text="Go Back"
+            android:text="Verify List"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -65,7 +67,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:layout_marginLeft="2dp"
-            android:text="Verify List"
+            android:text="Pull Report"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

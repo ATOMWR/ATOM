@@ -31,11 +31,9 @@ public class AdminHomeActivity extends AppCompatActivity {
     private Button checkTravelAllowance;
     private Button verification;
 
-    private ProgressBar progressBar;
+    // String jsonResponse;
 
-    String jsonResponse;
-
-    private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getOtForms.php";
+    // private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getOtForms.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +47,13 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         checkOvertime = (Button) findViewById(R.id.admin_ot);
         checkTravelAllowance = (Button) findViewById((R.id.admin_ta));
-        verification=(Button)findViewById(R.id.verify_user);
-
-        progressBar = (ProgressBar) findViewById(R.id.admin_progress_bar);
+        verification = (Button)findViewById(R.id.verify_user);
 
         checkOvertime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Start the AsyncTask
-                MainAsyncTask task = new MainAsyncTask();
-                task.execute(GET_OT_FORMS_URL);
+                Intent showOvertimeCycles = new Intent(AdminHomeActivity.this, AdminOvertimeActivity.class);
+                startActivity(showOvertimeCycles);
             }
         });
 
@@ -75,106 +67,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         verification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent goto_qrcode_verification = new Intent(AdminHomeActivity.this,QRverification.class);
                 startActivity(goto_qrcode_verification);
             }
         });
-    }
-
-    private String getOtFroms(String url){
-
-        //Create URI
-        Uri baseUri = Uri.parse(url);
-        Uri.Builder uriBuilder = baseUri.buildUpon();
-
-        String insertUrl = uriBuilder.toString();
-        URL finalInsertUrl = null;
-
-        try {
-            finalInsertUrl = new URL(insertUrl);
-        } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
-        }
-
-        //Perform HTTP request to the URL and receive a JSON response back
-        jsonResponse = null;
-        try{
-            jsonResponse = makeHttpRequest(finalInsertUrl);
-        }
-        catch (IOException e){
-            Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
-        }
-
-        return jsonResponse;
-    }
-
-    /**
-     * Make an HTTP request to the given URL and return a String as the response.
-     */
-    private String makeHttpRequest(URL url) throws IOException {
-
-        String jsonResponse = "";
-
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(15000);
-            urlConnection.setConnectTimeout(15000);
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
-
-        } catch (IOException e) {
-            Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return jsonResponse;
-    }
-
-    /**
-     * Convert JSON to String.
-     */
-    private String readFromStream(InputStream inputStream) throws IOException {
-        StringBuilder output = new StringBuilder();
-        if(inputStream != null){
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-            BufferedReader reader = new BufferedReader(inputStreamReader);
-
-            String line = reader.readLine();
-
-            while (line != null){
-                output.append(line);
-                line = reader.readLine();
-            }
-        }
-        return output.toString();
-    }
-
-    private class MainAsyncTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            String result = getOtFroms(urls[0]);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.GONE);
-
-            Intent goto_otforms_list = new Intent(AdminHomeActivity.this, OvertimeFormListActivity.class);
-            goto_otforms_list.putExtra("OtFormList", result);
-            startActivity(goto_otforms_list);
-        }
     }
 }

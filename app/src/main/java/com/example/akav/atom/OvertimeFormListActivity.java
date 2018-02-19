@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -34,6 +35,9 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private Button goBack;
     private Button verifyList;
 
+    private String startDateTimestamp;
+    private String endDateTimeStamp;
+
     private JSONObject jsonToSend;
 
     private String jsonResponse;
@@ -41,7 +45,13 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private LinearLayout updateFormProgressLayout;
     private RelativeLayout formListLayout;
 
+    private TextView loadingFormTextView;
+
+    private Integer isPreviousCycle;
+
     private ArrayList<OvertimeFormObject> formList;
+
+    private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getOtForms.php";
 
     private final String INTER_VERIFY_OT_FORMS = "http://atomwrapp.dx.am/interVerifyOtForms.php";
 
@@ -51,17 +61,16 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overtime_form_list);
 
         Intent intent = getIntent();
-        String formListJson = intent.getStringExtra("OtFormList");
+        startDateTimestamp = intent.getStringExtra("startDate");
+        endDateTimeStamp = intent.getStringExtra("endDate");
+        isPreviousCycle = intent.getIntExtra("isPreviousCycle", 0);
 
-        formList = parseJson(formListJson);
-
-        OvertimeFormListAdapter formListAdapter = new OvertimeFormListAdapter(this, formList);
-
-        ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(formListAdapter);
+        MainAsyncTask2 task2 = new MainAsyncTask2();
+        task2.execute(GET_OT_FORMS_URL);
 
         updateFormProgressLayout = (LinearLayout) findViewById(R.id.update_form_list_progress_layout);
         formListLayout = (RelativeLayout) findViewById(R.id.form_list_layout);
+        loadingFormTextView = (TextView) findViewById(R.id.loading_forms_text);
 
         verifyList = (Button) findViewById(R.id.verify_list);
         goBack = (Button) findViewById(R.id.undo_and_go_back);
@@ -71,6 +80,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 jsonToSend = ArrayListToJson(formList);
 
+                loadingFormTextView.setText("Updating Forms, Please Wait.");
                 formListLayout.setVisibility(View.GONE);
                 updateFormProgressLayout.setVisibility(View.VISIBLE);
 
@@ -141,10 +151,10 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                 String extraHours = currentForm.getString("extrahours");
                 String reason = currentForm.getString("reason");
                 Integer interverification = currentForm.getInt("inter_verification");
-                Integer finalVerificatin = currentForm.getInt("final_verification");
+                Integer finalVerification = currentForm.getInt("final_verification");
 
                 formList.add(new OvertimeFormObject(date, platformNumber, name, shift, actualStart,
-                        actualEnd, extraHours, reason, interverification, finalVerificatin));
+                        actualEnd, extraHours, reason, interverification, finalVerification));
             }
 
         } catch (JSONException e) {
@@ -187,12 +197,11 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(15000);
-            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(30000);
+            urlConnection.setConnectTimeout(30000);
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type","application/json");
-            //urlConnection.setRequestProperty("Host", "android.schoolportal.gr");
 
             urlConnection.connect();
 
@@ -247,6 +256,92 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Toast.makeText(OvertimeFormListActivity.this, "Successfully updated OT forms", Toast.LENGTH_LONG).show();
             finish();
+        }
+    }
+
+
+    private String getOtFroms(String url){
+
+        //Create URI
+        Uri baseUri = Uri.parse(url);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("startDate", startDateTimestamp);
+        uriBuilder.appendQueryParameter("endDate", endDateTimeStamp);
+        uriBuilder.appendQueryParameter("isPreviousCycle", isPreviousCycle.toString());
+
+        String insertUrl = uriBuilder.toString();
+        URL finalInsertUrl = null;
+
+        try {
+            finalInsertUrl = new URL(insertUrl);
+        } catch (MalformedURLException e) {
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
+        }
+
+        //Perform HTTP request to the URL and receive a JSON response back
+        jsonResponse = null;
+        try{
+            jsonResponse = makeHttpRequest2(finalInsertUrl);
+        }
+        catch (IOException e){
+            Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
+        }
+
+        return jsonResponse;
+    }
+
+    /**
+     * Make an HTTP request to the given URL and return a String as the response.
+     */
+    private String makeHttpRequest2(URL url) throws IOException {
+
+        String jsonResponse = "";
+
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(30000);
+            urlConnection.setConnectTimeout(30000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            inputStream = urlConnection.getInputStream();
+            jsonResponse = readFromStream(inputStream);
+
+        } catch (IOException e) {
+            Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return jsonResponse;
+    }
+
+    private class MainAsyncTask2 extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String result = getOtFroms(urls[0]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            formList = parseJson(result);
+
+            OvertimeFormListAdapter formListAdapter = new OvertimeFormListAdapter(OvertimeFormListActivity.this, formList);
+
+            ListView listView = (ListView) findViewById(R.id.list);
+            listView.setAdapter(formListAdapter);
+
+            updateFormProgressLayout.setVisibility(View.GONE);
+            formListLayout.setVisibility(View.VISIBLE);
         }
     }
 }
