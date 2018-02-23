@@ -33,7 +33,6 @@ import java.util.Date;
 public class AdminOvertimeActivity extends AppCompatActivity {
 
 
-
     private LinearLayout currentCycle;
 
     private TextView currentCycleStart;
@@ -90,8 +89,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 }
 
                 // Get Timestamp from date string
-                Long startDateTimestamp = startDate.getTime()/1000;
-                Long endDateTimestamp = endDate.getTime()/1000;
+                Long startDateTimestamp = startDate.getTime() / 1000;
+                Long endDateTimestamp = endDate.getTime() / 1000;
 
                 Intent currentCycleFormsList = new Intent(AdminOvertimeActivity.this, OvertimeFormListActivity.class);
 
@@ -125,8 +124,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 }
 
                 // Get Timestamp from date string
-                Long startDateTimestamp = startDate.getTime()/1000;
-                Long endDateTimestamp = endDate.getTime()/1000;
+                Long startDateTimestamp = startDate.getTime() / 1000;
+                Long endDateTimestamp = endDate.getTime() / 1000;
 
                 Intent previousCycleFormsList = new Intent(AdminOvertimeActivity.this, OvertimeFormListActivity.class);
 
@@ -140,7 +139,7 @@ public class AdminOvertimeActivity extends AppCompatActivity {
         });
     }
 
-    private String getCycleDates(String url){
+    private String getCycleDates(String url) {
 
         //Create URI
         Uri baseUri = Uri.parse(url);
@@ -152,22 +151,22 @@ public class AdminOvertimeActivity extends AppCompatActivity {
         try {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
-        try{
+        try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
 
         String result = null;
-
+        JSONObject root = null;
         try {
-            JSONObject root = new JSONObject(jsonResponse);
+            root = new JSONObject(jsonResponse);
 
             // For Current Cycle Date
             long startDateTimeStamp = root.getLong("Start Date");
@@ -179,11 +178,18 @@ public class AdminOvertimeActivity extends AppCompatActivity {
             currentCycleStart.setText(currentStartDate);
             currentCycleEnd.setText(currentEndDate);
 
+            result = "" + startDateTimeStamp + ", " + endDateTimeStamp;
+
+        } catch (JSONException e) {
+            Log.e(MainActivity.class.getName(), "Error in Parsing", e);
+        }
+
+        try {
             // For Previous Cycle Dates
 
             JSONArray previousCycleArray = root.getJSONArray("Previous Cycle Dates");
 
-            for (int index = 0; index < previousCycleArray.length(); index++){
+            for (int index = 0; index < previousCycleArray.length(); index++) {
                 JSONObject cycleDates = previousCycleArray.getJSONObject(index);
 
                 long startDate = cycleDates.getLong("Start Date");
@@ -191,11 +197,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
 
                 previousCycleDateList.add(new OtCycleDateObject(startDate, endDate));
             }
-
-            result = "" + startDateTimeStamp + ", " + endDateTimeStamp;
-
         } catch (JSONException e) {
-            Log.e(MainActivity.class.getName(), "Error in Parsing", e);;
+            Log.e(MainActivity.class.getName(), "Error in Parsing", e);
         }
         return result;
     }
@@ -237,13 +240,13 @@ public class AdminOvertimeActivity extends AppCompatActivity {
      */
     private String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
-        if(inputStream != null){
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader reader = new BufferedReader(inputStreamReader);
 
             String line = reader.readLine();
 
-            while (line != null){
+            while (line != null) {
                 output.append(line);
                 line = reader.readLine();
             }
