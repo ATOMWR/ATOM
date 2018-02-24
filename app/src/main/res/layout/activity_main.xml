@@ -66,6 +66,37 @@
             android:text="Register"
             android:textColor="#FFFFFF" />
 
+        <!--Temperory Buttons-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/user_fill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
+                android:text="User Fill"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:textColor="#FFFFFF"/>
+
+            <Button
+                android:id="@+id/admin_fill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
+                android:layout_marginLeft="4dp"
+                android:text="Admin Fill"
+                android:layout_weight="1"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"

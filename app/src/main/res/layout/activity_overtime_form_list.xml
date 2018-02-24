@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.akav.atom.OvertimeFormListActivity">
+    tools:context="com.example.akav.atom.overtime.OvertimeFormListActivity">
 
     <LinearLayout
         android:id="@+id/update_form_list_progress_layout"

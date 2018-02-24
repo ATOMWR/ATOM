@@ -1,6 +1,6 @@
-package com.example.akav.atom;
+package com.example.akav.atom.overtime;
 
-import android.widget.TextView;
+import com.example.akav.atom.R;
 
 /**
  * Created by ankit on 01-02-2018.

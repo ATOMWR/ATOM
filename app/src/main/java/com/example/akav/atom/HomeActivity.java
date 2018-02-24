@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.akav.atom.overtime.OvertimeActivity;
+import com.example.akav.atom.travel.TravelActivity;
+
 public class HomeActivity extends AppCompatActivity {
 
     private Button fillOT;
@@ -91,6 +94,5 @@ public class HomeActivity extends AppCompatActivity {
         // Edit Profile Logic
 
     }
-
 
 }

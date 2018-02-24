@@ -68,8 +68,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-    }
 
+        // Temperorary Buttons
+
+        Button fillUser = (Button) findViewById(R.id.user_fill);
+        Button fillAdmin = (Button) findViewById(R.id.admin_fill);
+
+        fillUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mUserName = (EditText) findViewById(R.id.user_id);
+                mPassword = (EditText) findViewById(R.id.password);
+                mUserName.setText("user");
+                mPassword.setText("userpw");
+            }
+        });
+
+        fillAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mUserName = (EditText) findViewById(R.id.user_id);
+                mPassword = (EditText) findViewById(R.id.password);
+                mUserName.setText("admin");
+                mPassword.setText("adminpw");
+            }
+        });
+    }
     // To Authenticate User.
     private void validateUser() {
 

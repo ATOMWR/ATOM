@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.example.akav.atom.overtime.OvertimeActivity">
-
+    tools:context="com.example.akav.atom.travel.AdminTravelActivity">
 
     <RelativeLayout
         android:id="@+id/progress_bar_layout"
@@ -70,10 +69,10 @@
                     android:layout_marginBottom="16dp"/>
 
                 <!--add list view here -->
-                    <ListView
-                        android:id="@+id/prev_cycle_date_list_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp" />
+                <ListView
+                    android:id="@+id/prev_cycle_date_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp" />
 
             </LinearLayout>
 

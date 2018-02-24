@@ -7,11 +7,11 @@ import java.util.Date;
  * Created by ankit on 09-02-2018.
  */
 
-public class OtCycleDateObject {
+public class cycleDateObject {
     private Long startDate;
     private Long endDate;
 
-    public OtCycleDateObject(Long startDate, Long endDate) {
+    public cycleDateObject(Long startDate, Long endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }

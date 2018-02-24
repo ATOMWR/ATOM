@@ -1,4 +1,4 @@
-package com.example.akav.atom;
+package com.example.akav.atom.overtime;
 
 /**
  * Created by AKAV on 1/1/2018.
@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+
+import com.example.akav.atom.R;
 
 /**
  * Created by AKAV on 12/30/2017.

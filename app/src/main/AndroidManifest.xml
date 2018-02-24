@@ -26,23 +26,24 @@
             android:name=".HomeActivity"
             android:label="@string/home_title" />
         <activity
-            android:name=".OvertimeActivity"
+            android:name=".overtime.OvertimeActivity"
             android:label="Overtime Allowance" />
         <activity
-            android:name=".TravelActivity"
+            android:name=".travel.TravelActivity"
             android:label="Travel Allowance" />
         <activity
-            android:name=".OvertimeGridActivity"
+            android:name=".overtime.OvertimeGridActivity"
             android:label="Select Date" />
         <activity
-            android:name=".OvertimeForm"
+            android:name=".overtime.OvertimeForm"
             android:label="Fill OverTime Form" />
         <activity
             android:name=".AdminHomeActivity"
             android:label="Admin Home" />
         <activity android:name=".QRverification" />
-        <activity android:name=".OvertimeFormListActivity" />
-        <activity android:name=".AdminOvertimeActivity"></activity>
+        <activity android:name=".overtime.OvertimeFormListActivity" />
+        <activity android:name=".overtime.AdminOvertimeActivity" />
+        <activity android:name=".travel.AdminTravelActivity"></activity>
     </application>
 
 </manifest>
