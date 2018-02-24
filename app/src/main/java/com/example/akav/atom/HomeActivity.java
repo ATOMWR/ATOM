@@ -44,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent gotoTA = new Intent(HomeActivity.this, TravelActivity.class);
+                gotoTA.putExtra("userID",userId);
                 startActivity(gotoTA);
             }
         });
