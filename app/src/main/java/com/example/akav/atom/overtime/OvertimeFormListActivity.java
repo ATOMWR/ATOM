@@ -1,11 +1,13 @@
 package com.example.akav.atom.overtime;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -34,15 +36,15 @@ import java.util.ArrayList;
 
 public class OvertimeFormListActivity extends AppCompatActivity {
 
-    private Button goBack;
+    private Button pullReport;
     private Button verifyList;
 
     private String startDateTimestamp;
     private String endDateTimeStamp;
+    private String jsonResponse;
+    private String buttonColor;
 
     private JSONObject jsonToSend;
-
-    private String jsonResponse;
 
     private LinearLayout updateFormProgressLayout;
     private RelativeLayout formListLayout;
@@ -50,11 +52,12 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private TextView loadingFormTextView;
 
     private Integer isPreviousCycle;
+    private Integer numberOfVerifiedForms;
 
     private ArrayList<OvertimeFormObject> formList;
 
+    private final String ERROR_MESSAGE = "Can't Pull Report\nThere are UNVERIFIED forms in this list";
     private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getOtForms.php";
-
     private final String INTER_VERIFY_OT_FORMS = "http://atomwrapp.dx.am/interVerifyOtForms.php";
 
     @Override
@@ -67,6 +70,8 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         endDateTimeStamp = intent.getStringExtra("endDate");
         isPreviousCycle = intent.getIntExtra("isPreviousCycle", 0);
 
+        numberOfVerifiedForms = 0;
+
         MainAsyncTask2 task2 = new MainAsyncTask2();
         task2.execute(GET_OT_FORMS_URL);
 
@@ -75,7 +80,39 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         loadingFormTextView = (TextView) findViewById(R.id.loading_forms_text);
 
         verifyList = (Button) findViewById(R.id.verify_list);
-        goBack = (Button) findViewById(R.id.undo_and_go_back);
+        pullReport = (Button) findViewById(R.id.pull_report);
+
+        if (isPreviousCycle == 0) {
+            pullReport.setVisibility(View.GONE);
+        } else {
+            pullReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO : Change Colors Later.
+                    buttonColor = (String) pullReport.getTag();
+                    if (buttonColor.equals("#B1BBF0")) {
+
+                        Toast errorToast = new Toast(getApplicationContext());
+                        errorToast.setGravity(Gravity.CENTER, 0, 0);
+
+                        TextView errorText = new TextView(getApplicationContext());
+                        errorText.setText(ERROR_MESSAGE);
+                        errorText.setGravity(Gravity.CENTER);
+                        errorText.setBackgroundColor(getResources().getColor(R.color.red));
+                        errorText.setPadding(48, 48, 48, 48);
+                        errorText.setTextColor(getResources().getColor(R.color.white));
+                        errorText.setTextSize(16);
+
+                        errorToast.setView(errorText);
+                        errorToast.setDuration(Toast.LENGTH_LONG);
+                        errorToast.show();
+
+                    } else {
+                        // TODO : Add code to pull report.
+                    }
+                }
+            });
+        }
 
         verifyList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,12 +129,6 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             }
         });
 
-        goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
 
     private JSONObject ArrayListToJson(ArrayList<OvertimeFormObject> formList) {
@@ -140,7 +171,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             JSONObject root = new JSONObject(formListJson);
             JSONArray forms = root.getJSONArray("forms");
 
-            for (int index = 0; index < forms.length(); index++){
+            for (int index = 0; index < forms.length(); index++) {
 
                 JSONObject currentForm = forms.getJSONObject(index);
 
@@ -157,6 +188,10 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
                 formList.add(new OvertimeFormObject(date, platformNumber, name, shift, actualStart,
                         actualEnd, extraHours, reason, interverification, finalVerification));
+
+                if (interverification == 1) {
+                    numberOfVerifiedForms += 1;
+                }
             }
 
         } catch (JSONException e) {
@@ -166,22 +201,22 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         return formList;
     }
 
-    private String verifyOtForms(String url){
+    private String verifyOtForms(String url) {
 
         URL finalInsertUrl = null;
 
         try {
             finalInsertUrl = new URL(url);
         } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
         jsonResponse = null;
-        try{
+        try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
 
@@ -203,7 +238,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             urlConnection.setConnectTimeout(30000);
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type","application/json");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
 
             urlConnection.connect();
 
@@ -232,13 +267,13 @@ public class OvertimeFormListActivity extends AppCompatActivity {
      */
     private String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
-        if(inputStream != null){
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader reader = new BufferedReader(inputStreamReader);
 
             String line = reader.readLine();
 
-            while (line != null){
+            while (line != null) {
                 output.append(line);
                 line = reader.readLine();
             }
@@ -257,12 +292,17 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(OvertimeFormListActivity.this, "Successfully updated OT forms", Toast.LENGTH_LONG).show();
-            finish();
+            if (isPreviousCycle == 0) {
+                finish();
+            } else {
+                //Reload activity
+                finish();
+                startActivity(getIntent());
+            }
         }
     }
 
-
-    private String getOtFroms(String url){
+    private String getOtFroms(String url) {
 
         //Create URI
         Uri baseUri = Uri.parse(url);
@@ -278,15 +318,15 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         try {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
         jsonResponse = null;
-        try{
+        try {
             jsonResponse = makeHttpRequest2(finalInsertUrl);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
 
@@ -342,8 +382,26 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             ListView listView = (ListView) findViewById(R.id.list);
             listView.setAdapter(formListAdapter);
 
+            checkPullReportStatus();
+
             updateFormProgressLayout.setVisibility(View.GONE);
             formListLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkPullReportStatus() {
+        if (canPullReport()) {
+            // TODO : Change Colors later.
+            pullReport.setTag("#3F51B5");
+            pullReport.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    private Boolean canPullReport() {
+        if (numberOfVerifiedForms.intValue() == formList.size()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
