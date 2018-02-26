@@ -42,7 +42,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private String endDateTimeStamp;
     private String jsonResponse;
     private String buttonColor;
-     String sd,ed;
+    private String sd,ed;
 
     private JSONObject jsonToSend;
 
@@ -57,8 +57,10 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private ArrayList<OvertimeFormObject> formList;
 
     private final String ERROR_MESSAGE = "Can't Pull Report\nThere are UNVERIFIED forms in this list";
+
     private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getOtForms.php";
     private final String INTER_VERIFY_OT_FORMS = "http://atomwrapp.dx.am/interVerifyOtForms.php";
+    private final String PULL_REPORT = "http://atomwrapp.dx.am/temp.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +114,14 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
                     } else {
                         // TODO : Add code to pull report.
-                        msg();
+                        // msg();
 
+                        loadingFormTextView.setText("Generating Report.");
+                        formListLayout.setVisibility(View.GONE);
+                        updateFormProgressLayout.setVisibility(View.VISIBLE);
 
-
+                        MainAsyncTask3 task2 = new MainAsyncTask3();
+                        task2.execute(PULL_REPORT);
                     }
                 }
             });
@@ -140,11 +146,11 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
 
     }
-    public void msg(){
+
+    /*public void msg(){
         Toast.makeText(OvertimeFormListActivity.this, sd + " to " + ed, Toast.LENGTH_LONG).show();
         //this sd and ed is to be sent to temp.php
-    }
-
+    }*/
 
     private JSONObject ArrayListToJson(ArrayList<OvertimeFormObject> formList) {
 
@@ -334,7 +340,6 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
             Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
-            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
@@ -403,6 +408,63 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             formListLayout.setVisibility(View.VISIBLE);
         }
     }
+
+
+    // Background Task to pull report.
+    private class MainAsyncTask3 extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String result = pullReportFromDatabase(urls[0]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(OvertimeFormListActivity.this, "Report Generated.", Toast.LENGTH_LONG).show();
+                finish();
+        }
+    }
+
+    private String pullReportFromDatabase(String url) {
+
+        //Create URI
+        Uri baseUri = Uri.parse(url);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("sdate", ed);
+        uriBuilder.appendQueryParameter("edate", sd);
+
+        String insertUrl = uriBuilder.toString();
+        URL finalInsertUrl = null;
+
+        try {
+            finalInsertUrl = new URL(insertUrl);
+        } catch (MalformedURLException e) {
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+        }
+
+        //Perform HTTP request to the URL
+        jsonResponse = null;
+
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) finalInsertUrl.openConnection();
+            urlConnection.setReadTimeout(30000);
+            urlConnection.setConnectTimeout(30000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+        } catch (IOException e) {
+            Log.e(MainActivity.class.getName(), "Problem Connecting to Server.", e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return jsonResponse;
+    }
+
 
     private void checkPullReportStatus() {
         if (canPullReport()) {
