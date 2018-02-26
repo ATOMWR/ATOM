@@ -143,8 +143,6 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     /*public void msg(){
