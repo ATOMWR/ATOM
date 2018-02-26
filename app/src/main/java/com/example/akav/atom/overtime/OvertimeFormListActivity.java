@@ -1,11 +1,10 @@
 package com.example.akav.atom.overtime;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -43,6 +42,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private String endDateTimeStamp;
     private String jsonResponse;
     private String buttonColor;
+     String sd,ed;
 
     private JSONObject jsonToSend;
 
@@ -69,6 +69,9 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         startDateTimestamp = intent.getStringExtra("startDate");
         endDateTimeStamp = intent.getStringExtra("endDate");
         isPreviousCycle = intent.getIntExtra("isPreviousCycle", 0);
+        sd=getIntent().getExtras().getString("strt");
+        ed=getIntent().getExtras().getString("enddt");
+        //Toast.makeText(OvertimeFormListActivity.this,sd+" to "+ed, Toast.LENGTH_LONG).show();
 
         numberOfVerifiedForms = 0;
 
@@ -109,9 +112,14 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
                     } else {
                         // TODO : Add code to pull report.
+                        msg();
+
+
+
                     }
                 }
             });
+
         }
 
         verifyList.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +137,14 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
+    public void msg(){
+        Toast.makeText(OvertimeFormListActivity.this, sd + " to " + ed, Toast.LENGTH_LONG).show();
+        //this sd and ed is to be sent to temp.php
+    }
+
 
     private JSONObject ArrayListToJson(ArrayList<OvertimeFormObject> formList) {
 
@@ -404,4 +419,5 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             return false;
         }
     }
+
 }
