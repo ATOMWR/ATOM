@@ -430,8 +430,8 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         Uri baseUri = Uri.parse(url);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("sdate", ed);
-        uriBuilder.appendQueryParameter("edate", sd);
+        uriBuilder.appendQueryParameter("sdate", sd);
+        uriBuilder.appendQueryParameter("edate", ed);
 
         String insertUrl = uriBuilder.toString();
         URL finalInsertUrl = null;
