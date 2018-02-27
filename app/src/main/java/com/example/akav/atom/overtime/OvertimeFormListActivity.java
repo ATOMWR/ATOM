@@ -1,5 +1,7 @@
 package com.example.akav.atom.overtime;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -419,9 +421,45 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+
             Toast.makeText(OvertimeFormListActivity.this, "Report Generated.", Toast.LENGTH_LONG).show();
-                finish();
+            openWebsite(result);
+
+            /*Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(result));
+            startActivity(i);
+
+            finish();*/
         }
+    }
+
+    void openWebsite(final String result){
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OvertimeFormListActivity.this);
+
+        alertDialogBuilder.setMessage("Report Generated. View Report?");
+
+        alertDialogBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        updateFormProgressLayout.setVisibility(View.GONE);
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(result));
+                        startActivity(i);
+                        finish();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private String pullReportFromDatabase(String url) {
@@ -460,7 +498,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                 urlConnection.disconnect();
             }
         }
-        return jsonResponse;
+        return finalInsertUrl.toString();
     }
 
 
