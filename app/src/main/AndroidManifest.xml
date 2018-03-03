@@ -43,7 +43,9 @@
         <activity android:name=".QRverification" />
         <activity android:name=".overtime.OvertimeFormListActivity" />
         <activity android:name=".overtime.AdminOvertimeActivity" />
-        <activity android:name=".travel.AdminTravelActivity"></activity>
+        <activity android:name=".travel.AdminTravelActivity" />
+        <activity android:name=".travel.TravelGridActivity" />
+        <activity android:name=".travel.TravelForm"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.akav.atom.overtime;
+package com.example.akav.atom.travel;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -32,8 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class OvertimeGridActivity extends AppCompatActivity {
-
+public class TravelGridActivity extends AppCompatActivity {
     private TextView selectedDate;
     String datestring,JSON_STRING,jsonstring,userID;
     String startDate,endDate;
@@ -42,7 +41,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
     int[] inter_verification_status;
     String t;
     String fromcurrorprevcycle;
-    String allowance="OTA";
+    String allowance="TA";
 
 
     JSONObject jo;
@@ -51,10 +50,11 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
     RelativeLayout loadinglayout,actuallayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_overtime_grid);
+        setContentView(R.layout.activity_travel_grid);
         final String uid = getIntent().getExtras().getString("userID");
         fromcurrorprevcycle=getIntent().getExtras().getString("fromcyclelist");
         loadinglayout=(RelativeLayout)findViewById(R.id.load_layout);
@@ -66,7 +66,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-         startDate = intent.getStringExtra("startDate");
+        startDate = intent.getStringExtra("startDate");
         endDate = intent.getStringExtra("endDate");
 
 
@@ -104,18 +104,18 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
 
 
-        Backgroundtask backgroundtask = new Backgroundtask();
+        TravelGridActivity.Backgroundtask backgroundtask = new TravelGridActivity.Backgroundtask();
         backgroundtask.execute();
 
 
     }
-        public void gridviewcall(){
+    public void gridviewcall(){
         /*String[] s=new String[14];
         for(int i=0;i<s.length;i++){
             s[i]=" "+(i+1)+" ";
         }*/
         final GridView gridView=(GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(new TextViewAdapter(this, s,stringdatearray,inter_verification_status));
+        gridView.setAdapter(new TextViewAdapterTA(this, s,stringdatearray,inter_verification_status));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -127,8 +127,8 @@ public class OvertimeGridActivity extends AppCompatActivity {
                     cannotfill();
                 }
 
-               else {
-                    Intent gotoOTFormIntent = new Intent(OvertimeGridActivity.this, OvertimeForm.class);
+                else {
+                    Intent gotoOTFormIntent = new Intent(TravelGridActivity.this, TravelForm.class);
                     gotoOTFormIntent.putExtra("userID", userID);
                     gotoOTFormIntent.putExtra("currdate", datestring);
                     gotoOTFormIntent.putExtra("tag", t);
@@ -149,11 +149,11 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
     }
     private void msg(){
-        Toast.makeText(OvertimeGridActivity.this, "tag is:"+t, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TravelGridActivity.this, "tag is:"+t, Toast.LENGTH_SHORT).show();
 
     }
     private void cannotfill(){
-        Toast.makeText(OvertimeGridActivity.this, "Sorry,you cannot fill form as it is under verification.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(TravelGridActivity.this, "Sorry,you cannot fill form as it is under verification.", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -224,7 +224,7 @@ public class OvertimeGridActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-           // Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
             jsonstring = result;
             //json();
             // return  result;
@@ -253,8 +253,8 @@ public class OvertimeGridActivity extends AppCompatActivity {
                 }
 
 
-               // ress = jo.getInt("data");
-              //  msg();
+                // ress = jo.getInt("data");
+                //  msg();
                 loadinglayout.setVisibility(View.GONE);
                 actuallayout.setVisibility(View.VISIBLE);
                 gridviewcall();

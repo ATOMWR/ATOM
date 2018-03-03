@@ -86,11 +86,11 @@ public class TravelActivity extends AppCompatActivity {
                 String currentCycleStartDate = currentCycleStart.getText().toString();
                 String currentCycleEndDate = currentCycleEnd.getText().toString();
 
-                /*String sdc=currentCycleStartDate.substring(10,14)+"-"+currentCycleStartDate.substring(5,7)+"-"+currentCycleStartDate.substring(0,2);
+                String sdc=currentCycleStartDate.substring(10,14)+"-"+currentCycleStartDate.substring(5,7)+"-"+currentCycleStartDate.substring(0,2);
 
                 String edc=currentCycleEndDate.substring(10,14)+"-"+currentCycleEndDate.substring(5,7)+"-"+currentCycleEndDate.substring(0,2);
 
-                Intent currentCycleToGrid = new Intent(TravelActivity.this, OvertimeGridActivity.class);
+                Intent currentCycleToGrid = new Intent(TravelActivity.this, TravelGridActivity.class);
 
 
                 currentCycleToGrid.putExtra("startDate", sdc);
@@ -99,7 +99,7 @@ public class TravelActivity extends AppCompatActivity {
                 currentCycleToGrid.putExtra("fromcyclelist", "canfill");
 
 
-                startActivity(currentCycleToGrid);*/
+                startActivity(currentCycleToGrid);
 
                 Toast.makeText(TravelActivity.this, currentCycleStartDate + "  TO  " + currentCycleEndDate, Toast.LENGTH_SHORT).show();
             }
@@ -117,11 +117,11 @@ public class TravelActivity extends AppCompatActivity {
                 String startDate = cycleDate.getStartDate();
                 String endDate = cycleDate.getEndDate();
 
-                /*String sd=startDate.substring(10,14)+"-"+startDate.substring(5,7)+"-"+startDate.substring(0,2);
+                String sd=startDate.substring(10,14)+"-"+startDate.substring(5,7)+"-"+startDate.substring(0,2);
 
                 String ed=endDate.substring(10,14)+"-"+endDate.substring(5,7)+"-"+endDate.substring(0,2);
 
-                Intent prevCycleToGrid = new Intent(TravelActivity.this, OvertimeGridActivity.class);
+                Intent prevCycleToGrid = new Intent(TravelActivity.this, TravelGridActivity.class);
 
                 prevCycleToGrid.putExtra("startDate", sd);
                 prevCycleToGrid.putExtra("endDate", ed);
@@ -129,7 +129,7 @@ public class TravelActivity extends AppCompatActivity {
                 prevCycleToGrid.putExtra("fromcyclelist", "cannotfill");
 
 
-                startActivity(prevCycleToGrid);*/
+                startActivity(prevCycleToGrid);
 
                 Toast.makeText(TravelActivity.this, startDate + "  TO  " + endDate, Toast.LENGTH_SHORT).show();
             }
