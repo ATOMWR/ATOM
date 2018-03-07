@@ -19,6 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Firebase Notifications -->
+        <service android:name=".service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- ./Firebase Notifications -->
         <activity
             android:name=".RegistrationActivity"
             android:label="@string/register_activity_title" />
@@ -45,7 +57,8 @@
         <activity android:name=".overtime.AdminOvertimeActivity" />
         <activity android:name=".travel.AdminTravelActivity" />
         <activity android:name=".travel.TravelGridActivity" />
-        <activity android:name=".travel.TravelForm"></activity>
+        <activity android:name=".travel.TravelForm" />
+        <activity android:name=".Notification"></activity>
     </application>
 
 </manifest>

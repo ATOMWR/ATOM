@@ -1,15 +1,18 @@
 package com.example.akav.atom;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -23,6 +26,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+
+//notification imports
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,10 +45,22 @@ public class MainActivity extends AppCompatActivity {
 
     private final String LOGIN_URL = "http://atomwrapp.dx.am/login.php";
 
+    //notification contents
+
+     NotificationCompat.Builder Notvar;
+    public static final int unique_id=12345;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private TextView txtRegId, txtMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //notification contents
+        //n=new NotificationCompat.Builder(this);
+
 
         mLogin = (Button) findViewById(R.id.login_button);
         mRegister = (Button) findViewById(R.id.goto_register_button);
@@ -94,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
     // To Authenticate User.
     private void validateUser() {
 
@@ -119,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(gotoAdminHomeIntent);
             }
             else{
+
                 gotoUserHomeIntent.putExtra("userId", userId);
                 startActivity(gotoUserHomeIntent);
             }

@@ -11,23 +11,25 @@
     tools:context="com.example.akav.atom.MainActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/user_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/user_name"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:hint="@string/user_name">
 
             <EditText
                 android:id="@+id/user_id"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -35,15 +37,15 @@
             android:id="@+id/password_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:layout_marginBottom="16dp">
-           <!-- app:passwordToggleEnabled="true"-->
+            android:layout_marginBottom="16dp"
+            android:hint="@string/password">
+            <!-- app:passwordToggleEnabled="true"-->
 
             <EditText
                 android:id="@+id/password"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
@@ -77,23 +79,23 @@
                 android:id="@+id/user_fill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
                 android:layout_marginTop="16dp"
+                android:layout_weight="1"
                 android:background="@color/colorPrimary"
                 android:text="User Fill"
-                android:layout_weight="1"
-                android:layout_marginRight="4dp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/admin_fill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/colorPrimary"
                 android:layout_marginLeft="4dp"
-                android:text="Admin Fill"
+                android:layout_marginTop="16dp"
                 android:layout_weight="1"
-                android:textColor="#FFFFFF"/>
+                android:background="@color/colorPrimary"
+                android:text="Admin Fill"
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
 
@@ -102,10 +104,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:padding="16dp"/>
+            android:layout_marginTop="16dp"
+            android:padding="16dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_push_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginStart="15dp"
+        android:layout_toEndOf="@+id/txt_reg_id"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/txt_reg_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="314dp"
+        android:layout_weight="2"
+        android:text="TextView" />
 
 </RelativeLayout>
