@@ -2,6 +2,13 @@ package com.example.akav.atom;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
@@ -12,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +43,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+
 public class HomeActivity extends AppCompatActivity {
 
     private Button fillOT;
@@ -42,21 +52,23 @@ public class HomeActivity extends AppCompatActivity {
     TextView temp;
     JSONObject jo;
     JSONArray ja;
+    static int globalcount;
+    RelativeLayout loadlayout;
+    LinearLayout actuallayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setTitle("home");
+        globalcount=0;
 
         Intent loginInfo = getIntent();
         userId = loginInfo.getStringExtra("userId");
 
         Toast.makeText(this, "Welcome " + userId + "!", Toast.LENGTH_SHORT).show();
 
-        String method = "display";
-        Backgroundtaskonload backgroundtask2 = new Backgroundtaskonload(this);
-        backgroundtask2.execute(method, userId);
 
         fillOT = (Button) findViewById(R.id.fill_ot);
         fillTA = (Button) findViewById(R.id.fill_ta);
@@ -83,7 +95,18 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        String method = "display";
+        Backgroundtaskonload backgroundtask2 = new Backgroundtaskonload(this);
+        backgroundtask2.execute(method, userId);
+
         getMenuInflater().inflate(R.menu.menu_home, menu);
+        MenuItem item = menu.findItem(R.id.action_notifications);
+        LayerDrawable icon = (LayerDrawable) item.getIcon();
+        Utils2.setBadgeCount(this, icon, 8);
+        // Update LayerDrawable's BadgeDrawable
+
+
+
         return true;
     }
 
@@ -100,9 +123,12 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.password_change:
                 changePassword();
                 return true;
-
             case R.id.log_out:
                 logout();
+                return true;
+
+            case R.id.action_notifications:
+                notifications();
                 return true;
 
         }
@@ -110,7 +136,7 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void logout() {
+    private void notifications() {
 
         // Logout Logic
         Intent gotoNotification = new Intent(HomeActivity.this, Notification.class);
@@ -118,7 +144,9 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(gotoNotification);
 
     }
+private void logout(){
 
+}
     private void changePassword() {
 
         // Password change logic
@@ -130,87 +158,7 @@ public class HomeActivity extends AppCompatActivity {
         // Edit Profile Logic
 
     }
-    class Backgroundtaskafterclick extends AsyncTask<String,Void,String> {
 
-        Context ctx;
-
-        Backgroundtaskafterclick(Context ctx) {
-            this.ctx = ctx;
-
-        }
-
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            String reg_url = "http://atomwrapp.dx.am/otfilling.php";
-            String method = params[0];
-            if (method.equals("fill")) {
-
-
-
-
-                String  pfno= params[1];
-                String name = params[2];
-                String shift=params[3];
-                String actstart=params[4];
-                String actend=params[5];
-                String extra=params[6];
-                String reas=params[7];
-                String dat=params[8];
-                String upflag=params[9];
-
-
-
-                try {
-                    URL url = new URL(reg_url);
-                    HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
-                    httpurlconnection.setRequestMethod("POST");
-
-                    httpurlconnection.setDoOutput(true);
-                    OutputStream OS = httpurlconnection.getOutputStream();
-                    BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-
-                    String newdata = URLEncoder.encode("date", "UTF-8") + "=" + URLEncoder.encode(dat, "UTF-8") + "&" +
-                            URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") + "&" +
-                            URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
-                            URLEncoder.encode("shift", "UTF-8") + "=" + URLEncoder.encode(shift, "UTF-8") +"&" +
-                            URLEncoder.encode("strt", "UTF-8") + "=" + URLEncoder.encode(actstart, "UTF-8") + "&" +
-                            URLEncoder.encode("end", "UTF-8") + "=" + URLEncoder.encode(actend, "UTF-8") + "&" +
-                            URLEncoder.encode("extra", "UTF-8") + "=" + URLEncoder.encode(extra, "UTF-8") + "&" +
-                            URLEncoder.encode("reason", "UTF-8") + "=" + URLEncoder.encode(reas, "UTF-8") + "&" +
-                            URLEncoder.encode("updateflag", "UTF-8") + "=" + URLEncoder.encode(upflag, "UTF-8") ;
-
-
-                    bufferedwriter.write(newdata);
-                    // Toast.makeText(ctx, "data written", Toast.LENGTH_LONG).show();
-
-                    bufferedwriter.flush();
-                    bufferedwriter.close();
-                    OS.close();
-                    InputStream IS = httpurlconnection.getInputStream();
-                    IS.close();
-
-
-
-                    return "successfull filled";
-
-
-                } catch (MalformedURLException e) {
-                    Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
-                } catch (IOException e) {
-                    Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String res) {
-            Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
-            // qr_result.setText(result);
-        }
-    }
     class Backgroundtaskonload extends AsyncTask<String,Void,String> {
 
         Context ctx;
@@ -302,6 +250,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 String q= String.valueOf(h);
                 temp.setText(q);
+                HomeActivity.globalcount=h;
 
 
                 // qr_result.setText(result);
@@ -312,6 +261,107 @@ public class HomeActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
         }
     }
+
+    public static class BadgeDrawable extends Drawable {
+
+        private float mTextSize;
+        private Paint mBadgePaint;
+        private Paint mTextPaint;
+        private Rect mTxtRect = new Rect();
+
+        private String mCount = "";
+        private boolean mWillDraw = false;
+
+        public BadgeDrawable(Context context) {
+            //mTextSize = context.getResources().getDimension(R.dimen.badge_text_size);
+            mTextSize = 18F;
+
+            mBadgePaint = new Paint();
+            mBadgePaint.setColor(Color.RED);
+            mBadgePaint.setAntiAlias(true);
+            mBadgePaint.setStyle(Paint.Style.FILL);
+
+            mTextPaint = new Paint();
+            mTextPaint.setColor(Color.WHITE);
+            mTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+            mTextPaint.setTextSize(mTextSize);
+            mTextPaint.setAntiAlias(true);
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+            if (!mWillDraw) {
+                return;
+            }
+
+            Rect bounds = getBounds();
+            float width = bounds.right - bounds.left;
+            float height = bounds.bottom - bounds.top;
+
+            // Position the badge in the top-right quadrant of the icon.
+            float radius = ((Math.min(width, height) / 2) - 1) / 2;
+            float centerX = width - radius - 1;
+            float centerY = radius + 1;
+
+            // Draw badge circle.
+            canvas.drawCircle(centerX, centerY, radius, mBadgePaint);
+
+            // Draw badge count text inside the circle.
+            mTextPaint.getTextBounds(mCount, 0, mCount.length(), mTxtRect);
+            float textHeight = mTxtRect.bottom - mTxtRect.top;
+            float textY = centerY + (textHeight / 2f);
+            canvas.drawText(mCount, centerX, textY, mTextPaint);
+        }
+
+        /*
+        Sets the count (i.e notifications) to display.
+         */
+        public void setCount(int count) {
+            mCount = Integer.toString(count);
+
+            // Only draw a badge if there are notifications.
+            mWillDraw = count > 0;
+            invalidateSelf();
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+            // do nothing
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter cf) {
+            // do nothing
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.UNKNOWN;
+        }
+    }
+    public static class Utils2 {
+        public static void setBadgeCount(Context context, LayerDrawable icon, int count) {
+
+            HomeActivity.BadgeDrawable badge;
+
+            // Reuse drawable if possible
+            Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+            if (reuse != null && reuse instanceof HomeActivity.BadgeDrawable) {
+                badge = (HomeActivity.BadgeDrawable) reuse;
+            } else {
+                badge = new HomeActivity.BadgeDrawable(context);
+            }
+
+            badge.setCount(count);
+            icon.mutate();
+            icon.setDrawableByLayerId(R.id.ic_badge, badge);
+        }
+
+
+    }
+
 }
