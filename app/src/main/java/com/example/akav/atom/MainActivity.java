@@ -1,6 +1,9 @@
 package com.example.akav.atom;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,16 +18,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
 //notification imports
@@ -36,12 +44,18 @@ public class MainActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mLogin;
     private Button mRegister;
-    private String userId;
+   // private String userId;
     private String password;
     private ProgressBar progressBar;
 
     private Boolean isValidUser;
     private Boolean isAdmin;
+
+
+    String JSON_STRING,jsonstring,userId;
+    TextView temp;
+    JSONObject jo;
+    JSONArray ja;
 
     private final String LOGIN_URL = "http://atomwrapp.dx.am/login.php";
 
@@ -60,7 +74,30 @@ public class MainActivity extends AppCompatActivity {
 
         //notification contents
         //n=new NotificationCompat.Builder(this);
+      /*  Intent intent = new Intent(this, HomeActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        NotificationCompat.Builder b = new NotificationCompat.Builder(this);
+
+        b.setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_logout)
+                .setTicker("Hearty365")
+                .setContentTitle("Default notification")
+                .setContentText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+                .setContentIntent(contentIntent)
+                .setContentInfo("Info");
+
+
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, b.build());
+*/
+        Intent notifyIntent = new Intent(this,MyReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast
+                (this, 8, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis(),
+                60000, pendingIntent);
 
         mLogin = (Button) findViewById(R.id.login_button);
         mRegister = (Button) findViewById(R.id.goto_register_button);
@@ -132,17 +169,23 @@ public class MainActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.INVISIBLE);
 
-            Intent gotoUserHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
+
             Intent gotoAdminHomeIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
+            Intent gotoUserHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
 
             if(isAdmin){
                 gotoAdminHomeIntent.putExtra("userId", userId);
+
                 startActivity(gotoAdminHomeIntent);
             }
             else{
 
+
                 gotoUserHomeIntent.putExtra("userId", userId);
                 startActivity(gotoUserHomeIntent);
+
+
+
             }
 
         } else {
@@ -297,4 +340,113 @@ public class MainActivity extends AppCompatActivity {
             identifyUser();
         }
     }
+
+
+    class Backgroundtaskonload extends AsyncTask<String,Void,String> {
+
+        Context ctx;
+
+        Backgroundtaskonload(Context ctx) {
+            this.ctx = ctx;
+
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String reg_url = "http://atomwrapp.dx.am/notificationload.php";
+            String method = params[0];
+            if (method.equals("display")) {
+
+                String name = params[1];
+                // String dat=params[2];
+
+
+                try {
+                    URL url = new URL(reg_url);
+                    HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
+                    httpurlconnection.setRequestMethod("POST");
+
+                    httpurlconnection.setDoOutput(true);
+                    OutputStream OS = httpurlconnection.getOutputStream();
+                    BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+
+                    String newdata = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
+
+
+                    bufferedwriter.write(newdata);
+                    // Toast.makeText(ctx, "data written", Toast.LENGTH_LONG).show();
+
+                    bufferedwriter.flush();
+                    bufferedwriter.close();
+                    OS.close();
+
+
+                    InputStream inputStream = httpurlconnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((JSON_STRING = bufferedReader.readLine()) != null) {
+
+                        stringBuilder.append(JSON_STRING + "\n");
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconnection.disconnect();
+
+                    return stringBuilder.toString().trim();
+
+
+                } catch (MalformedURLException e) {
+                    Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+                } catch (IOException e) {
+                    Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
+                }
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            Toast.makeText(ctx, "ret " + res, Toast.LENGTH_LONG).show();
+            jsonstring = res;
+            temp = (TextView) findViewById(R.id.tv);
+            // temp.setText(res);
+            try {
+                jo = new JSONObject(jsonstring);
+                ja = jo.getJSONArray("countresponse");
+
+                int i = 0;
+                int h=0;
+                int count = 0;
+                while (count < ja.length()) {
+                    JSONObject j = ja.getJSONObject(count);
+                    h=j.getInt("count");
+
+                    count++;
+                }
+                String q= String.valueOf(h);
+                temp.setText(q);
+                //globalcount=h;
+
+
+                // qr_result.setText(result);
+                //jsonstring = res;
+
+                //json();
+                // return  result;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
 }

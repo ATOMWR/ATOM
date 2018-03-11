@@ -55,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
     static int globalcount;
     RelativeLayout loadlayout;
     LinearLayout actuallayout;
+    int a;
 
 
     @Override
@@ -66,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Intent loginInfo = getIntent();
         userId = loginInfo.getStringExtra("userId");
+        a=loginInfo.getExtras().getInt("pending");
 
         Toast.makeText(this, "Welcome " + userId + "!", Toast.LENGTH_SHORT).show();
 
@@ -95,9 +97,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        String method = "display";
-        Backgroundtaskonload backgroundtask2 = new Backgroundtaskonload(this);
-        backgroundtask2.execute(method, userId);
+       // String method = "display";
+      //  Backgroundtaskonload backgroundtask2 = new Backgroundtaskonload(this);
+       // backgroundtask2.execute(method, userId);
 
         getMenuInflater().inflate(R.menu.menu_home, menu);
         MenuItem item = menu.findItem(R.id.action_notifications);
