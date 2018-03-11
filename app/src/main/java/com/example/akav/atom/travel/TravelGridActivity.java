@@ -128,7 +128,7 @@ public class TravelGridActivity extends AppCompatActivity {
                 }
 
                 else {
-                    Intent gotoOTFormIntent = new Intent(TravelGridActivity.this, TravelForm.class);
+                    Intent gotoOTFormIntent = new Intent(TravelGridActivity.this, TravelFormsActivity.class);
                     gotoOTFormIntent.putExtra("userID", userID);
                     gotoOTFormIntent.putExtra("currdate", datestring);
                     gotoOTFormIntent.putExtra("tag", t);
@@ -139,9 +139,6 @@ public class TravelGridActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
 
         //gridview logic
