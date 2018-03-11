@@ -149,7 +149,6 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 previousCycleFormsList.putExtra("strt",s);
                 previousCycleFormsList.putExtra("enddt",e);
 
-
                 startActivity(previousCycleFormsList);
             }
         });

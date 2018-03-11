@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/listViewItem">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/formContainer"
@@ -61,23 +60,33 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/shift"
+                android:id="@+id/from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shift    :  "
+                android:text="From  :  "
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/shift_on_form"
+                android:id="@+id/from_station"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/shift"/>
+                android:text="Start station"
+                android:layout_toRightOf="@id/from"/>
 
             <TextView
-                android:id="@+id/shift_time"
+                android:id="@+id/to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/shift_on_form"/>
+                android:layout_toRightOf="@+id/from_station"
+                android:text="  To  :  "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/to_station"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Station"
+                android:layout_toRightOf="@+id/to"/>
 
             <ImageView
                 android:id="@+id/verification_status"
@@ -115,7 +124,7 @@
                         android:id="@+id/start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Actual Start Time  :  "
+                        android:text="Start Time    :  "
                         android:textStyle="bold" />
 
                     <TextView
@@ -134,7 +143,7 @@
                         android:id="@+id/end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Actual End Time    :  "
+                        android:text="End Time      :  "
                         android:textStyle="bold" />
 
                     <TextView
@@ -172,8 +181,8 @@
                     android:id="@+id/extra_hours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 

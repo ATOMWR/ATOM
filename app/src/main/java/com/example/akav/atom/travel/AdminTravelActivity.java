@@ -84,7 +84,7 @@ public class AdminTravelActivity extends AppCompatActivity {
                 String currentCycleStartDate = currentCycleStart.getText().toString();
                 String currentCycleEndDate = currentCycleEnd.getText().toString();
 
-                /*SimpleDateFormat startDateFormat = new SimpleDateFormat("dd - MM - yyyy");
+                SimpleDateFormat startDateFormat = new SimpleDateFormat("dd - MM - yyyy");
                 SimpleDateFormat endDateFormat = new SimpleDateFormat("dd - MM - yyyy");
 
                 Date startDate = null;
@@ -100,17 +100,14 @@ public class AdminTravelActivity extends AppCompatActivity {
                 Long startDateTimestamp = startDate.getTime() / 1000;
                 Long endDateTimestamp = endDate.getTime() / 1000;
 
-                Intent currentCycleFormsList = new Intent(AdminTravelActivity.this, OvertimeFormListActivity.class);
+                Intent currentCycleFormsList = new Intent(AdminTravelActivity.this, TravelFormListActiviy.class);
 
 
                 currentCycleFormsList.putExtra("startDate", startDateTimestamp.toString());
                 currentCycleFormsList.putExtra("endDate", endDateTimestamp.toString());
                 currentCycleFormsList.putExtra("isPreviousCycle", 0);
 
-                startActivity(currentCycleFormsList);*/
-
-                Toast.makeText(AdminTravelActivity.this, currentCycleStartDate + "  TO  " + currentCycleEndDate, Toast.LENGTH_SHORT).show();
-
+                startActivity(currentCycleFormsList);
             }
         });
 
@@ -125,7 +122,7 @@ public class AdminTravelActivity extends AppCompatActivity {
                 SimpleDateFormat startDateFormat = new SimpleDateFormat("dd - MM - yyyy");
                 SimpleDateFormat endDateFormat = new SimpleDateFormat("dd - MM - yyyy");
 
-                /*Date startDate = null;
+                Date startDate = null;
                 Date endDate = null;
                 try {
                     startDate = startDateFormat.parse(previousCycleStartDate);
@@ -138,16 +135,14 @@ public class AdminTravelActivity extends AppCompatActivity {
                 Long startDateTimestamp = startDate.getTime() / 1000;
                 Long endDateTimestamp = endDate.getTime() / 1000;
 
-                Intent previousCycleFormsList = new Intent(AdminTravelActivity.this, OvertimeFormListActivity.class);
+                Intent previousCycleFormsList = new Intent(AdminTravelActivity.this, TravelFormListActiviy.class);
 
 
                 previousCycleFormsList.putExtra("startDate", startDateTimestamp.toString());
                 previousCycleFormsList.putExtra("endDate", endDateTimestamp.toString());
                 previousCycleFormsList.putExtra("isPreviousCycle", 1);
 
-                startActivity(previousCycleFormsList);*/
-
-                Toast.makeText(AdminTravelActivity.this, previousCycleStartDate + "  TO  " + previousCycleEndDate, Toast.LENGTH_SHORT).show();
+                startActivity(previousCycleFormsList);
             }
         });
     }
