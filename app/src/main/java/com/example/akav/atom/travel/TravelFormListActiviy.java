@@ -1,8 +1,11 @@
 package com.example.akav.atom.travel;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +47,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
     private String endDateTimeStamp;
     private String jsonResponse;
     private String buttonColor;
-    private String sd,ed;
+    private String sd, ed;
 
     private JSONObject jsonToSend;
 
@@ -78,8 +81,13 @@ public class TravelFormListActiviy extends AppCompatActivity {
 
         numberOfVerifiedForms = 0;
 
-        MainAsyncTask2 task2 = new MainAsyncTask2();
-        task2.execute(GET_TA_FORMS_URL);
+
+        if (isOnline()) {
+            MainAsyncTask2 task2 = new MainAsyncTask2();
+            task2.execute(GET_TA_FORMS_URL);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
         updateFormProgressLayout = (LinearLayout) findViewById(R.id.update_form_list_progress_layout);
         formListLayout = (RelativeLayout) findViewById(R.id.form_list_layout);
@@ -122,8 +130,13 @@ public class TravelFormListActiviy extends AppCompatActivity {
                         updateFormProgressLayout.setVisibility(View.VISIBLE);*/
 
                         Toast.makeText(TravelFormListActiviy.this, "Error, Code incomplete", Toast.LENGTH_SHORT).show();
-                        /*MainAsyncTask3 task2 = new MainAsyncTask3();
-                        task2.execute(PULL_REPORT);*/
+                        /*
+                        if(isOnline()) {
+                            MainAsyncTask3 task2 = new MainAsyncTask3();
+                            task2.execute(PULL_REPORT)
+                        } else{
+                            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                        }*/
                     }
                 }
             });
@@ -139,9 +152,14 @@ public class TravelFormListActiviy extends AppCompatActivity {
                 formListLayout.setVisibility(View.GONE);
                 updateFormProgressLayout.setVisibility(View.VISIBLE);
 
-                // Start the AsyncTask
-                MainAsyncTask task = new MainAsyncTask();
-                task.execute(INTER_VERIFY_TA_FORMS);
+
+                if (isOnline()) {
+                    // Start the AsyncTask
+                    MainAsyncTask task = new MainAsyncTask();
+                    task.execute(INTER_VERIFY_TA_FORMS);
+                } else {
+                    Toast.makeText(TravelFormListActiviy.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -437,7 +455,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
         }
     }
 
-    void openWebsite(final String result){
+    void openWebsite(final String result) {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TravelFormListActiviy.this);
 
@@ -455,7 +473,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
                     }
                 });
 
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -520,5 +538,14 @@ public class TravelFormListActiviy extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }

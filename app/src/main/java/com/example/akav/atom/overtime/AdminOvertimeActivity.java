@@ -1,6 +1,9 @@
 package com.example.akav.atom.overtime;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.akav.atom.MainActivity;
 import com.example.akav.atom.cycleDateObject;
@@ -28,7 +32,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,9 +65,14 @@ public class AdminOvertimeActivity extends AppCompatActivity {
 
         previousCycleDateList = new ArrayList<>();
 
-        // Start the AsyncTask
-        MainAsyncTask task = new MainAsyncTask();
-        task.execute(GET_DATE_URL);
+        if (isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(GET_DATE_URL);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
+
 
         ListView cycleDateListView = (ListView) findViewById(R.id.prev_cycle_date_list_view);
 
@@ -95,8 +106,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 // Get Timestamp from date string
                 Long startDateTimestamp = startDate.getTime() / 1000;
                 Long endDateTimestamp = endDate.getTime() / 1000;
-                String s=currentCycleStartDate.substring(10,14)+"-"+currentCycleStartDate.substring(5,7)+"-"+currentCycleStartDate.substring(0,2);
-                String e=currentCycleEndDate.substring(10,14)+"-"+currentCycleEndDate.substring(5,7)+"-"+currentCycleEndDate.substring(0,2);
+                String s = currentCycleStartDate.substring(10, 14) + "-" + currentCycleStartDate.substring(5, 7) + "-" + currentCycleStartDate.substring(0, 2);
+                String e = currentCycleEndDate.substring(10, 14) + "-" + currentCycleEndDate.substring(5, 7) + "-" + currentCycleEndDate.substring(0, 2);
 
 
                 Intent currentCycleFormsList = new Intent(AdminOvertimeActivity.this, OvertimeFormListActivity.class);
@@ -105,8 +116,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 currentCycleFormsList.putExtra("startDate", startDateTimestamp.toString());
                 currentCycleFormsList.putExtra("endDate", endDateTimestamp.toString());
                 currentCycleFormsList.putExtra("isPreviousCycle", 0);
-                currentCycleFormsList.putExtra("strt",s);
-                currentCycleFormsList.putExtra("enddt",e);
+                currentCycleFormsList.putExtra("strt", s);
+                currentCycleFormsList.putExtra("enddt", e);
 
 
                 startActivity(currentCycleFormsList);
@@ -136,8 +147,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 // Get Timestamp from date string
                 Long startDateTimestamp = startDate.getTime() / 1000;
                 Long endDateTimestamp = endDate.getTime() / 1000;
-                String s=previousCycleStartDate.substring(10,14)+"-"+previousCycleStartDate.substring(5,7)+"-"+previousCycleStartDate.substring(0,2);
-                String e=previousCycleEndDate.substring(10,14)+"-"+previousCycleEndDate.substring(5,7)+"-"+previousCycleEndDate.substring(0,2);
+                String s = previousCycleStartDate.substring(10, 14) + "-" + previousCycleStartDate.substring(5, 7) + "-" + previousCycleStartDate.substring(0, 2);
+                String e = previousCycleEndDate.substring(10, 14) + "-" + previousCycleEndDate.substring(5, 7) + "-" + previousCycleEndDate.substring(0, 2);
 
 
                 Intent previousCycleFormsList = new Intent(AdminOvertimeActivity.this, OvertimeFormListActivity.class);
@@ -146,8 +157,8 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 previousCycleFormsList.putExtra("startDate", startDateTimestamp.toString());
                 previousCycleFormsList.putExtra("endDate", endDateTimestamp.toString());
                 previousCycleFormsList.putExtra("isPreviousCycle", 1);
-                previousCycleFormsList.putExtra("strt",s);
-                previousCycleFormsList.putExtra("enddt",e);
+                previousCycleFormsList.putExtra("strt", s);
+                previousCycleFormsList.putExtra("enddt", e);
 
                 startActivity(previousCycleFormsList);
             }
@@ -237,6 +248,11 @@ public class AdminOvertimeActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -283,6 +299,15 @@ public class AdminOvertimeActivity extends AppCompatActivity {
             progressBarLayout.setVisibility(View.GONE);
             cycleList.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 
 }

@@ -3,6 +3,8 @@ package com.example.akav.atom.overtime;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,30 +35,32 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 
 
 public class OvertimeForm extends AppCompatActivity {
-Spinner shift;
+    Spinner shift;
 
-    String shiftselect,userId;
+    String shiftselect, userId;
     TextView start_time;
-    TextView end_time,shiftvalue,roster;
+    TextView end_time, shiftvalue, roster;
     EditText descp;
 
-    Button startbutt,endbutt,submit;
-    String s1,e1,newe,news,newsm,newem,datestring;
-    int s,e,dh,dm;
-    String status,jsonstring,JSON_STRING;
-    boolean formfillingallowed=true;
-    boolean confirmed=false;
-    String update="f";
+    Button startbutt, endbutt, submit;
+    String s1, e1, newe, news, newsm, newem, datestring;
+    int s, e, dh, dm;
+    String status, jsonstring, JSON_STRING;
+    boolean formfillingallowed = true;
+    boolean confirmed = false;
+    String update = "f";
 
-    JSONObject jo,j;
+    JSONObject jo, j;
     JSONArray ja;
-    String retrieveshift,retrievestrt,retrieveend,retrievedesc;
+    String retrieveshift, retrievestrt, retrieveend, retrievedesc;
 
 
     Calendar date1;
@@ -97,14 +101,17 @@ Spinner shift;
             descp.setEnabled(false);
 
 
-            String method = "display";
-            OvertimeForm.Backgroundtask2 backgroundtask2 = new OvertimeForm.Backgroundtask2(this);
-            backgroundtask2.execute(method, userId, datestring);
-        }
-
-         else if (status.equals("ot verified")) {
-             formfillingallowed = false;
-             confirmed = true;
+            if (isOnline()) {
+                // Start the AsyncTask
+                String method = "display";
+                OvertimeForm.Backgroundtask2 backgroundtask2 = new OvertimeForm.Backgroundtask2(this);
+                backgroundtask2.execute(method, userId, datestring);
+            } else {
+                Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+            }
+        } else if (status.equals("ot verified")) {
+            formfillingallowed = false;
+            confirmed = true;
             startbutt.setEnabled(false);
             endbutt.setEnabled(false);
             submit.setEnabled(false);
@@ -116,34 +123,27 @@ Spinner shift;
             descp.setEnabled(false);
 
 
-            String method = "display";
-            OvertimeForm.Backgroundtask2 backgroundtask2 = new OvertimeForm.Backgroundtask2(this);
-            backgroundtask2.execute(method, userId, datestring);
-         }
+            if (isOnline()) {
+                // Start the AsyncTask
+                String method = "display";
+                OvertimeForm.Backgroundtask2 backgroundtask2 = new OvertimeForm.Backgroundtask2(this);
+                backgroundtask2.execute(method, userId, datestring);
+            } else {
+                Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+            }
+
+        }
 
 
-
-
-
-
-
-
-
-
-
-
-        TextView actual=(TextView)findViewById(R.id.actuallabel);
-        actual.setPaintFlags(actual.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);//underline subheading
-        TextView rosterlabel=(TextView)findViewById(R.id.roasterlabel);
-        rosterlabel.setPaintFlags(actual.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);//underline subheading
-        TextView desclabel=(TextView)findViewById(R.id.desclabel);
-        actual.setPaintFlags(actual.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);//underline subheading
-
-
+        TextView actual = (TextView) findViewById(R.id.actuallabel);
+        actual.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
+        TextView rosterlabel = (TextView) findViewById(R.id.roasterlabel);
+        rosterlabel.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
+        TextView desclabel = (TextView) findViewById(R.id.desclabel);
+        actual.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
 
 
         shiftSpinner();
-
 
 
         startbutt.setOnClickListener(new View.OnClickListener() {
@@ -158,11 +158,11 @@ Spinner shift;
                 mTimePicker = new TimePickerDialog(OvertimeForm.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        s1= selectedHour + ":" + selectedMinute;
+                        s1 = selectedHour + ":" + selectedMinute;
                         start_time.setText(selectedHour + ":" + selectedMinute);
                     }
                 }, starthour, startminute, true);//Yes 24 hour time
-               // s=starthour+startminute/60;
+                // s=starthour+startminute/60;
                 mTimePicker.setTitle("Actual Duty Start Time");
                 mTimePicker.show();
 
@@ -173,14 +173,14 @@ Spinner shift;
             @Override
             public void onClick(View v) {
                 Calendar mcurrentTime2 = Calendar.getInstance();
-                 int endhour = mcurrentTime2.get(Calendar.HOUR_OF_DAY);
-                 int endminute = mcurrentTime2.get(Calendar.MINUTE);
-               // e=mcurrentTime2.getTime();
+                int endhour = mcurrentTime2.get(Calendar.HOUR_OF_DAY);
+                int endminute = mcurrentTime2.get(Calendar.MINUTE);
+                // e=mcurrentTime2.getTime();
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(OvertimeForm.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        e1=selectedHour + ":" + selectedMinute;
+                        e1 = selectedHour + ":" + selectedMinute;
                         end_time.setText(selectedHour + ":" + selectedMinute);
                     }
                 }, endhour, endminute, true);//Yes 24 hour time
@@ -193,68 +193,59 @@ Spinner shift;
         });
 
 
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!formfillingallowed && !confirmed) {
+                    startbutt.setEnabled(true);
+                    endbutt.setEnabled(true);
+                    // submit.setEnabled(false);
+                    submit.setText("SUBMIT");
+                    shift.setEnabled(true);
+                    descp.setEnabled(true);
+                    formfillingallowed = true;
+                    shiftvalue.setText("");
+                    update = "t";
 
+                } else if (!formfillingallowed && confirmed) {
+                    err();
+                } else {
+                    // d=e-s;
+                    // d-=8;
+                    // text=(TextView)findViewById(R.id.textView);
 
-           submit.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   if(!formfillingallowed&&!confirmed) {
-                       startbutt.setEnabled(true);
-                       endbutt.setEnabled(true);
-                       // submit.setEnabled(false);
-                       submit.setText("SUBMIT");
-                       shift.setEnabled(true);
-                       descp.setEnabled(true);
-                       formfillingallowed=true;
-                       shiftvalue.setText("");
-                       update="t";
+                    news = s1.substring(0, s1.indexOf(':'));
+                    newe = e1.substring(0, e1.indexOf(':'));
+                    newsm = s1.substring(s1.indexOf(':') + 1);
+                    newem = e1.substring(e1.indexOf(':') + 1);
 
-                   }
-                   else if(!formfillingallowed&&confirmed){
-                       err();
-                   }
-                   else{
-                       // d=e-s;
-                       // d-=8;
-                       // text=(TextView)findViewById(R.id.textView);
+                    int s = Integer.parseInt(news);
+                    int e = Integer.parseInt(newe);
+                    int sm = Integer.parseInt(newsm);
+                    int em = Integer.parseInt(newem);
+                    dh = e - s - 8;
+                    if (dh < 0)
+                        dh += 24;
+                    dm = em - sm;
+                    if (em < sm) {
+                        dh--;
+                        dm += 60;
 
-                       news=s1.substring(0,s1.indexOf(':'));
-                       newe=e1.substring(0,e1.indexOf(':'));
-                       newsm=s1.substring(s1.indexOf(':')+1);
-                       newem=e1.substring(e1.indexOf(':')+1);
+                    }
+                    //sample.setText(dm);
+                    //msg();
+                    open();
 
-                       int s=Integer.parseInt(news);
-                       int e=Integer.parseInt(newe);
-                       int sm=Integer.parseInt(newsm);
-                       int em=Integer.parseInt(newem);
-                       dh=e-s-8;
-                       if(dh<0)
-                           dh+=24;
-                       dm=em-sm;
-                       if(em<sm){
-                           dh--;
-                           dm+=60;
-
-                       }
-                       //sample.setText(dm);
-                       //msg();
-                       open();
-
-                   }
-               }
-           });
-
-
+                }
+            }
+        });
 
 
     }
 
-public void err(){
-    Toast.makeText(OvertimeForm.this,"Data for this date is already verified!!!", Toast.LENGTH_LONG).show();
-}
-
-
-
+    public void err() {
+        Toast.makeText(OvertimeForm.this, "Data for this date is already verified!!!", Toast.LENGTH_LONG).show();
+    }
 
 
     private void shiftSpinner() {
@@ -268,50 +259,55 @@ public void err(){
 
         // Apply the adapter to the spinner
         shift.setAdapter(genderSpinnerAdapter);
-        final TextView rosterdutyhours=(TextView)findViewById(R.id.rostertext);
+        final TextView rosterdutyhours = (TextView) findViewById(R.id.rostertext);
 
         // Set the category String based on spinner selection
         shift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 shiftselect = (String) parent.getItemAtPosition(position);
-                if(shiftselect.equals("Morning"))
+                if (shiftselect.equals("Morning"))
                     rosterdutyhours.setText("06:00 - 14:00");
-                else if(shiftselect.equals("Evening"))
+                else if (shiftselect.equals("Evening"))
                     rosterdutyhours.setText("14:00 - 22:00");
-                else if(shiftselect.equals("Night"))
+                else if (shiftselect.equals("Night"))
                     rosterdutyhours.setText("22:00 - 06:00");
 
             }
 
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {shiftselect= "Select Shift";
+            public void onNothingSelected(AdapterView<?> parent) {
+                shiftselect = "Select Shift";
             }
         });
     }
 
     //entry into ot table
-   public void open(){
-        String method="fill";
-        String datestr=datestring;
-        String name=userId;
-        String pfno="101";
-        String shift=shiftselect;//"morning";
-       String actstart=news+":"+newsm;
-       String actend=newe+":"+newem;
-       String extra=dh+":"+dm;
-       String reason=descp.getText().toString();
-
+    public void open() {
+        String method = "fill";
+        String datestr = datestring;
+        String name = userId;
+        String pfno = "101";
+        String shift = shiftselect;//"morning";
+        String actstart = news + ":" + newsm;
+        String actend = newe + ":" + newem;
+        String extra = dh + ":" + dm;
+        String reason = descp.getText().toString();
 
         // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
 
-        OvertimeForm.Backgroundtask backgroundtask=new OvertimeForm.Backgroundtask(this);
-        backgroundtask.execute(method,pfno,name,shift,actstart,actend,extra,reason,datestr,update,datestring);
+        if (isOnline()) {
+            // Start the AsyncTask
+            OvertimeForm.Backgroundtask backgroundtask = new OvertimeForm.Backgroundtask(this);
+            backgroundtask.execute(method, pfno, name, shift, actstart, actend, extra, reason, datestr, update, datestring);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
-    class Backgroundtask extends AsyncTask<String,Void,String> {
+    class Backgroundtask extends AsyncTask<String, Void, String> {
 
         Context ctx;
 
@@ -321,7 +317,6 @@ public void err(){
         }
 
 
-
         @Override
         protected String doInBackground(String... params) {
             String reg_url = "http://atomwrapp.dx.am/otfilling.php";
@@ -329,18 +324,15 @@ public void err(){
             if (method.equals("fill")) {
 
 
-
-
-                String  pfno= params[1];
+                String pfno = params[1];
                 String name = params[2];
-                String shift=params[3];
-                String actstart=params[4];
-                String actend=params[5];
-                String extra=params[6];
-                String reas=params[7];
-                String dat=params[8];
-                String upflag=params[9];
-
+                String shift = params[3];
+                String actstart = params[4];
+                String actend = params[5];
+                String extra = params[6];
+                String reas = params[7];
+                String dat = params[8];
+                String upflag = params[9];
 
 
                 try {
@@ -355,7 +347,7 @@ public void err(){
                     String newdata = URLEncoder.encode("date", "UTF-8") + "=" + URLEncoder.encode(dat, "UTF-8") + "&" +
                             URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") + "&" +
                             URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
-                            URLEncoder.encode("shift", "UTF-8") + "=" + URLEncoder.encode(shift, "UTF-8") +"&" +
+                            URLEncoder.encode("shift", "UTF-8") + "=" + URLEncoder.encode(shift, "UTF-8") + "&" +
                             URLEncoder.encode("strt", "UTF-8") + "=" + URLEncoder.encode(actstart, "UTF-8") + "&" +
                             URLEncoder.encode("end", "UTF-8") + "=" + URLEncoder.encode(actend, "UTF-8") + "&" +
                             URLEncoder.encode("extra", "UTF-8") + "=" + URLEncoder.encode(extra, "UTF-8") + "&" +
@@ -373,10 +365,14 @@ public void err(){
                     IS.close();
 
 
+                    return "Successfully Filled OT Form";
 
-                    return "successfull filled";
 
-
+                } catch (SocketTimeoutException s) {
+                    s.printStackTrace();
+                    Toast.makeText(OvertimeForm.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                } catch (UnknownHostException u) {
+                    u.printStackTrace();
                 } catch (MalformedURLException e) {
                     Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
                 } catch (IOException e) {
@@ -393,7 +389,7 @@ public void err(){
         }
     }
 
-    class Backgroundtask2 extends AsyncTask<String,Void,String> {
+    class Backgroundtask2 extends AsyncTask<String, Void, String> {
 
         Context ctx;
 
@@ -403,7 +399,6 @@ public void err(){
         }
 
 
-
         @Override
         protected String doInBackground(String... params) {
             String reg_url = "http://atomwrapp.dx.am/getot.php";
@@ -411,8 +406,7 @@ public void err(){
             if (method.equals("display")) {
 
                 String name = params[1];
-                String dat=params[2];
-
+                String dat = params[2];
 
 
                 try {
@@ -425,7 +419,7 @@ public void err(){
                     BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
 
                     String newdata = URLEncoder.encode("date", "UTF-8") + "=" + URLEncoder.encode(dat, "UTF-8") + "&" +
-                            URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") ;
+                            URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
 
 
                     bufferedwriter.write(newdata);
@@ -450,8 +444,6 @@ public void err(){
                     return stringBuilder.toString().trim();
 
 
-
-
                 } catch (MalformedURLException e) {
                     Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
                 } catch (IOException e) {
@@ -461,6 +453,7 @@ public void err(){
             return null;
 
         }
+
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
@@ -469,7 +462,7 @@ public void err(){
 
         @Override
         protected void onPostExecute(String res) {
-           // Toast.makeText(ctx, "ret "+res, Toast.LENGTH_LONG).show();
+            // Toast.makeText(ctx, "ret "+res, Toast.LENGTH_LONG).show();
             // qr_result.setText(result);
             jsonstring = res;
 
@@ -481,29 +474,28 @@ public void err(){
 
                 int i = 0;
                 int count = 0;
-                while(count<ja.length()){
-                    JSONObject j=ja.getJSONObject(count);
-                    retrieveshift=j.getString("shift");
-                    retrievestrt=j.getString("starttime");
-                    retrieveend=j.getString("endtime");
-                    retrievedesc=j.getString("descr");
+                while (count < ja.length()) {
+                    JSONObject j = ja.getJSONObject(count);
+                    retrieveshift = j.getString("shift");
+                    retrievestrt = j.getString("starttime");
+                    retrieveend = j.getString("endtime");
+                    retrievedesc = j.getString("descr");
                     count++;
                 }
 
 
-            }
-               catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             shiftvalue.setText(retrieveshift);
             start_time.setText(retrievestrt);
             end_time.setText(retrieveend);
             descp.setText(retrievedesc);
-            if(retrieveshift.equals("Morning"))
+            if (retrieveshift.equals("Morning"))
                 roster.setText("06:00 - 14:00");
-            else if(retrieveshift.equals("Evening"))
+            else if (retrieveshift.equals("Evening"))
                 roster.setText("14:00 - 22:00");
-            else if(retrieveshift.equals("Night"))
+            else if (retrieveshift.equals("Night"))
                 roster.setText("22:00 - 06:00");
 
 
@@ -512,30 +504,20 @@ public void err(){
         }
     }
 
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private void msg(){
+    private void msg() {
 
         //String disp=df.format(date);
-       // Toast.makeText(this, disp, Toast.LENGTH_SHORT).show();
-       // Toast.makeText(this, "Extra duty hours is "+dh +" : "+ dm +" hours.", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, disp, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "Extra duty hours is "+dh +" : "+ dm +" hours.", Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Submitt", Toast.LENGTH_LONG).show();
     }
 

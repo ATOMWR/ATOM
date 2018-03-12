@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,8 +33,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 
 //notification imports
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
+
                 validateUser();
             }
         });
@@ -157,9 +161,17 @@ public class MainActivity extends AppCompatActivity {
 
         getUserDetails();
 
-        // Start the AsyncTask
-        MainAsyncTask task = new MainAsyncTask();
-        task.execute(LOGIN_URL);
+
+        if(isOnline()) {
+            progressBar.setVisibility(View.VISIBLE);
+
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(LOGIN_URL);
+        } else {
+
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -292,7 +304,15 @@ public class MainActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
-        } catch (IOException e) {
+        }
+        catch (SocketTimeoutException s){
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        }
+        catch(UnknownHostException u){
+            u.printStackTrace();
+        }
+        catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
             if (urlConnection != null) {
@@ -446,6 +466,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 
 

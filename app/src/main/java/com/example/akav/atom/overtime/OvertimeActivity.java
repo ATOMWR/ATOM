@@ -1,6 +1,9 @@
 package com.example.akav.atom.overtime;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,9 +63,13 @@ public class OvertimeActivity extends AppCompatActivity {
 
         previousCycleDateList = new ArrayList<>();
 
-        // Start the AsyncTask
-        MainAsyncTask task = new MainAsyncTask();
-        task.execute(GET_DATE_URL);
+        if(isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(GET_DATE_URL);
+        } else{
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
         ListView cycleDateListView = (ListView) findViewById(R.id.prev_cycle_date_list_view);
 
@@ -250,5 +257,14 @@ public class OvertimeActivity extends AppCompatActivity {
             progressBarLayout.setVisibility(View.GONE);
             cycleList.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }

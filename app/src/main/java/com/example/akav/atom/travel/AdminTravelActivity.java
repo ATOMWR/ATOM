@@ -1,6 +1,9 @@
 package com.example.akav.atom.travel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +34,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,9 +68,15 @@ public class AdminTravelActivity extends AppCompatActivity {
 
         previousCycleDateList = new ArrayList<>();
 
-        // Start the AsyncTask
-        MainAsyncTask task = new MainAsyncTask();
-        task.execute(GET_DATE_URL);
+
+        if (isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(GET_DATE_URL);
+
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
         ListView cycleDateListView = (ListView) findViewById(R.id.prev_cycle_date_list_view);
 
@@ -230,6 +241,11 @@ public class AdminTravelActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -276,6 +292,15 @@ public class AdminTravelActivity extends AppCompatActivity {
             progressBarLayout.setVisibility(View.GONE);
             cycleList.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 
 }

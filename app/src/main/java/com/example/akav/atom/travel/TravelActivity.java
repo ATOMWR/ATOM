@@ -1,6 +1,9 @@
 package com.example.akav.atom.travel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +33,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,9 +66,13 @@ public class TravelActivity extends AppCompatActivity {
 
         previousCycleDateList = new ArrayList<>();
 
-        // Start the AsyncTask
-        MainAsyncTask task = new MainAsyncTask();
-        task.execute(GET_DATE_URL);
+        if (isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(GET_DATE_URL);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
         ListView cycleDateListView = (ListView) findViewById(R.id.prev_cycle_date_list_view);
 
@@ -86,9 +95,9 @@ public class TravelActivity extends AppCompatActivity {
                 String currentCycleStartDate = currentCycleStart.getText().toString();
                 String currentCycleEndDate = currentCycleEnd.getText().toString();
 
-                String sdc=currentCycleStartDate.substring(10,14)+"-"+currentCycleStartDate.substring(5,7)+"-"+currentCycleStartDate.substring(0,2);
+                String sdc = currentCycleStartDate.substring(10, 14) + "-" + currentCycleStartDate.substring(5, 7) + "-" + currentCycleStartDate.substring(0, 2);
 
-                String edc=currentCycleEndDate.substring(10,14)+"-"+currentCycleEndDate.substring(5,7)+"-"+currentCycleEndDate.substring(0,2);
+                String edc = currentCycleEndDate.substring(10, 14) + "-" + currentCycleEndDate.substring(5, 7) + "-" + currentCycleEndDate.substring(0, 2);
 
                 Intent currentCycleToGrid = new Intent(TravelActivity.this, TravelGridActivity.class);
 
@@ -117,9 +126,9 @@ public class TravelActivity extends AppCompatActivity {
                 String startDate = cycleDate.getStartDate();
                 String endDate = cycleDate.getEndDate();
 
-                String sd=startDate.substring(10,14)+"-"+startDate.substring(5,7)+"-"+startDate.substring(0,2);
+                String sd = startDate.substring(10, 14) + "-" + startDate.substring(5, 7) + "-" + startDate.substring(0, 2);
 
-                String ed=endDate.substring(10,14)+"-"+endDate.substring(5,7)+"-"+endDate.substring(0,2);
+                String ed = endDate.substring(10, 14) + "-" + endDate.substring(5, 7) + "-" + endDate.substring(0, 2);
 
                 Intent prevCycleToGrid = new Intent(TravelActivity.this, TravelGridActivity.class);
 
@@ -136,7 +145,7 @@ public class TravelActivity extends AppCompatActivity {
         });
     }
 
-    private String getCycleDates(String url){
+    private String getCycleDates(String url) {
 
         //Create URI
         Uri baseUri = Uri.parse(url);
@@ -148,15 +157,15 @@ public class TravelActivity extends AppCompatActivity {
         try {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
-        try{
+        try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
 
@@ -179,7 +188,7 @@ public class TravelActivity extends AppCompatActivity {
 
             JSONArray previousCycleArray = root.getJSONArray("Previous Cycle Dates");
 
-            for (int index = 0; index < previousCycleArray.length(); index++){
+            for (int index = 0; index < previousCycleArray.length(); index++) {
                 JSONObject cycleDates = previousCycleArray.getJSONObject(index);
 
                 Long startDate = cycleDates.getLong("Start Date");
@@ -191,7 +200,8 @@ public class TravelActivity extends AppCompatActivity {
             result = "" + startDateTimeStamp + ", " + endDateTimeStamp;
 
         } catch (JSONException e) {
-            Log.e(MainActivity.class.getName(), "Error in Parsing", e);;
+            Log.e(MainActivity.class.getName(), "Error in Parsing", e);
+            ;
         }
         return result;
     }
@@ -215,6 +225,11 @@ public class TravelActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -233,13 +248,13 @@ public class TravelActivity extends AppCompatActivity {
      */
     private String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
-        if(inputStream != null){
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader reader = new BufferedReader(inputStreamReader);
 
             String line = reader.readLine();
 
-            while (line != null){
+            while (line != null) {
                 output.append(line);
                 line = reader.readLine();
             }
@@ -260,5 +275,14 @@ public class TravelActivity extends AppCompatActivity {
             progressBarLayout.setVisibility(View.GONE);
             cycleList.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }
