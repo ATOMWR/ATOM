@@ -2,7 +2,10 @@ package com.example.akav.atom.travel;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +37,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -224,7 +229,7 @@ public class TravelForm extends AppCompatActivity {
 
                 if ((dateDifference == 0) && (monthDifference == 0)) {
                     // Same Date
-                    timeDifference  = getTimeDifference(startDateString, endDateString);
+                    timeDifference = getTimeDifference(startDateString, endDateString);
                     hourDifference = timeDifference / 1000 / 60 / 60;
                     minuteDifference = ((timeDifference / 1000 / 60) % 60);
 
@@ -240,7 +245,7 @@ public class TravelForm extends AppCompatActivity {
                 } else {
                     // Different dates
                     // Case 1: Difference of 1 day, Same month
-                    if((dateDifference == 1) && (monthDifference == 0)){
+                    if ((dateDifference == 1) && (monthDifference == 0)) {
                         // First Day TA
                         String tempEndTime = "23:59:99";
                         String tempEndDate = startDate;
@@ -276,7 +281,7 @@ public class TravelForm extends AppCompatActivity {
                     }
 
                     // Case 2: Difference more than One Day, Same Month
-                    if((dateDifference > 1) && (monthDifference == 0)){
+                    if ((dateDifference > 1) && (monthDifference == 0)) {
                         // First Day TA
                         String tempEndTime = "23:59:99";
                         String tempEndDate = startDate;
@@ -297,8 +302,8 @@ public class TravelForm extends AppCompatActivity {
                         // Intermediate days
                         Integer numberOfDays = 1;
 
-                        while (numberOfDays < dateDifference){
-                            String intermediateStartDate =  year + "-" + (startMonth) + "-" + (startDay + numberOfDays);
+                        while (numberOfDays < dateDifference) {
+                            String intermediateStartDate = year + "-" + (startMonth) + "-" + (startDay + numberOfDays);
                             String intermediateStartTime = "00:00:00";
                             String intermediateEndDate = intermediateStartDate;
                             String intermediateEndTime = "23:59:99";
@@ -354,10 +359,15 @@ public class TravelForm extends AppCompatActivity {
 
                 Log.i(TravelForm.class.getName(), "JSON to send: " + jsonToSend.toString());
 
-                // Start the AsyncTask
-                progressBar.setVisibility(View.VISIBLE);
-                MainAsyncTask task = new MainAsyncTask();
-                task.execute(FILL_TA_FORM_URL);
+
+                if (isOnline()) {
+                    // Start the AsyncTask
+                    progressBar.setVisibility(View.VISIBLE);
+                    MainAsyncTask task = new MainAsyncTask();
+                    task.execute(FILL_TA_FORM_URL);
+                } else {
+                    Toast.makeText(TravelForm.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -567,6 +577,11 @@ public class TravelForm extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -612,6 +627,15 @@ public class TravelForm extends AppCompatActivity {
             Toast.makeText(TravelForm.this, "Successfully filled form", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }
 

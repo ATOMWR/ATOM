@@ -1,6 +1,9 @@
 package com.example.akav.atom.travel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
@@ -31,7 +34,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -59,8 +64,14 @@ public class TravelFormsActivity extends AppCompatActivity {
         currentDate = intent.getStringExtra("currdate");
         userID = intent.getStringExtra("userID");
 
-        MainAsyncTask task = new MainAsyncTask();
-        task.execute(GET_TA_FORMS);
+
+        if (isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(GET_TA_FORMS);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
         addNew = (FloatingActionButton) findViewById(R.id.fill_new_ta_form);
         progressBar = (ProgressBar) findViewById(R.id.ta_forms_progress_bar);
@@ -175,6 +186,11 @@ public class TravelFormsActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -241,5 +257,14 @@ public class TravelFormsActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             addNew.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }

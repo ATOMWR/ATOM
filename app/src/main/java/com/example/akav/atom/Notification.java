@@ -26,8 +26,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 
 public class Notification extends AppCompatActivity {
 String userId,JSON_STRING,jsonstring,datestring;
@@ -102,9 +104,6 @@ String userId,JSON_STRING,jsonstring,datestring;
 
                 String name = params[1];
 
-
-
-
                 try {
                     URL url = new URL(reg_url);
                     HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
@@ -115,8 +114,6 @@ String userId,JSON_STRING,jsonstring,datestring;
                     BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
 
                     String newdata = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
-
-
 
                     bufferedwriter.write(newdata);
                     // Toast.makeText(ctx, "data written", Toast.LENGTH_LONG).show();
@@ -137,17 +134,19 @@ String userId,JSON_STRING,jsonstring,datestring;
 
                     return stringBuilder.toString().trim();
 
-
-
-
-
-
-
+                }
+                catch (SocketTimeoutException s){
+                    s.printStackTrace();
+                    Toast.makeText(Notification.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                }
+                catch(UnknownHostException u){
+                    u.printStackTrace();
                 } catch (MalformedURLException e) {
                     Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
                 } catch (IOException e) {
                     Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
                 }
+
             }
             return null;
         }

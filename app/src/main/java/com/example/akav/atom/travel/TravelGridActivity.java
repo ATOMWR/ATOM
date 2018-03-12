@@ -1,6 +1,9 @@
 package com.example.akav.atom.travel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,29 +29,31 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class TravelGridActivity extends AppCompatActivity {
     private TextView selectedDate;
-    String datestring,JSON_STRING,jsonstring,userID;
-    String startDate,endDate;
-    String[] s=new String[14];
+    String datestring, JSON_STRING, jsonstring, userID;
+    String startDate, endDate;
+    String[] s = new String[14];
     String[] stringdatearray;
     int[] inter_verification_status;
     String t;
     String fromcurrorprevcycle;
-    String allowance="TA";
+    String allowance = "TA";
 
 
     JSONObject jo;
     JSONArray ja;
     int ress;
 
-    RelativeLayout loadinglayout,actuallayout;
+    RelativeLayout loadinglayout, actuallayout;
 
 
     @Override
@@ -56,11 +61,11 @@ public class TravelGridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_grid);
         final String uid = getIntent().getExtras().getString("userID");
-        fromcurrorprevcycle=getIntent().getExtras().getString("fromcyclelist");
-        loadinglayout=(RelativeLayout)findViewById(R.id.load_layout);
-        actuallayout=(RelativeLayout)findViewById(R.id.actual_layout);
+        fromcurrorprevcycle = getIntent().getExtras().getString("fromcyclelist");
+        loadinglayout = (RelativeLayout) findViewById(R.id.load_layout);
+        actuallayout = (RelativeLayout) findViewById(R.id.actual_layout);
 
-        userID=uid;
+        userID = uid;
 
         selectedDate = (TextView) findViewById(R.id.selected_date);
 
@@ -70,64 +75,62 @@ public class TravelGridActivity extends AppCompatActivity {
         endDate = intent.getStringExtra("endDate");
 
 
-
         selectedDate.setText(startDate + " TO " + endDate);
 
 
-
-
-        Calendar c=Calendar.getInstance();
-        Calendar d=Calendar.getInstance();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        Calendar d = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             c.setTime(sdf.parse(startDate));
             d.setTime(sdf.parse(endDate));
-            int i=0;
+            int i = 0;
             String temp;
 
-            while(!c.equals(d)){
+            while (!c.equals(d)) {
 
-                temp=sdf.format(c.getTime());
-                s[i]=temp.substring(0,10);
+                temp = sdf.format(c.getTime());
+                s[i] = temp.substring(0, 10);
                 i++;
-                c.add(Calendar.DATE,1);
+                c.add(Calendar.DATE, 1);
 
             }
-            temp=sdf.format(c.getTime());
-            s[i]=temp.substring(0,10);
+            temp = sdf.format(c.getTime());
+            s[i] = temp.substring(0, 10);
 
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-
-
-
-        TravelGridActivity.Backgroundtask backgroundtask = new TravelGridActivity.Backgroundtask();
-        backgroundtask.execute();
+        if (isOnline()) {
+            // Start the AsyncTask
+            TravelGridActivity.Backgroundtask backgroundtask = new TravelGridActivity.Backgroundtask();
+            backgroundtask.execute();
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
 
 
     }
-    public void gridviewcall(){
+
+    public void gridviewcall() {
         /*String[] s=new String[14];
         for(int i=0;i<s.length;i++){
             s[i]=" "+(i+1)+" ";
         }*/
-        final GridView gridView=(GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(new TextViewAdapterTA(this, s,stringdatearray,inter_verification_status));
+        final GridView gridView = (GridView) findViewById(R.id.gridview);
+        gridView.setAdapter(new TextViewAdapterTA(this, s, stringdatearray, inter_verification_status));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                datestring=parent.getItemAtPosition(position).toString();
-                t=view.getTag().toString();
-                if(fromcurrorprevcycle.equals("cannotfill")&&!t.equals("ot notify")){
+                datestring = parent.getItemAtPosition(position).toString();
+                t = view.getTag().toString();
+                if (fromcurrorprevcycle.equals("cannotfill") && !t.equals("ot notify")) {
                     cannotfill();
-                }
-
-                else {
+                } else {
                     Intent gotoOTFormIntent = new Intent(TravelGridActivity.this, TravelFormsActivity.class);
                     gotoOTFormIntent.putExtra("userID", userID);
                     gotoOTFormIntent.putExtra("currdate", datestring);
@@ -145,16 +148,15 @@ public class TravelGridActivity extends AppCompatActivity {
 
 
     }
-    private void msg(){
-        Toast.makeText(TravelGridActivity.this, "tag is:"+t, Toast.LENGTH_SHORT).show();
+
+    private void msg() {
+        Toast.makeText(TravelGridActivity.this, "tag is:" + t, Toast.LENGTH_SHORT).show();
 
     }
-    private void cannotfill(){
+
+    private void cannotfill() {
         Toast.makeText(TravelGridActivity.this, "Sorry,you cannot fill form as it is under verification.", Toast.LENGTH_SHORT).show();
     }
-
-
-
 
 
     class Backgroundtask extends AsyncTask<Void, Void, String> {
@@ -178,9 +180,9 @@ public class TravelGridActivity extends AppCompatActivity {
                 BufferedWriter bufferedwriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
 
                 String newdata = URLEncoder.encode("stdate", "UTF-8") + "=" + URLEncoder.encode(startDate, "UTF-8") + "&" +
-                        URLEncoder.encode("eddate", "UTF-8") + "=" + URLEncoder.encode(endDate, "UTF-8")+ "&" +
-                        URLEncoder.encode("allowancetype", "UTF-8") + "=" + URLEncoder.encode(allowance, "UTF-8")+ "&" +
-                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(userID, "UTF-8") ;
+                        URLEncoder.encode("eddate", "UTF-8") + "=" + URLEncoder.encode(endDate, "UTF-8") + "&" +
+                        URLEncoder.encode("allowancetype", "UTF-8") + "=" + URLEncoder.encode(allowance, "UTF-8") + "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(userID, "UTF-8");
 
 
                 bufferedwriter.write(newdata);
@@ -204,6 +206,11 @@ public class TravelGridActivity extends AppCompatActivity {
                 httpurlconnection.disconnect();
 
                 return stringBuilder.toString().trim();
+            } catch (SocketTimeoutException s) {
+                s.printStackTrace();
+                Toast.makeText(TravelGridActivity.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            } catch (UnknownHostException u) {
+                u.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -227,13 +234,13 @@ public class TravelGridActivity extends AppCompatActivity {
             // return  result;
             try {
                 jo = new JSONObject(jsonstring);
-                ja=jo.getJSONArray("dateresponse");
+                ja = jo.getJSONArray("dateresponse");
 
-                int i=0;
-                int count=0;
-                if(ja.length()!=0) {
-                    stringdatearray=new String[ja.length()];
-                    inter_verification_status=new int[ja.length()];
+                int i = 0;
+                int count = 0;
+                if (ja.length() != 0) {
+                    stringdatearray = new String[ja.length()];
+                    inter_verification_status = new int[ja.length()];
                     while (count < ja.length()) {
                         JSONObject j = ja.getJSONObject(count);
                         stringdatearray[i] = j.getString("date");
@@ -242,11 +249,11 @@ public class TravelGridActivity extends AppCompatActivity {
                         count++;
 
                     }
-                }else{
-                    stringdatearray=new String[1];
-                    inter_verification_status=new int[1];
+                } else {
+                    stringdatearray = new String[1];
+                    inter_verification_status = new int[1];
                     stringdatearray[i] = "nodate";
-                    inter_verification_status[i] =999;
+                    inter_verification_status[i] = 999;
                 }
 
 
@@ -263,7 +270,13 @@ public class TravelGridActivity extends AppCompatActivity {
         }
     }
 
-
-
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
 
 }

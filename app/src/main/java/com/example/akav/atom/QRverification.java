@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -24,8 +26,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 
@@ -39,7 +43,7 @@ public class QRverification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrverification);
-         submit=(Button)findViewById(R.id.submitbutton);
+        submit = (Button) findViewById(R.id.submitbutton);
 
         final Activity activity = this;
 
@@ -62,8 +66,8 @@ public class QRverification extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-         qr_result= (TextView) findViewById(R.id.qr_result);
-        submit=(Button)findViewById(R.id.submitbutton);
+        qr_result = (TextView) findViewById(R.id.qr_result);
+        submit = (Button) findViewById(R.id.submitbutton);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
@@ -82,23 +86,23 @@ public class QRverification extends AppCompatActivity {
 
                 }
             }
-                name = resultarray[2].substring(resultarray[2].indexOf(":") + 1);
-                pfno = resultarray[3].substring(resultarray[3].indexOf(":") + 1);
-                password = resultarray[5].substring(resultarray[5].indexOf(":") + 1);
-                category = resultarray[4].substring(resultarray[4].indexOf(":") + 1);
-                subcategory = resultarray[6].substring(resultarray[6].indexOf(":") + 1);
+            name = resultarray[2].substring(resultarray[2].indexOf(":") + 1);
+            pfno = resultarray[3].substring(resultarray[3].indexOf(":") + 1);
+            password = resultarray[5].substring(resultarray[5].indexOf(":") + 1);
+            category = resultarray[4].substring(resultarray[4].indexOf(":") + 1);
+            subcategory = resultarray[6].substring(resultarray[6].indexOf(":") + 1);
 
 
-                qr_result.setText("name:"+name + "\n" + "pfno:" +pfno + "\n" + "password:"+password + "\n" + "category:"+category + "\n" + "subcategory:"+subcategory);
+            qr_result.setText("name:" + name + "\n" + "pfno:" + pfno + "\n" + "password:" + password + "\n" + "category:" + category + "\n" + "subcategory:" + subcategory);
 
 
-                // Intent returntoadmin=new Intent(QRverification.this,AdminHomeActivity.class);
-                //startActivity(returntoadmin);
+            // Intent returntoadmin=new Intent(QRverification.this,AdminHomeActivity.class);
+            //startActivity(returntoadmin);
 
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   // open();
+                    // open();
                     confirmationcall();
                 }
             });
@@ -107,14 +111,22 @@ public class QRverification extends AppCompatActivity {
         }
 
     }
-    public void open(){
-        String method="register";
-       // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
 
-        Backgroundtask backgroundtask=new Backgroundtask(this);
-        backgroundtask.execute(method,name,password,pfno,category,subcategory);
+    public void open() {
+        String method = "register";
+        // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
+
+        if (isOnline()) {
+            // Start the AsyncTask
+            Backgroundtask backgroundtask = new Backgroundtask(this);
+            backgroundtask.execute(method, name, password, pfno, category, subcategory);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
+
     }
-   public void confirmationcall(){
+
+    public void confirmationcall() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Are you sure, You wanted to make decision");
         alertDialogBuilder.setPositiveButton("yes",
@@ -123,8 +135,8 @@ public class QRverification extends AppCompatActivity {
                     public void onClick(DialogInterface arg0, int arg1) {
 
 
-                       // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
-                       open();
+                        // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
+                        open();
                     }
                 });
 
@@ -140,19 +152,14 @@ public class QRverification extends AppCompatActivity {
     }
 
 
+    class Backgroundtask extends AsyncTask<String, Void, String> {
 
+        Context ctx;
 
-
-
-    class Backgroundtask extends AsyncTask<String,Void,String> {
-
-       Context ctx;
-
-       Backgroundtask(Context ctx) {
+        Backgroundtask(Context ctx) {
             this.ctx = ctx;
 
         }
-
 
 
         @Override
@@ -164,10 +171,9 @@ public class QRverification extends AppCompatActivity {
 
                 String name = params[1];
                 String password = params[2];
-                String  pfno= params[3];
-                String category=params[4];
-                String subcategory=params[5];
-
+                String pfno = params[3];
+                String category = params[4];
+                String subcategory = params[5];
 
 
                 try {
@@ -181,9 +187,9 @@ public class QRverification extends AppCompatActivity {
 
                     String newdata = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
                             URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8") + "&" +
-                            URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") +"&" +
+                            URLEncoder.encode("pfno", "UTF-8") + "=" + URLEncoder.encode(pfno, "UTF-8") + "&" +
                             URLEncoder.encode("cat", "UTF-8") + "=" + URLEncoder.encode(category, "UTF-8") + "&" +
-                            URLEncoder.encode("subcat", "UTF-8") + "=" + URLEncoder.encode(subcategory, "UTF-8") ;
+                            URLEncoder.encode("subcat", "UTF-8") + "=" + URLEncoder.encode(subcategory, "UTF-8");
 
                     bufferedwriter.write(newdata);
                     // Toast.makeText(ctx, "data written", Toast.LENGTH_LONG).show();
@@ -195,10 +201,14 @@ public class QRverification extends AppCompatActivity {
                     IS.close();
 
 
-
                     return "successful registration";
 
 
+                } catch (SocketTimeoutException s) {
+                    s.printStackTrace();
+                    Toast.makeText(QRverification.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                } catch (UnknownHostException u) {
+                    u.printStackTrace();
                 } catch (MalformedURLException e) {
                     Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
                 } catch (IOException e) {
@@ -210,12 +220,17 @@ public class QRverification extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String res) {
-           Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
-           // qr_result.setText(result);
+            Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
+            // qr_result.setText(result);
         }
     }
 
-
-
-
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
 }

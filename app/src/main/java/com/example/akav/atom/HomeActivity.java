@@ -11,6 +11,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -362,8 +364,5 @@ private void logout(){
             icon.mutate();
             icon.setDrawableByLayerId(R.id.ic_badge, badge);
         }
-
-
     }
-
 }

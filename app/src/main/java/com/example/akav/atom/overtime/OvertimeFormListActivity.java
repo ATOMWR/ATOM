@@ -1,8 +1,11 @@
 package com.example.akav.atom.overtime;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +34,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -44,7 +49,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
     private String endDateTimeStamp;
     private String jsonResponse;
     private String buttonColor;
-    private String sd,ed;
+    private String sd, ed;
 
     private JSONObject jsonToSend;
 
@@ -73,14 +78,20 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         startDateTimestamp = intent.getStringExtra("startDate");
         endDateTimeStamp = intent.getStringExtra("endDate");
         isPreviousCycle = intent.getIntExtra("isPreviousCycle", 0);
-        sd=getIntent().getExtras().getString("strt");
-        ed=getIntent().getExtras().getString("enddt");
+        sd = getIntent().getExtras().getString("strt");
+        ed = getIntent().getExtras().getString("enddt");
         //Toast.makeText(OvertimeFormListActivity.this,sd+" to "+ed, Toast.LENGTH_LONG).show();
 
         numberOfVerifiedForms = 0;
 
-        MainAsyncTask2 task2 = new MainAsyncTask2();
-        task2.execute(GET_OT_FORMS_URL);
+        if (isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask2 task2 = new MainAsyncTask2();
+            task2.execute(GET_OT_FORMS_URL);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+        }
+
 
         updateFormProgressLayout = (LinearLayout) findViewById(R.id.update_form_list_progress_layout);
         formListLayout = (RelativeLayout) findViewById(R.id.form_list_layout);
@@ -122,8 +133,14 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                         formListLayout.setVisibility(View.GONE);
                         updateFormProgressLayout.setVisibility(View.VISIBLE);
 
-                        MainAsyncTask3 task2 = new MainAsyncTask3();
-                        task2.execute(PULL_REPORT);
+
+                        if (isOnline()) {
+                            // Start the AsyncTask
+                            MainAsyncTask3 task2 = new MainAsyncTask3();
+                            task2.execute(PULL_REPORT);
+                        } else {
+                            Toast.makeText(OvertimeFormListActivity.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -139,9 +156,14 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                 formListLayout.setVisibility(View.GONE);
                 updateFormProgressLayout.setVisibility(View.VISIBLE);
 
-                // Start the AsyncTask
-                MainAsyncTask task = new MainAsyncTask();
-                task.execute(INTER_VERIFY_OT_FORMS);
+
+                if (isOnline()) {
+                    // Start the AsyncTask
+                    MainAsyncTask task = new MainAsyncTask();
+                    task.execute(INTER_VERIFY_OT_FORMS);
+                } else {
+                    Toast.makeText(OvertimeFormListActivity.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -270,6 +292,11 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -372,6 +399,11 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -433,7 +465,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         }
     }
 
-    void openWebsite(final String result){
+    void openWebsite(final String result) {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OvertimeFormListActivity.this);
 
@@ -451,7 +483,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                     }
                 });
 
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -491,6 +523,11 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem Connecting to Server.", e);
         } finally {
@@ -518,4 +555,12 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
 }
