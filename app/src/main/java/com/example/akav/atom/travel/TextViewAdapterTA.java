@@ -64,6 +64,17 @@ public class TextViewAdapterTA  extends BaseAdapter{
             else if(textView.getText().toString().equals(" 20 ")||textView.getText().toString().equals(" 15 "))
                 gridView.setBackgroundColor(Color.parseColor("#E3E358"));
              else*/
+          for(int i=0;i<js.length;i++){
+              for(int j=i+1;j<js.length;j++){
+                  if(js[i].equals(js[j])){
+                      if(ji[i]==2||ji[j]==2){
+                          ji[i]=2;
+                          ji[j]=2;
+                      }
+                  }
+              }
+          }
+
             int a=js.length;
             for (int i = 0; i < a; i++) {
                 if(js[i].equals("nodate")) {

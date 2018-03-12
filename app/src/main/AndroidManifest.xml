@@ -55,6 +55,8 @@
         <activity android:name=".travel.AdminTravelActivity" />
         <activity android:name=".travel.TravelGridActivity" />
         <activity android:name=".travel.TravelForm" />
+        <activity android:name=".travel.TravelFormsActivity"/>
+        <activity android:name=".travel.TravelFormListActiviy"/>
         <activity android:name=".Notification"></activity>
     </application>
 
