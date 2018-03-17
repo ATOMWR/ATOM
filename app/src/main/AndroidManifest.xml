@@ -19,15 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name=".MyReceiver"
             android:enabled="true"
-            android:exported="false" >
-        </receiver>
+            android:exported="false"></receiver>
+
         <service
             android:name=".MyNewIntentService"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
+
         <activity
             android:name=".RegistrationActivity"
             android:label="@string/register_activity_title" />
@@ -55,9 +56,10 @@
         <activity android:name=".travel.AdminTravelActivity" />
         <activity android:name=".travel.TravelGridActivity" />
         <activity android:name=".travel.TravelForm" />
-        <activity android:name=".travel.TravelFormsActivity"/>
-        <activity android:name=".travel.TravelFormListActiviy"/>
-        <activity android:name=".Notification"></activity>
+        <activity android:name=".travel.TravelFormsActivity" />
+        <activity android:name=".travel.TravelFormListActiviy" />
+        <activity android:name=".Notification" />
+        <activity android:name=".AdminNotification"></activity>
     </application>
 
 </manifest>
