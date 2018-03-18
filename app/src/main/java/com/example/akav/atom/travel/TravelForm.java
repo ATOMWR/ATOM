@@ -10,12 +10,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -536,6 +538,9 @@ public class TravelForm extends AppCompatActivity {
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
+            if (jsonResponse == null) {
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -579,7 +584,7 @@ public class TravelForm extends AppCompatActivity {
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            return null;
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException e) {
@@ -624,8 +629,16 @@ public class TravelForm extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(TravelForm.this, "Successfully filled form", Toast.LENGTH_SHORT).show();
-            finish();
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                Toast.makeText(TravelForm.this, "Successfully filled form", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 

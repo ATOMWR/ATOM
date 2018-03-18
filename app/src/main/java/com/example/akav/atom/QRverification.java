@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -206,7 +207,7 @@ public class QRverification extends AppCompatActivity {
 
                 } catch (SocketTimeoutException s) {
                     s.printStackTrace();
-                    Toast.makeText(QRverification.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                    return  null;
                 } catch (UnknownHostException u) {
                     u.printStackTrace();
                 } catch (MalformedURLException e) {
@@ -219,8 +220,8 @@ public class QRverification extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String res) {
-            Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
+        protected void onPostExecute(String result) {
+            Toast.makeText(ctx, result, Toast.LENGTH_LONG).show();
             // qr_result.setText(result);
         }
     }

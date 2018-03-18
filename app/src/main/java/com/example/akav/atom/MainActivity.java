@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mLogin;
     private Button mRegister;
-   // private String userId;
+    // private String userId;
     private String password;
     private ProgressBar progressBar;
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isAdmin;
 
 
-    String JSON_STRING,jsonstring,userId;
+    String JSON_STRING, jsonstring, userId;
     TextView temp;
     JSONObject jo;
     JSONArray ja;
@@ -65,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     //notification contents
 
-     NotificationCompat.Builder Notvar;
-    public static final int unique_id=12345;
+    NotificationCompat.Builder Notvar;
+    public static final int unique_id = 12345;
     private static final String TAG = MainActivity.class.getSimpleName();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private TextView txtRegId, txtMessage;
@@ -96,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, b.build());
 */
-        Intent notifyIntent = new Intent(this,MyReceiver.class);
+        Intent notifyIntent = new Intent(this, MyReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast
                 (this, 8, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis(),
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
                 60000, pendingIntent);
 
         mLogin = (Button) findViewById(R.id.login_button);
@@ -125,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(gotoRegisterIntent);
             }
         });
-
 
 
         // Temperorary Buttons
@@ -155,14 +156,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     // To Authenticate User.
     private void validateUser() {
 
         getUserDetails();
 
+        InputMethodManager i = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        i.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
 
-        if(isOnline()) {
+        if (isOnline()) {
             progressBar.setVisibility(View.VISIBLE);
 
             // Start the AsyncTask
@@ -175,45 +177,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void identifyUser(){
+    private void identifyUser() {
 
-        if (isValidUser) {
+        try {
+            if (isValidUser) {
 
-            progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
 
 
-            Intent gotoAdminHomeIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
-            Intent gotoUserHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                Intent gotoAdminHomeIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
+                Intent gotoUserHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
 
-            if(isAdmin){
-                gotoAdminHomeIntent.putExtra("userId", userId);
+                if (isAdmin) {
+                    gotoAdminHomeIntent.putExtra("userId", userId);
 
-                startActivity(gotoAdminHomeIntent);
+                    startActivity(gotoAdminHomeIntent);
+                } else {
+
+
+                    gotoUserHomeIntent.putExtra("userId", userId);
+                    startActivity(gotoUserHomeIntent);
+
+
+                }
+
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                clearUserDetails();
+                error();
             }
-            else{
-
-
-                gotoUserHomeIntent.putExtra("userId", userId);
-                startActivity(gotoUserHomeIntent);
-
-
-
-            }
-
-        } else {
-            progressBar.setVisibility(View.INVISIBLE);
-            clearUserDetails();
-            error();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
         }
     }
 
     // Show Error
-    private void error(){
+    private void error() {
         Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_LONG).show();
     }
 
     /**
-    * If returned JSON object contains false for 'validUser'
+     * If returned JSON object contains false for 'validUser'
      * then return false,
      * else set isAdmin and isRegularUser based on
      * JSON Objects fields.
@@ -242,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         mPassword.setText("");
     }
 
-    private String userLogin(String url){
+    private String userLogin(String url) {
 
         //Create URI
         Uri baseUri = Uri.parse(url);
@@ -257,15 +261,18 @@ public class MainActivity extends AppCompatActivity {
         try {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);;
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
-        try{
+        try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
-        }
-        catch (IOException e){
+            if (jsonResponse == null) {
+                return null;
+            }
+        } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
 
@@ -280,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
             result = isValidUser.toString() + ", " + isAdmin.toString();
 
         } catch (JSONException e) {
-            Log.e(MainActivity.class.getName(), "Error in Parsing", e);;
+            Log.e(MainActivity.class.getName(), "Error in Parsing", e);
+            ;
         }
         return result;
     }
@@ -304,15 +312,13 @@ public class MainActivity extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
-        }
-        catch (SocketTimeoutException s){
+        } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
-        }
-        catch(UnknownHostException u){
+            Log.e(MainActivity.class.getName(), "Error connecting to the Internet", s);
+            return null;
+        } catch (UnknownHostException u) {
             u.printStackTrace();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
             if (urlConnection != null) {
@@ -328,15 +334,15 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Convert JSON to String.
      */
-    private String readFromStream(InputStream inputStream) throws  IOException{
+    private String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
-        if(inputStream != null){
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader reader = new BufferedReader(inputStreamReader);
 
             String line = reader.readLine();
 
-            while (line != null){
+            while (line != null) {
                 output.append(line);
                 line = reader.readLine();
             }
@@ -354,15 +360,21 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-           // Toast.makeText(getApplicationContext(), "isValidUser, isAdmin = " + result, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), "isValidUser, isAdmin = " + result, Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.INVISIBLE);
-
-            identifyUser();
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try Again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                identifyUser();
+            }
         }
     }
 
 
-    class Backgroundtaskonload extends AsyncTask<String,Void,String> {
+    class Backgroundtaskonload extends AsyncTask<String, Void, String> {
 
         Context ctx;
 
@@ -443,15 +455,15 @@ public class MainActivity extends AppCompatActivity {
                 ja = jo.getJSONArray("countresponse");
 
                 int i = 0;
-                int h=0;
+                int h = 0;
                 int count = 0;
                 while (count < ja.length()) {
                     JSONObject j = ja.getJSONObject(count);
-                    h=j.getInt("count");
+                    h = j.getInt("count");
 
                     count++;
                 }
-                String q= String.valueOf(h);
+                String q = String.valueOf(h);
                 temp.setText(q);
                 //globalcount=h;
 

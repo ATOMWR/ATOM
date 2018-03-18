@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -159,6 +160,9 @@ public class TravelFormsActivity extends AppCompatActivity {
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
+            if (jsonResponse == null) {
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -188,7 +192,7 @@ public class TravelFormsActivity extends AppCompatActivity {
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            return null;
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException e) {
@@ -234,28 +238,38 @@ public class TravelFormsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            formList = parseJson(result);
-
-            if (formList.size() == 0) {
-                loadingTextView.setText("No TA Forms for this date.");
-            } else {
-                loadingTextView.setVisibility(View.GONE);
-                TravelFormUserListAdapter formListAdapter = new TravelFormUserListAdapter(TravelFormsActivity.this, formList);
-
-                ListView listView = (ListView) findViewById(R.id.ta_list);
-                listView.setVisibility(View.VISIBLE);
-                listView.setAdapter(formListAdapter);
-            }
-
-            for (TravelFormObject travelFormObject : formList) {
-                Log.i(TravelFormsActivity.class.getName(), "Date of Travel " + travelFormObject.getDateOfTravel());
-                Log.i(TravelFormsActivity.class.getName(), "Start Station " + travelFormObject.getStartStation());
-                Log.i(TravelFormsActivity.class.getName(), "End Station " + travelFormObject.getEndStation());
-                Log.i(TravelFormsActivity.class.getName(), "Extra Hours " + travelFormObject.getExtraHours());
-            }
-
             progressBar.setVisibility(View.GONE);
-            addNew.setVisibility(View.VISIBLE);
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                formList = parseJson(result);
+
+                if (formList.size() == 0) {
+                    loadingTextView.setText("No TA Forms for this date.");
+                } else {
+                    loadingTextView.setVisibility(View.GONE);
+                    TravelFormUserListAdapter formListAdapter = new TravelFormUserListAdapter(TravelFormsActivity.this, formList);
+
+                    ListView listView = (ListView) findViewById(R.id.ta_list);
+                    listView.setVisibility(View.VISIBLE);
+                    listView.setAdapter(formListAdapter);
+                }
+
+                for (TravelFormObject travelFormObject : formList) {
+                    Log.i(TravelFormsActivity.class.getName(), "Date of Travel " + travelFormObject.getDateOfTravel());
+                    Log.i(TravelFormsActivity.class.getName(), "Start Station " + travelFormObject.getStartStation());
+                    Log.i(TravelFormsActivity.class.getName(), "End Station " + travelFormObject.getEndStation());
+                    Log.i(TravelFormsActivity.class.getName(), "Extra Hours " + travelFormObject.getExtraHours());
+                }
+
+                addNew.setVisibility(View.VISIBLE);
+            }
+
+
         }
     }
 

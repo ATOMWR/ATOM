@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -258,6 +259,9 @@ public class TravelFormListActiviy extends AppCompatActivity {
         jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
+            if (jsonResponse == null) {
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -291,6 +295,9 @@ public class TravelFormListActiviy extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            return null;
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -333,14 +340,23 @@ public class TravelFormListActiviy extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(TravelFormListActiviy.this, "Successfully updated TA forms", Toast.LENGTH_LONG).show();
-            if (isPreviousCycle == 0) {
-                finish();
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
             } else {
-                //Reload activity
-                finish();
-                startActivity(getIntent());
+                Toast.makeText(TravelFormListActiviy.this, "Successfully updated TA forms", Toast.LENGTH_LONG).show();
+                if (isPreviousCycle == 0) {
+                    finish();
+                } else {
+                    //Reload activity
+                    finish();
+                    startActivity(getIntent());
+                }
             }
+
         }
     }
 
@@ -368,6 +384,9 @@ public class TravelFormListActiviy extends AppCompatActivity {
         jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest2(finalInsertUrl);
+            if (jsonResponse == null) {
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -394,6 +413,9 @@ public class TravelFormListActiviy extends AppCompatActivity {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            return null;
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -417,17 +439,27 @@ public class TravelFormListActiviy extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            formList = parseJson(result);
-
-            TravelFormListAdapter formListAdapter = new TravelFormListAdapter(TravelFormListActiviy.this, formList);
-
-            ListView listView = (ListView) findViewById(R.id.list);
-            listView.setAdapter(formListAdapter);
-
-            checkPullReportStatus();
 
             updateFormProgressLayout.setVisibility(View.GONE);
-            formListLayout.setVisibility(View.VISIBLE);
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                formList = parseJson(result);
+
+                TravelFormListAdapter formListAdapter = new TravelFormListAdapter(TravelFormListActiviy.this, formList);
+
+                ListView listView = (ListView) findViewById(R.id.list);
+                listView.setAdapter(formListAdapter);
+
+                checkPullReportStatus();
+
+                formListLayout.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 
@@ -444,8 +476,15 @@ public class TravelFormListActiviy extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            Toast.makeText(TravelFormListActiviy.this, "Report Generated.", Toast.LENGTH_LONG).show();
-            openWebsite(result);
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                Toast.makeText(TravelFormListActiviy.this, "Report Generated.", Toast.LENGTH_LONG).show();
+                openWebsite(result);
+            }
 
             /*Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(result));
@@ -456,6 +495,8 @@ public class TravelFormListActiviy extends AppCompatActivity {
     }
 
     void openWebsite(final String result) {
+
+        updateFormProgressLayout.setVisibility(View.GONE);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TravelFormListActiviy.this);
 
@@ -513,6 +554,9 @@ public class TravelFormListActiviy extends AppCompatActivity {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
+        } catch (SocketTimeoutException s) {
+            s.printStackTrace();
+            return null;
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem Connecting to Server.", e);
         } finally {

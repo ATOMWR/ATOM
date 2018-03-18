@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -208,7 +209,7 @@ public class TravelGridActivity extends AppCompatActivity {
                 return stringBuilder.toString().trim();
             } catch (SocketTimeoutException s) {
                 s.printStackTrace();
-                Toast.makeText(TravelGridActivity.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                return null;
             } catch (UnknownHostException u) {
                 u.printStackTrace();
             } catch (MalformedURLException e) {
@@ -228,45 +229,56 @@ public class TravelGridActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            // Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
-            jsonstring = result;
-            //json();
-            // return  result;
-            try {
-                jo = new JSONObject(jsonstring);
-                ja = jo.getJSONArray("dateresponse");
 
-                int i = 0;
-                int count = 0;
-                if (ja.length() != 0) {
-                    stringdatearray = new String[ja.length()];
-                    inter_verification_status = new int[ja.length()];
-                    while (count < ja.length()) {
-                        JSONObject j = ja.getJSONObject(count);
-                        stringdatearray[i] = j.getString("date");
-                        inter_verification_status[i] = j.getInt("inter_verification");
-                        i++;
-                        count++;
+            loadinglayout.setVisibility(View.GONE);
+            
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                // Toast.makeText(OvertimeGridActivity.this, "json string =>"+result, Toast.LENGTH_SHORT).show();
+                jsonstring = result;
+                //json();
+                // return  result;
+                try {
+                    jo = new JSONObject(jsonstring);
+                    ja = jo.getJSONArray("dateresponse");
 
+                    int i = 0;
+                    int count = 0;
+                    if (ja.length() != 0) {
+                        stringdatearray = new String[ja.length()];
+                        inter_verification_status = new int[ja.length()];
+                        while (count < ja.length()) {
+                            JSONObject j = ja.getJSONObject(count);
+                            stringdatearray[i] = j.getString("date");
+                            inter_verification_status[i] = j.getInt("inter_verification");
+                            i++;
+                            count++;
+
+                        }
+                    } else {
+                        stringdatearray = new String[1];
+                        inter_verification_status = new int[1];
+                        stringdatearray[i] = "nodate";
+                        inter_verification_status[i] = 999;
                     }
-                } else {
-                    stringdatearray = new String[1];
-                    inter_verification_status = new int[1];
-                    stringdatearray[i] = "nodate";
-                    inter_verification_status[i] = 999;
+
+
+                    // ress = jo.getInt("data");
+                    //  msg();
+
+                    actuallayout.setVisibility(View.VISIBLE);
+                    gridviewcall();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-
-                // ress = jo.getInt("data");
-                //  msg();
-                loadinglayout.setVisibility(View.GONE);
-                actuallayout.setVisibility(View.VISIBLE);
-                gridviewcall();
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
         }
     }
 
