@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -185,6 +186,9 @@ public class AdminOvertimeActivity extends AppCompatActivity {
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
+            if (jsonResponse == null) {
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -250,7 +254,7 @@ public class AdminOvertimeActivity extends AppCompatActivity {
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            return null;
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException e) {
@@ -295,9 +299,18 @@ public class AdminOvertimeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            //Toast.makeText(getApplicationContext(), "isValidUser, isAdmin = " + result, Toast.LENGTH_SHORT).show();
+
             progressBarLayout.setVisibility(View.GONE);
-            cycleList.setVisibility(View.VISIBLE);
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                cycleList.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 

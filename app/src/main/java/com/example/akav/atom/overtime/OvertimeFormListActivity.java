@@ -259,6 +259,9 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(finalInsertUrl);
+            if (jsonResponse == null) {
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -294,7 +297,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            return null;
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException e) {
@@ -339,13 +342,21 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(OvertimeFormListActivity.this, "Successfully updated OT forms", Toast.LENGTH_LONG).show();
-            if (isPreviousCycle == 0) {
-                finish();
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
             } else {
-                //Reload activity
-                finish();
-                startActivity(getIntent());
+                Toast.makeText(OvertimeFormListActivity.this, "Successfully updated OT forms", Toast.LENGTH_LONG).show();
+                if (isPreviousCycle == 0) {
+                    finish();
+                } else {
+                    //Reload activity
+                    finish();
+                    startActivity(getIntent());
+                }
             }
         }
     }
@@ -373,6 +384,9 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest2(finalInsertUrl);
+            if(jsonResponse == null){
+                return null;
+            }
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem in Making HTTP request.", e);
         }
@@ -401,7 +415,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            return null;
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException e) {
@@ -427,17 +441,28 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            formList = parseJson(result);
-
-            OvertimeFormListAdapter formListAdapter = new OvertimeFormListAdapter(OvertimeFormListActivity.this, formList);
-
-            ListView listView = (ListView) findViewById(R.id.list);
-            listView.setAdapter(formListAdapter);
-
-            checkPullReportStatus();
 
             updateFormProgressLayout.setVisibility(View.GONE);
-            formListLayout.setVisibility(View.VISIBLE);
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+
+                formList = parseJson(result);
+
+                OvertimeFormListAdapter formListAdapter = new OvertimeFormListAdapter(OvertimeFormListActivity.this, formList);
+
+                ListView listView = (ListView) findViewById(R.id.list);
+                listView.setAdapter(formListAdapter);
+
+                checkPullReportStatus();
+
+                formListLayout.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 
@@ -454,8 +479,18 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            Toast.makeText(OvertimeFormListActivity.this, "Report Generated.", Toast.LENGTH_LONG).show();
-            openWebsite(result);
+            updateFormProgressLayout.setVisibility(View.GONE);
+
+            if (result == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                Toast.makeText(OvertimeFormListActivity.this, "Report Generated.", Toast.LENGTH_LONG).show();
+                openWebsite(result);
+            }
+
 
             /*Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(result));
@@ -525,7 +560,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
-            Toast.makeText(this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+            return null;
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException e) {

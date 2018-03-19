@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -370,7 +371,7 @@ public class OvertimeForm extends AppCompatActivity {
 
                 } catch (SocketTimeoutException s) {
                     s.printStackTrace();
-                    Toast.makeText(OvertimeForm.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                    return null;
                 } catch (UnknownHostException u) {
                     u.printStackTrace();
                 } catch (MalformedURLException e) {
@@ -384,7 +385,15 @@ public class OvertimeForm extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String res) {
-            Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
+            if (res == null) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setGravity(Gravity.CENTER);
+                toast.show();
+            } else {
+                Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
+            }
+
             // qr_result.setText(result);
         }
     }

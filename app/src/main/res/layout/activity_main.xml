@@ -110,23 +110,5 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_push_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_marginStart="15dp"
-        android:layout_toEndOf="@+id/txt_reg_id"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/txt_reg_id"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="314dp"
-        android:layout_weight="2"
-        android:text="TextView" />
 
 </RelativeLayout>
