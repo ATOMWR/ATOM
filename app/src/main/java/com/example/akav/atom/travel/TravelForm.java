@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -21,14 +20,10 @@ import android.widget.Toast;
 
 import com.example.akav.atom.MainActivity;
 import com.example.akav.atom.R;
-import com.example.akav.atom.overtime.OvertimeForm;
-import com.example.akav.atom.overtime.OvertimeFormListActivity;
-import com.example.akav.atom.overtime.OvertimeFormObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +36,6 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

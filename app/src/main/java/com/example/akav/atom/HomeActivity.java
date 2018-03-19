@@ -11,8 +11,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -148,9 +146,13 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(gotoNotification);
 
     }
-private void logout(){
+    private void logout(){
+    Intent gotoNotification = new Intent(HomeActivity.this, Salary.class);
+    gotoNotification.putExtra("userID",userId);
+    startActivity(gotoNotification);
 
-}
+
+    }
     private void changePassword() {
 
         // Password change logic
@@ -237,7 +239,7 @@ private void logout(){
         protected void onPostExecute(String res) {
             Toast.makeText(ctx, "ret " + res, Toast.LENGTH_LONG).show();
             jsonstring = res;
-            temp = (TextView) findViewById(R.id.tv);
+           // temp = (TextView) findViewById(R.id.tv);
            // temp.setText(res);
             try {
                 jo = new JSONObject(jsonstring);

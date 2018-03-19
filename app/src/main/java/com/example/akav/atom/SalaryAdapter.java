@@ -10,21 +10,21 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 /**
- * Created by AKAV on 07-Mar-18.
+ * Created by AKAV on 19-Mar-18.
  */
 
-public class NotificationAdapter extends BaseAdapter {
-
-
+public class SalaryAdapter extends BaseAdapter {
     private Context context;
-    private String[] textViewValues,ftypes;
+    private String[] textViewValues,en;
+    private int[] am;
 
 
 
-    public NotificationAdapter(Context context, String[] textViewValues ,String[] ftypes) {
+    public SalaryAdapter(Context context, String[] textViewValues ,String[] end,int[] amt) {
         this.context = context;
         this.textViewValues = textViewValues;
-        this.ftypes=ftypes;
+        this.en=end;
+        this.am=amt;
 
 
     }
@@ -51,9 +51,9 @@ public class NotificationAdapter extends BaseAdapter {
             TextView textView = (TextView) gridView
                     .findViewById(R.id.not_textid);
             textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-
-
-          //  textView.setText(ftypes[position]+":"+textViewValues[position]);
+            String sss="Start Date:"+textViewValues[position]+"                  End date :"+en[position]+"         Salary: "+am[position];
+            textView.setText(sss);
+            //  textView.setText(ftypes[position]+":"+textViewValues[position]);
 
           /*  if(textView.getText().toString().equals(" 3 ")||textView.getText().toString().equals(" 8 "))
                 gridView.setBackgroundColor(Color.parseColor("#E98D71"));
@@ -62,26 +62,6 @@ public class NotificationAdapter extends BaseAdapter {
             else if(textView.getText().toString().equals(" 20 ")||textView.getText().toString().equals(" 15 "))
                 gridView.setBackgroundColor(Color.parseColor("#E3E358"));
              else*/
-            int a=textViewValues.length;
-            for (int i = 0; i < a; i++) {
-                if(textViewValues[i].equals("nodate")) {
-                    textView.setText("no notifications");
-                   // break;
-                }
-
-                  else  if (ftypes[i].equals("ot")) {
-                        String ss=ftypes[i]+":"+textViewValues[position];
-                        textView.setText(ss);
-
-                    }
-                    else {
-                    String ss=ftypes[i]+":"+textViewValues[position];
-                    textView.setText(ss);
-                   // break;
-                }
-            }
-
-
 
 
 
@@ -107,13 +87,14 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return textViewValues[position];
+        return textViewValues[position]+" "+en[position]+" "+am[position];
     }
 
     @Override
     public long getItemId(int position) {
         return position;
     }
+
 
 
 }

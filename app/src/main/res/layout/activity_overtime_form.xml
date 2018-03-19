@@ -4,6 +4,7 @@
     android:id="@+id/activity_overtime_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -11,124 +12,133 @@
     tools:context="com.example.akav.atom.overtime.OvertimeForm">
 
     <Spinner
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:id="@+id/ShiftSpinner"
-        android:layout_below="@+id/selectshift"
-        android:layout_alignParentStart="true"
         android:layout_width="130dp"
-        android:layout_alignEnd="@+id/actuallabel" />
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/selectshift"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/box" />
 
     <TextView
-        android:text="Shift:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
         android:id="@+id/selectshift"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <TextView
-        android:text="Rostered Duty:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/roasterlabel"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:layout_below="@+id/ShiftSpinner"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="25dp" />
+        android:layout_below="@+id/textView8"
+        android:layout_marginTop="27dp"
+        android:text="Shift:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     <TextView
-        android:text="- -:- - to - -:- -"
+        android:id="@+id/roasterlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ShiftSpinner"
+        android:layout_marginTop="25dp"
+        android:text="Rostered Duty:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+    <TextView
+        android:id="@+id/rostertext"
         android:layout_width="130dp"
         android:layout_height="30dp"
-        android:id="@+id/rostertext"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:layout_below="@+id/roasterlabel"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp" />
-
-    <Button
-        android:text="Start time"
-        android:layout_width="wrap_content"
-        android:id="@+id/startbutton"
-        android:layout_height="35dp"
-        android:layout_above="@+id/starttime"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="--:--"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/starttime"
-        android:layout_alignBaseline="@+id/endtime"
-        android:layout_alignBottom="@+id/endtime"/>
-
-
-    <TextView
-        android:text="--:--"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/endtime"
-        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/roasterlabel"
         android:layout_toEndOf="@+id/actuallabel"
-        android:layout_marginStart="12dp" />
+        android:text="- -:- - to - -:- -"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textSize="15sp" />
 
     <Button
-        android:text="End Time"
-        android:layout_width="wrap_content"
+        android:id="@+id/startbutton"
+        android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_alignTop="@+id/starttime"
+        android:layout_toEndOf="@+id/starttime"
+        android:background="@drawable/otstrttime_button" />
+
+    <TextView
+        android:id="@+id/starttime"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/endtime"
+        android:layout_alignBottom="@+id/endtime"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/box"
+        android:text="--:--"
+        android:textDirection="firstStrong"
+        android:textSize="15sp" />
+
+
+    <TextView
+        android:id="@+id/endtime"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/actuallabel"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/actuallabel"
+        android:background="@drawable/box"
+        android:textDirection="locale"
+        android:textSize="15sp"
+        tools:text="--:--" />
+
+    <Button
         android:id="@+id/endbutton"
-        android:layout_above="@+id/endtime"
-        android:layout_toEndOf="@+id/actuallabel" />
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignTop="@+id/endtime"
+        android:layout_toEndOf="@+id/endtime"
+        android:background="@drawable/otendtime_button" />
 
     <TextView
-        android:text="Actual Duty Hours:"
-        android:layout_height="wrap_content"
         android:id="@+id/actuallabel"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:layout_width="190dp"
-        android:layout_above="@+id/startbutton"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/rostertext"
+        android:layout_marginTop="28dp"
+        android:text="Actual Duty Hours:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     <TextView
-        android:text="Description:"
+        android:id="@+id/desclabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/desclabel"
-        android:layout_marginTop="52dp"
-        android:layout_below="@+id/starttime"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/startbutton"
+        android:layout_marginTop="20dp"
+        android:text="Description:"
         android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
         android:id="@+id/descid"
-        android:hint="Reason......"
-        android:layout_below="@+id/desclabel"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/desclabel"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/box"
+        android:ems="10"
+        android:hint="Reason......"
+        android:inputType="textMultiLine" />
 
     <Button
-        android:text="Submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/submitbutt"
+        android:layout_width="120dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/rostertext"
-        android:layout_marginBottom="36dp" />
+        android:layout_marginBottom="15dp"
+        android:layout_toEndOf="@+id/roasterlabel"
+        android:background="@drawable/otsubmit_button" />
 
     <TextView
+        android:id="@+id/shifttext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/shifttext"
-        android:layout_above="@+id/roasterlabel"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/ShiftSpinner"
-        android:layout_alignEnd="@+id/roasterlabel" />
+        android:layout_below="@+id/submitbutt"
+        android:layout_marginStart="234dp"
+        android:layout_marginTop="94dp" />
 
 </RelativeLayout>

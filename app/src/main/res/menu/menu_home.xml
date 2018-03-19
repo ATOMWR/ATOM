@@ -13,7 +13,7 @@
         android:id="@+id/log_out"
         android:title="Log Out"
         app:showAsAction="always"
-        android:icon="@drawable/ic_logout"/>
+        android:icon="@drawable/ic_salary"/>
 
     <item
         android:id="@+id/edit_profile"

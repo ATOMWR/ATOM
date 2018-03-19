@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String res) {
             Toast.makeText(ctx, "ret " + res, Toast.LENGTH_LONG).show();
             jsonstring = res;
-            temp = (TextView) findViewById(R.id.tv);
+            //temp = (TextView) findViewById(R.id.tv);
             // temp.setText(res);
             try {
                 jo = new JSONObject(jsonstring);

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:padding="16dp"
     tools:context="com.example.akav.atom.overtime.OvertimeActivity">
 
@@ -14,29 +14,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:background="#FFFFFF"
         android:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:padding="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fetching Cycle Dates. Please Wait."
-                android:textColor="#111111"
+                android:layout_marginTop="16dp"
                 android:padding="16dp"
-                android:layout_marginTop="16dp"/>
+                android:text="Fetching Cycle Dates. Please Wait."
+                android:textColor="#111111" />
 
         </LinearLayout>
 
@@ -61,19 +62,19 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/colorPrimary"
                     android:padding="16dp"
                     android:text="Previous Cycles"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:background="@color/colorPrimary"
-                    android:layout_marginBottom="16dp"/>
+                    android:textColor="#FFFFFF" />
 
                 <!--add list view here -->
-                    <ListView
-                        android:id="@+id/prev_cycle_date_list_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp" />
+                <ListView
+                    android:id="@+id/prev_cycle_date_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp" />
 
             </LinearLayout>
 
@@ -83,8 +84,8 @@
             android:id="@+id/current_cycle_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_below="@+id/prev_cycle_list_layout">
+            android:layout_below="@+id/prev_cycle_list_layout"
+            android:layout_marginBottom="32dp">
 
             <LinearLayout
                 android:id="@+id/ot_current_cycle"
@@ -116,29 +117,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
+                        android:padding="16dp"
                         android:text="12/02/2017"
                         android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:padding="16dp" />
+                        android:textColor="#FFFFFF" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:padding="16dp"
                         android:text="TO"
                         android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:padding="16dp" />
+                        android:textColor="#FFFFFF" />
 
                     <TextView
                         android:id="@+id/ot_current_cycle_end"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
+                        android:padding="16dp"
                         android:text="26/02/2017"
                         android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:padding="16dp" />
+                        android:textColor="#FFFFFF" />
 
                 </LinearLayout>
 

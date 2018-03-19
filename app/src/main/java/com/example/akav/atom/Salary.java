@@ -1,17 +1,12 @@
 package com.example.akav.atom;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
-
-import com.example.akav.atom.overtime.OvertimeForm;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,18 +26,18 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 
-public class Notification extends AppCompatActivity {
-String userId,JSON_STRING,jsonstring,datestring;
+public class Salary extends AppCompatActivity {
+    String userId,JSON_STRING,jsonstring,datestring;
     JSONObject jo;
     JSONArray ja;
-    String[] stringdatearray,formtype;
+    String[] start,end;
+    int[] amt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification);
+        setContentView(R.layout.activity_salary);
         userId=getIntent().getExtras().getString("userID");
-        Toast.makeText(Notification.this,userId+" is logged in ", Toast.LENGTH_LONG).show();
-
         String method="dates";
         Backgroundtask backgroundtask2 = new Backgroundtask(this);
         backgroundtask2.execute(method, userId);
@@ -50,39 +45,8 @@ String userId,JSON_STRING,jsonstring,datestring;
     }
 
     public void gridviewcall(){
-        /*String[] s=new String[14];
-        for(int i=0;i<s.length;i++){
-            s[i]=" "+(i+1)+" ";
-        }*/
         final GridView gridView=(GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(new NotificationAdapter(this,stringdatearray,formtype));
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                datestring=parent.getItemAtPosition(position).toString();
-
-                Intent gotoOTFormIntent = new Intent(Notification.this, OvertimeForm.class);
-                gotoOTFormIntent.putExtra("userID", userId);
-                gotoOTFormIntent.putExtra("currdate", datestring);
-                gotoOTFormIntent.putExtra("tag", "ot notify");
-
-                   // gotoOTFormIntent.putExtra("tag", t);
-
-                    //msg();
-
-                startActivity(gotoOTFormIntent);
-
-            }
-        });
-
-
-
-
-
-        //gridview logic
-
+        gridView.setAdapter(new SalaryAdapter(this,start,end,amt));
 
     }
     class Backgroundtask extends AsyncTask<String,Void,String> {
@@ -98,7 +62,7 @@ String userId,JSON_STRING,jsonstring,datestring;
 
         @Override
         protected String doInBackground(String... params) {
-            String reg_url = "http://atomwrapp.dx.am/notificationdate.php";
+            String reg_url = "http://atomwrapp.dx.am/salary.php";
             String method = params[0];
             if (method.equals("dates")) {
 
@@ -137,7 +101,7 @@ String userId,JSON_STRING,jsonstring,datestring;
                 }
                 catch (SocketTimeoutException s){
                     s.printStackTrace();
-                    Toast.makeText(Notification.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Salary.this, "Error connecting to the Internet, Please try again", Toast.LENGTH_SHORT).show();
                 }
                 catch(UnknownHostException u){
                     u.printStackTrace();
@@ -160,34 +124,37 @@ String userId,JSON_STRING,jsonstring,datestring;
             // return  result;
             try {
                 jo = new JSONObject(jsonstring);
-                ja=jo.getJSONArray("dateresponse");
+                ja=jo.getJSONArray("salaryresponse");
 
                 int i=0;
                 int count=0;
                 if(ja.length()!=0) {
-                    stringdatearray=new String[ja.length()];
-                    formtype=new String[ja.length()];
+
+                    start=new String[ja.length()];
+                    end=new String[ja.length()];
+                    amt=new int[ja.length()];
                     while (count < ja.length()) {
                         JSONObject j = ja.getJSONObject(count);
-                        stringdatearray[i] = j.getString("date");
-                        formtype[i]=j.getString("form");
+                        start[i] = j.getString("startdate");
+                        end[i]=j.getString("enddate");
+                        amt[i]=j.getInt("amount");
 
-                       // inter_verification_status[i] = j.getInt("inter_verification");
+                        // inter_verification_status[i] = j.getInt("inter_verification");
                         i++;
                         count++;
 
                     }
                 }else{
-                    stringdatearray=new String[1];
-                    stringdatearray[i] = "nodate";
+                    start=new String[1];
+                    start[i] = "nodate";
 
                 }
 
 
                 // ress = jo.getInt("data");
                 //  msg();
-               // loadinglayout.setVisibility(View.GONE);
-               // actuallayout.setVisibility(View.VISIBLE);
+                // loadinglayout.setVisibility(View.GONE);
+                // actuallayout.setVisibility(View.VISIBLE);
                 gridviewcall();
 
 

@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="#FFFFFF"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context="com.example.akav.atom.HomeActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout3">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/fill_ot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="249dp"
+            android:layout_height="68dp"
+            android:background="@drawable/ot_button"
             android:padding="16dp"
-            android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"
-            android:text="Overtime Allowance"/>
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/fill_ta"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:layout_height="67dp"
             android:layout_marginTop="16dp"
-            android:background="@color/colorPrimary"
-            android:text="Travel Allowance"
+            android:background="@drawable/ta_button"
+            android:padding="16dp"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout3"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
-        android:text="TextView" />
 
 
 </RelativeLayout>
