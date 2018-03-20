@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/ot_prev_cycle_date_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorAccent"
+            android:layout_marginBottom="2dp">
+
+            <TextView
+                android:id="@+id/ot_prev_cycle_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="29/01/2017"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textAlignment="center"
+                android:text="TO"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/ot_prev_cycle_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="11/02/2017"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:layout_weight="2"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/ot_form_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:text="OT Forms"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/ta_form_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:text="TA Forms"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

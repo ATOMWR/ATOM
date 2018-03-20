@@ -15,10 +15,10 @@ import java.util.ArrayList;
  * Created by ankit on 09-02-2018.
  */
 
-public class previousCycleDateListAdapter extends ArrayAdapter<cycleDateObject> {
+public class PreviousCycleDateListAdapter extends ArrayAdapter<CycleDateObject> {
 
-    public previousCycleDateListAdapter(Context context, ArrayList<cycleDateObject> previosCycleDateList){
-        super(context, 0, previosCycleDateList);
+    public PreviousCycleDateListAdapter(Context context, ArrayList<CycleDateObject> previousCycleDateList){
+        super(context, 0, previousCycleDateList);
     }
 
     @NonNull
@@ -30,7 +30,7 @@ public class previousCycleDateListAdapter extends ArrayAdapter<cycleDateObject> 
             dateListItemView = LayoutInflater.from(getContext()).inflate(R.layout.previous_cycle_date_list_item, parent, false);
         }
 
-        cycleDateObject cycleDate = getItem(position);
+        CycleDateObject cycleDate = getItem(position);
 
         TextView startDate = (TextView) dateListItemView.findViewById(R.id.ot_prev_cycle_start);
         TextView endDate = (TextView)dateListItemView.findViewById(R.id.ot_prev_cycle_end);
