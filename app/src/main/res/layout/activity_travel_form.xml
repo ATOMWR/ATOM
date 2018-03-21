@@ -100,8 +100,7 @@
             android:layout_width="120dp"
             android:layout_height="35dp"
             android:layout_alignStart="@+id/ta_end_time"
-            android:layout_below="@+id/select_end_time"
-            android:layout_marginTop="12dp"
+            android:layout_alignTop="@+id/textView12"
             android:background="#FFFFFF"
             android:ems="10"
             android:inputType="text"
@@ -215,8 +214,9 @@
             android:id="@+id/textView12"
             android:layout_width="120dp"
             android:layout_height="35dp"
-            android:layout_alignBottom="@+id/ta_start_station"
             android:layout_alignStart="@+id/textView11"
+            android:layout_below="@+id/textView11"
+            android:layout_marginTop="14dp"
             android:text="Source:"
             android:textSize="20sp" />
 
