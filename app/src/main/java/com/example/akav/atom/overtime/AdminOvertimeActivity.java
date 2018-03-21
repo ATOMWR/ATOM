@@ -19,9 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.akav.atom.MainActivity;
-import com.example.akav.atom.cycleDateObject;
+import com.example.akav.atom.CycleDateObject;
 import com.example.akav.atom.R;
-import com.example.akav.atom.previousCycleDateListAdapter;
+import com.example.akav.atom.PreviousCycleDateListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +52,7 @@ public class AdminOvertimeActivity extends AppCompatActivity {
     private RelativeLayout progressBarLayout;
     private RelativeLayout cycleList;
 
-    private ArrayList<cycleDateObject> previousCycleDateList;
+    private ArrayList<CycleDateObject> previousCycleDateList;
 
     public static final String GET_DATE_URL = "http://atomwrapp.dx.am/getOtCycleDates.php";
 
@@ -77,7 +77,7 @@ public class AdminOvertimeActivity extends AppCompatActivity {
 
         ListView cycleDateListView = (ListView) findViewById(R.id.prev_cycle_date_list_view);
 
-        previousCycleDateListAdapter dateListAdapter = new previousCycleDateListAdapter(this, previousCycleDateList);
+        PreviousCycleDateListAdapter dateListAdapter = new PreviousCycleDateListAdapter(this, previousCycleDateList);
 
         cycleDateListView.setAdapter(dateListAdapter);
 
@@ -128,7 +128,7 @@ public class AdminOvertimeActivity extends AppCompatActivity {
         cycleDateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                cycleDateObject cycleDate = previousCycleDateList.get(position);
+                CycleDateObject cycleDate = previousCycleDateList.get(position);
 
                 String previousCycleStartDate = cycleDate.getStartDate();
                 String previousCycleEndDate = cycleDate.getEndDate();
@@ -225,7 +225,7 @@ public class AdminOvertimeActivity extends AppCompatActivity {
                 long startDate = cycleDates.getLong("Start Date");
                 long endDate = cycleDates.getLong("End Date");
 
-                previousCycleDateList.add(new cycleDateObject(startDate, endDate));
+                previousCycleDateList.add(new CycleDateObject(startDate, endDate));
             }
         } catch (JSONException e) {
             Log.e(MainActivity.class.getName(), "Error in Parsing", e);
