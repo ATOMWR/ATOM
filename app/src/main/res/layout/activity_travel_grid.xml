@@ -36,120 +36,121 @@ tools:context="com.example.akav.atom.travel.TravelGridActivity">
     </LinearLayout>
 </RelativeLayout>
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/actual_layout">
+    <RelativeLayout
+        android:id="@+id/actual_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F9FFFD">
 
-    <TextView
-        android:layout_marginTop="14dp"
-        android:id="@+id/review"
-        android:background="#E98D71"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_below="@+id/passedlabel"
-        android:layout_alignStart="@+id/passedlabel" />
+        <TextView
+            android:id="@+id/review"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignStart="@+id/passedlabel"
+            android:layout_below="@+id/passedlabel"
+            android:layout_marginTop="14dp"
+            android:background="#E98D71" />
 
-    <GridView
-        android:layout_width="wrap_content"
-        android:id="@+id/gridview"
-        android:columnWidth="50dp"
-        android:numColumns="7"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="63dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="63dp"
+            android:columnWidth="50dp"
 
-        android:gravity="end"
-        android:verticalSpacing="15dp"
-        android:horizontalSpacing="4dp"
+            android:gravity="end"
+            android:horizontalSpacing="4dp"
+            android:numColumns="7"
 
-        android:stretchMode="columnWidth"
+            android:stretchMode="columnWidth"
 
-        android:layout_height="250dp" />
+            android:verticalSpacing="15dp" />
 
-    <TextView
-        android:id="@+id/selected_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:padding="16dp"
-        android:textColor="#FFFFFF"
+        <TextView
+            android:id="@+id/selected_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorAccent"
+            android:padding="16dp"
 
-        android:layout_centerHorizontal="true" />
+            android:textColor="#FFFFFF" />
 
-    <TextView
-        android:layout_marginTop="16dp"
-        android:id="@+id/passedlabel"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:background="#ADDF41"
-        android:layout_below="@+id/filledtext"
-        android:layout_alignStart="@+id/filledlabel" />
+        <TextView
+            android:id="@+id/passedlabel"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignStart="@+id/filledlabel"
+            android:layout_below="@+id/filledtext"
+            android:layout_marginTop="16dp"
+            android:background="#ADDF41" />
 
-    <TextView
-        android:layout_marginTop="15dp"
-        android:id="@+id/noactivity"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_below="@+id/review"
-        android:layout_alignStart="@+id/review"
-        android:background="#C8EFE0" />
+        <TextView
+            android:id="@+id/noactivity"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignStart="@+id/review"
+            android:layout_below="@+id/review"
+            android:layout_marginTop="15dp"
+            android:background="#C8EFE0" />
 
-    <TextView
-        android:id="@+id/filledlabel"
-        android:layout_height="15dp"
-        android:layout_width="15dp"
-        android:background="#E3E358"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/filledlabel"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBaseline="@+id/textView2"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_centerHorizontal="true"
+            android:background="#E3E358" />
 
-    <TextView
-        android:text="   Form filled"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/filledtext"
-        android:layout_alignBaseline="@+id/filledlabel"
-        android:layout_alignBottom="@+id/filledlabel"
-        android:layout_toEndOf="@+id/filledlabel" />
+        <TextView
+            android:id="@+id/filledtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/filledlabel"
+            android:layout_alignBottom="@+id/filledlabel"
+            android:layout_toEndOf="@+id/filledlabel"
+            android:text="   Form filled" />
 
-    <TextView
-        android:text="   No Activity"
-        android:layout_width="wrap_content"
-        android:id="@+id/notext"
-        android:layout_alignBaseline="@+id/noactivity"
-        android:layout_alignBottom="@+id/noactivity"
-        android:layout_toEndOf="@+id/noactivity"
-        android:layout_height="15dp" />
+        <TextView
+            android:id="@+id/notext"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_alignBaseline="@+id/noactivity"
+            android:layout_alignBottom="@+id/noactivity"
+            android:layout_toEndOf="@+id/noactivity"
+            android:text="   No Activity" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_below="@+id/gridview"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
-        android:id="@+id/textView2" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_below="@+id/gridview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+            android:text="TextView" />
 
-    <TextView
-        android:text="   Review required"
-        android:layout_width="wrap_content"
-        android:layout_height="15dp"
-        android:id="@+id/reviewtext"
-        android:layout_alignBaseline="@+id/review"
-        android:layout_alignBottom="@+id/review"
-        android:layout_toEndOf="@+id/review" />
+        <TextView
+            android:id="@+id/reviewtext"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_alignBaseline="@+id/review"
+            android:layout_alignBottom="@+id/review"
+            android:layout_toEndOf="@+id/review"
+            android:text="   Review required" />
 
-    <TextView
-        android:text="   Successfull submission"
-        android:layout_width="wrap_content"
-        android:layout_height="15dp"
-        android:id="@+id/subittedtext"
-        android:layout_alignBaseline="@+id/passedlabel"
-        android:layout_alignBottom="@+id/passedlabel"
-        android:layout_toEndOf="@+id/passedlabel" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/subittedtext"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_alignBaseline="@+id/passedlabel"
+            android:layout_alignBottom="@+id/passedlabel"
+            android:layout_toEndOf="@+id/passedlabel"
+            android:text="   Successfull submission" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

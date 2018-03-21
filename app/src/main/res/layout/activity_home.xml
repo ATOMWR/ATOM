@@ -4,7 +4,7 @@
     android:id="@+id/activity_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F9FFFD"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context="com.example.akav.atom.HomeActivity">

@@ -104,7 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         MenuItem item = menu.findItem(R.id.action_notifications);
         LayerDrawable icon = (LayerDrawable) item.getIcon();
-        Utils2.setBadgeCount(this, icon, 8);
+       // Utils2.setBadgeCount(this, icon, 8);
         // Update LayerDrawable's BadgeDrawable
 
 
@@ -349,7 +349,7 @@ public class HomeActivity extends AppCompatActivity {
             return PixelFormat.UNKNOWN;
         }
     }
-    public static class Utils2 {
+   /* public static class Utils2 {
         public static void setBadgeCount(Context context, LayerDrawable icon, int count) {
 
             HomeActivity.BadgeDrawable badge;
@@ -366,5 +366,5 @@ public class HomeActivity extends AppCompatActivity {
             icon.mutate();
             icon.setDrawableByLayerId(R.id.ic_badge, badge);
         }
-    }
+    }*/
 }

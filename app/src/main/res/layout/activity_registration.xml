@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_registration"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="#F9FFFD"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context="com.example.akav.atom.RegistrationActivity">
-
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/full_name_layout"
@@ -26,10 +25,10 @@
 
             <EditText
                 android:id="@+id/full_name"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
-                android:hint="Name"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:hint="Name" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -41,11 +40,11 @@
 
             <EditText
                 android:id="@+id/email_address"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:hint="E Mail Address"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -57,11 +56,11 @@
 
             <EditText
                 android:id="@+id/phone_number"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:hint="Mobile Number"
-                android:inputType="phone"/>
+                android:inputType="phone" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -72,13 +71,13 @@
             android:layout_marginBottom="8dp">
 
 
-        <!--app:passwordToggleEnabled="true"-->
+            <!--app:passwordToggleEnabled="true"-->
 
             <EditText
                 android:id="@+id/password"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:hint="Password"
                 android:inputType="textPassword" />
 
@@ -92,9 +91,9 @@
 
             <EditText
                 android:id="@+id/pf_number"
-                android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:hint="Unique PF Number" />
 
         </android.support.design.widget.TextInputLayout>
@@ -111,8 +110,8 @@
             android:id="@+id/qrcodebutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
             android:text="Generate QRCode"
             android:textColor="#FFFFFF" />

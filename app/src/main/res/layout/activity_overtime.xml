@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F9FFFD"
     android:padding="16dp"
     tools:context="com.example.akav.atom.overtime.OvertimeActivity">
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="#FFFFFF"
+        android:background="#F9FFFD"
         android:visibility="visible">
 
         <LinearLayout

@@ -153,7 +153,7 @@ String userId,JSON_STRING,jsonstring,datestring;
 
         @Override
         protected void onPostExecute(String res) {
-            Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
+           // Toast.makeText(ctx, res, Toast.LENGTH_LONG).show();
             // qr_result.setText(result);
             jsonstring = res;
             //json();

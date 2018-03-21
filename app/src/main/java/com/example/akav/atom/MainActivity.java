@@ -131,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Temperorary Buttons
 
-        Button fillUser = (Button) findViewById(R.id.user_fill);
-        Button fillAdmin = (Button) findViewById(R.id.admin_fill);
+       // Button fillUser = (Button) findViewById(R.id.user_fill);
+      //  Button fillAdmin = (Button) findViewById(R.id.admin_fill);
 
-        fillUser.setOnClickListener(new View.OnClickListener() {
+       /* fillUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mUserName = (EditText) findViewById(R.id.user_id);
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 mUserName.setText("admin");
                 mPassword.setText("adminpw");
             }
-        });
+        });*/
     }
 
 

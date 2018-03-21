@@ -51,7 +51,8 @@ public class NotificationAdapter extends BaseAdapter {
             TextView textView = (TextView) gridView
                     .findViewById(R.id.not_textid);
             textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-
+            String ss=ftypes[position]+":"+textViewValues[position];
+            textView.setText(ss);
 
           //  textView.setText(ftypes[position]+":"+textViewValues[position]);
 
@@ -69,16 +70,7 @@ public class NotificationAdapter extends BaseAdapter {
                    // break;
                 }
 
-                  else  if (ftypes[i].equals("ot")) {
-                        String ss=ftypes[i]+":"+textViewValues[position];
-                        textView.setText(ss);
 
-                    }
-                    else {
-                    String ss=ftypes[i]+":"+textViewValues[position];
-                    textView.setText(ss);
-                   // break;
-                }
             }
 
 

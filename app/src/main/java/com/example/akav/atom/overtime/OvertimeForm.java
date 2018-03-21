@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -95,7 +96,7 @@ public class OvertimeForm extends AppCompatActivity {
             startbutt.setEnabled(false);
             endbutt.setEnabled(false);
 
-            submit.setText("EDIT");
+            submit.setBackground(ContextCompat.getDrawable(this,R.drawable.ot_button));
 
             shift.setEnabled(false);
             //descp.setText(retrievedesc);
@@ -141,7 +142,9 @@ public class OvertimeForm extends AppCompatActivity {
         TextView rosterlabel = (TextView) findViewById(R.id.roasterlabel);
         rosterlabel.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
         TextView desclabel = (TextView) findViewById(R.id.desclabel);
-        actual.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
+        desclabel.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
+        TextView selectsh = (TextView) findViewById(R.id.selectshift);
+        selectsh.setPaintFlags(actual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);//underline subheading
 
 
         shiftSpinner();
@@ -201,7 +204,8 @@ public class OvertimeForm extends AppCompatActivity {
                     startbutt.setEnabled(true);
                     endbutt.setEnabled(true);
                     // submit.setEnabled(false);
-                    submit.setText("SUBMIT");
+                    submit.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.otsubmit_button));
+
                     shift.setEnabled(true);
                     descp.setEnabled(true);
                     formfillingallowed = true;

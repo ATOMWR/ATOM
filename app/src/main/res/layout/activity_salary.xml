@@ -4,24 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F9FFFD"
     tools:context="com.example.akav.atom.Salary">
+
     <GridView
-        android:layout_width="wrap_content"
         android:id="@+id/gridview"
-        android:columnWidth="50dp"
-        android:numColumns="1"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="63dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
+        android:layout_marginTop="63dp"
+        android:columnWidth="50dp"
 
         android:gravity="end"
-        android:verticalSpacing="15dp"
         android:horizontalSpacing="4dp"
+        android:numColumns="1"
 
         android:stretchMode="columnWidth"
 
-        android:layout_height="250dp" />
+        android:verticalSpacing="15dp" />
 
 
 </android.support.constraint.ConstraintLayout>

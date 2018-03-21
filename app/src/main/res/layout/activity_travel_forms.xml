@@ -4,24 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F9FFFD"
     tools:context="com.example.akav.atom.travel.TravelFormsActivity">
 
     <LinearLayout
-        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
+            android:id="@+id/reason_ta_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/reason_ta_form"
-            android:padding="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:background="@color/colorPrimary"
+            android:padding="8dp"
             android:text="Travel Activities for this Date"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/loading_text_view"
@@ -33,11 +34,11 @@
             android:textStyle="italic" />
 
         <ListView
-            android:visibility="gone"
             android:id="@+id/ta_list"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -46,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fill_new_ta_form"
@@ -57,7 +58,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="34dp"
         android:padding="16dp"
-        android:visibility="gone"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/ic_add"
+        android:visibility="gone" />
 
 </RelativeLayout>
