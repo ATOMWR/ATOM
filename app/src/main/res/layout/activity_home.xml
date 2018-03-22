@@ -18,7 +18,7 @@
 
         <Button
             android:id="@+id/fill_ot"
-            android:layout_width="249dp"
+            android:layout_width="250dp"
             android:layout_height="68dp"
             android:background="@drawable/ot_button"
             android:padding="16dp"
@@ -27,8 +27,7 @@
         <Button
             android:id="@+id/fill_ta"
             android:layout_width="match_parent"
-            android:layout_height="67dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="68dp"
             android:background="@drawable/ta_button"
             android:padding="16dp"
             android:textColor="#FFFFFF" />

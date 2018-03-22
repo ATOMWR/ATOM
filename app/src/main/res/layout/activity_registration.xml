@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_registration"
@@ -17,112 +18,79 @@
         android:layout_centerInParent="true"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/full_name_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
-
             <EditText
                 android:id="@+id/full_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:paddingLeft="48dp"
                 android:fontFamily="sans-serif"
+                android:background="@drawable/id"
+                android:layout_marginBottom="8dp"
                 android:hint="Name" />
 
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/email_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
 
             <EditText
                 android:id="@+id/email_address"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:fontFamily="sans-serif"
                 android:hint="E Mail Address"
+                android:paddingLeft="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/email"
                 android:inputType="textEmailAddress" />
 
-        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/phone_no_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
-
-            <EditText
-                android:id="@+id/phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:hint="Mobile Number"
-                android:inputType="phone" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/password_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
-
-
-            <!--app:passwordToggleEnabled="true"-->
-
-            <EditText
+        <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:fontFamily="sans-serif"
                 android:hint="Password"
+                android:paddingLeft="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/password"
                 android:inputType="textPassword" />
 
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/pf_number_layout"
+        <EditText
+            android:id="@+id/phone_number"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/mobile"
+            android:fontFamily="sans-serif"
+            android:hint="Mobile Number"
+            android:inputType="phone"
+            android:paddingLeft="48dp" />
 
-            <EditText
+        <EditText
                 android:id="@+id/pf_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:fontFamily="sans-serif"
+                android:paddingLeft="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/pfno"
                 android:hint="Unique PF Number" />
-
-        </android.support.design.widget.TextInputLayout>
 
         <Spinner
             android:id="@+id/category_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:paddingLeft="48dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/shift"
             android:spinnerMode="dialog" />
 
 
         <Button
             android:id="@+id/qrcodebutton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorPrimary"
-            android:text="Generate QRCode"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/register"
             android:textColor="#FFFFFF" />
 
-        <Button
-            android:id="@+id/goto_login_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="Go to login page"
-            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 

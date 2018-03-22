@@ -17,21 +17,16 @@
 
         <Button
             android:id="@+id/admin_ot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"
-            android:text="Overtime Allowance"/>
+            android:layout_width="250dp"
+            android:layout_height="68dp"
+            android:background="@drawable/ot_button"
+            android:textColor="#FFFFFF"/>
 
         <Button
             android:id="@+id/admin_ta"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/colorPrimary"
-            android:text="Travel Allowance"
+            android:layout_height="68dp"
+            android:background="@drawable/ta_button"
             android:textColor="#FFFFFF" />
 
         <Button

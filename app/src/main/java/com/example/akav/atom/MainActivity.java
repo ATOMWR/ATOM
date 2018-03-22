@@ -288,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             Log.e(MainActivity.class.getName(), "Error in Parsing", e);
-            ;
         }
         return result;
     }

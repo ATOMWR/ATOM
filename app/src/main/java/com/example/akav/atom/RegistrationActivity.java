@@ -53,7 +53,6 @@ public class RegistrationActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.email_address);
         phoneNumberEditText = (EditText) findViewById(R.id.phone_number);
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
-        gotoLogin = (Button) findViewById(R.id.goto_login_button);
         registerButton = (Button) findViewById(R.id.qrcodebutton);
         uniquepfno = (EditText) findViewById(R.id.pf_number);
         password=(EditText)findViewById(R.id.password);
@@ -71,15 +70,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 gotoHomeIntent.setData(nameUri);
                 startActivity(gotoHomeIntent);*/
                 alert();
-            }
-        });
-
-
-        gotoLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent gotoLoginIntent = new Intent(RegistrationActivity.this, MainActivity.class);
-                startActivity(gotoLoginIntent);
             }
         });
 

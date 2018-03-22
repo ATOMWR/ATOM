@@ -22,6 +22,7 @@
         android:fontFamily="sans-serif"
         android:hint="  User Id"
         android:outlineProvider="bounds"
+        android:paddingLeft="4dp"
         android:textSize="12sp" />
 
     <EditText
@@ -30,11 +31,11 @@
         android:layout_height="35dp"
         android:layout_alignEnd="@+id/login_button"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/imageView2"
         android:background="@drawable/halfbox"
         android:fontFamily="sans-serif"
         android:hint="  Password"
         android:inputType="textPassword"
+        android:paddingLeft="4dp"
         android:textSize="12sp" />
 
     <Button
