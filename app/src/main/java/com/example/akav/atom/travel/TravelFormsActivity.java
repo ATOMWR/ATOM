@@ -66,13 +66,7 @@ public class TravelFormsActivity extends AppCompatActivity {
         userID = intent.getStringExtra("userID");
 
 
-        if (isOnline()) {
-            // Start the AsyncTask
-            MainAsyncTask task = new MainAsyncTask();
-            task.execute(GET_TA_FORMS);
-        } else {
-            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
-        }
+
 
         addNew = (FloatingActionButton) findViewById(R.id.fill_new_ta_form);
         progressBar = (ProgressBar) findViewById(R.id.ta_forms_progress_bar);
@@ -270,6 +264,20 @@ public class TravelFormsActivity extends AppCompatActivity {
             }
 
 
+        }
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        if (isOnline()) {
+            // Start the AsyncTask
+            MainAsyncTask task = new MainAsyncTask();
+            task.execute(GET_TA_FORMS);
+        } else {
+            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
         }
     }
 
