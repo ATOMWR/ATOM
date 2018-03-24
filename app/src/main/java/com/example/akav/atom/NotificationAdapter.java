@@ -67,8 +67,15 @@ public class NotificationAdapter extends BaseAdapter {
             for (int i = 0; i < a; i++) {
                 if(textViewValues[i].equals("nodate")) {
                     textView.setText("no notifications");
-                   // break;
                 }
+                    else if(ftypes[position].equals("ot")){
+                    gridView.setTag(new String("ot"));
+                    }
+                    else if(ftypes[position].equals("ta")){
+                    gridView.setTag(new String("ta"));
+                }
+                   // break;
+
 
 
             }

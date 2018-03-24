@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.akav.atom.overtime.OvertimeForm;
+import com.example.akav.atom.travel.TravelForm;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +37,7 @@ String userId,JSON_STRING,jsonstring,datestring;
     JSONObject jo;
     JSONArray ja;
     String[] stringdatearray,formtype;
+    String t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +64,15 @@ String userId,JSON_STRING,jsonstring,datestring;
 
 
                 datestring=parent.getItemAtPosition(position).toString();
+                t = view.getTag().toString();
+                Intent gotoOTFormIntent;
+                if(t.equals("ot")) {
+                    gotoOTFormIntent = new Intent(Notification.this, OvertimeForm.class);
+                }
+                else{
+                    gotoOTFormIntent = new Intent(Notification.this, TravelForm.class);
+                }
 
-                Intent gotoOTFormIntent = new Intent(Notification.this, OvertimeForm.class);
                 gotoOTFormIntent.putExtra("userID", userId);
                 gotoOTFormIntent.putExtra("currdate", datestring);
                 gotoOTFormIntent.putExtra("tag", "ot notify");
