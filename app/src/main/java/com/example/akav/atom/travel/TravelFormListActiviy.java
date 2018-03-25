@@ -67,6 +67,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
     private final String GET_TA_FORMS_URL = "http://atomwrapp.dx.am/getTaForms.php";
     private final String INTER_VERIFY_TA_FORMS = "http://atomwrapp.dx.am/interVerifyTaForms.php";
     private final String PULL_REPORT = "http://atomwrapp.dx.am/temp.php";
+    private final String MAIL_REPORT = "http://atomwrapp.dx.am/mail.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
                         /*
                         if(isOnline()) {
                             MainAsyncTask3 task2 = new MainAsyncTask3();
-                            task2.execute(PULL_REPORT)
+                            task2.execute(MAIL_REPORT)
                         } else{
                             Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
                         }*/
@@ -547,12 +548,17 @@ public class TravelFormListActiviy extends AppCompatActivity {
         jsonResponse = null;
 
         HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+
         try {
             urlConnection = (HttpURLConnection) finalInsertUrl.openConnection();
             urlConnection.setReadTimeout(30000);
             urlConnection.setConnectTimeout(30000);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
+
+            inputStream = urlConnection.getInputStream();
+            jsonResponse = readFromStream(inputStream);
 
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
@@ -564,7 +570,38 @@ public class TravelFormListActiviy extends AppCompatActivity {
                 urlConnection.disconnect();
             }
         }
-        return finalInsertUrl.toString();
+
+
+        Integer status = 0;
+
+        try {
+            JSONObject root = new JSONObject(jsonResponse);
+            status = root.getInt("Status");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Create URI to view report
+        Uri baseUri2 = Uri.parse(PULL_REPORT);
+        Uri.Builder uriBuilder2 = baseUri2.buildUpon();
+
+        uriBuilder2.appendQueryParameter("sdate", sd);
+        uriBuilder2.appendQueryParameter("edate", ed);
+
+        String viewReportUrl = uriBuilder2.toString();
+        URL finalViewReport = null;
+
+        try {
+            finalViewReport = new URL(viewReportUrl);
+        } catch (MalformedURLException e) {
+            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+        }
+
+        if (status == 1) {
+            return finalViewReport.toString();
+        } else {
+            return null;
+        }
     }
 
 
