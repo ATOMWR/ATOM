@@ -365,8 +365,8 @@ public class TravelFormListActiviy extends AppCompatActivity {
         Uri baseUri = Uri.parse(url);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("startDate", startDateTimestamp);
-        uriBuilder.appendQueryParameter("endDate", endDateTimeStamp);
+        uriBuilder.appendQueryParameter("startDate", sd);
+        uriBuilder.appendQueryParameter("endDate", ed);
         uriBuilder.appendQueryParameter("fromAdmin", "1");
         uriBuilder.appendQueryParameter("isPreviousCycle", isPreviousCycle.toString());
 
