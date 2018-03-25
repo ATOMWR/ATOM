@@ -110,12 +110,18 @@ public class AdminTravelActivity extends AppCompatActivity {
                 Long startDateTimestamp = startDate.getTime() / 1000;
                 Long endDateTimestamp = endDate.getTime() / 1000;
 
+                String s = currentCycleStartDate.substring(10, 14) + "-" + currentCycleStartDate.substring(5, 7) + "-" + currentCycleStartDate.substring(0, 2);
+                String e = currentCycleEndDate.substring(10, 14) + "-" + currentCycleEndDate.substring(5, 7) + "-" + currentCycleEndDate.substring(0, 2);
+
+
                 Intent currentCycleFormsList = new Intent(AdminTravelActivity.this, TravelFormListActiviy.class);
 
 
                 currentCycleFormsList.putExtra("startDate", startDateTimestamp.toString());
                 currentCycleFormsList.putExtra("endDate", endDateTimestamp.toString());
                 currentCycleFormsList.putExtra("isPreviousCycle", 0);
+                currentCycleFormsList.putExtra("strt", s);
+                currentCycleFormsList.putExtra("enddt", e);
 
                 startActivity(currentCycleFormsList);
             }
@@ -148,9 +154,14 @@ public class AdminTravelActivity extends AppCompatActivity {
                 Intent previousCycleFormsList = new Intent(AdminTravelActivity.this, TravelFormListActiviy.class);
 
 
+                String s = previousCycleStartDate.substring(10, 14) + "-" + previousCycleStartDate.substring(5, 7) + "-" + previousCycleStartDate.substring(0, 2);
+                String e = previousCycleEndDate.substring(10, 14) + "-" + previousCycleEndDate.substring(5, 7) + "-" + previousCycleEndDate.substring(0, 2);
+
                 previousCycleFormsList.putExtra("startDate", startDateTimestamp.toString());
                 previousCycleFormsList.putExtra("endDate", endDateTimestamp.toString());
                 previousCycleFormsList.putExtra("isPreviousCycle", 1);
+                previousCycleFormsList.putExtra("strt", s);
+                previousCycleFormsList.putExtra("enddt", e);
 
                 startActivity(previousCycleFormsList);
             }
