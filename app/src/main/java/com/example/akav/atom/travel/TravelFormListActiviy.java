@@ -127,18 +127,16 @@ public class TravelFormListActiviy extends AppCompatActivity {
                         // TODO : Add code to pull report.
                         // msg();
 
-                        /*loadingFormTextView.setText("Generating Report.");
+                        loadingFormTextView.setText("Generating Report.");
                         formListLayout.setVisibility(View.GONE);
-                        updateFormProgressLayout.setVisibility(View.VISIBLE);*/
+                        updateFormProgressLayout.setVisibility(View.VISIBLE);
 
-                        Toast.makeText(TravelFormListActiviy.this, "Error, Code incomplete", Toast.LENGTH_SHORT).show();
-                        /*
                         if(isOnline()) {
                             MainAsyncTask3 task2 = new MainAsyncTask3();
-                            task2.execute(MAIL_REPORT)
+                            task2.execute(MAIL_REPORT);
                         } else{
-                            Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
-                        }*/
+                            Toast.makeText(getApplicationContext(), "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
