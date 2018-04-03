@@ -13,9 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
 
         <receiver
             android:name=".MyReceiver"
@@ -60,16 +58,19 @@
         <activity android:name=".Notification" />
         <activity android:name=".AdminNotification" />
         <activity android:name=".Salary" />
-        <activity android:name=".Welcome"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:noHistory="true">
-
+        <activity
+            android:name=".Welcome"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TiHomeActivity" />
+        <activity android:name=".overtime.OvertimeSummaryListActivity" />
+        <activity android:name=".travel.TravelSummaryListActivity"></activity>
     </application>
 
 </manifest>

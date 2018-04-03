@@ -30,6 +30,25 @@
 
     </LinearLayout>
 
+    <!-- Empty view for the list -->
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/empty_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="NO Forms under this cycle."
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/form_list_layout"
         android:layout_width="match_parent"
@@ -59,6 +78,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:text="Verify List"
+            android:visibility="gone"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -69,7 +89,8 @@
             android:layout_weight="1"
             android:background="@color/fadeButtonColor"
             android:tag="#B1BBF0"
-            android:text="Pull Report"
+            android:text="Send to TI"
+            android:visibility="gone"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

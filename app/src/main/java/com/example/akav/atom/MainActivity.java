@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mLogin;
     private Button mRegister;
+    private Button tiLogin;
     // private String userId;
     private String password;
     private ProgressBar progressBar;
@@ -77,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tiLogin = (Button) findViewById(R.id.button);
+        tiLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, TiHomeActivity.class);
+                startActivity(i);
+            }
+        });
 
         //notification contents
         //n=new NotificationCompat.Builder(this);

@@ -1,4 +1,4 @@
-package com.example.akav.atom.overtime;
+package com.example.akav.atom.travel;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,13 +15,9 @@ import com.example.akav.atom.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by ankit on 01-02-2018.
- */
+public class TravelSummaryListAdapter extends ArrayAdapter<TravelSummaryObject> {
 
-public class OvertimeFormListAdapter extends ArrayAdapter<OvertimeFormObject> {
-
-    public OvertimeFormListAdapter(Context context, ArrayList<OvertimeFormObject> forms){
+    public TravelSummaryListAdapter(Context context, ArrayList<TravelSummaryObject> forms) {
         super(context, 0, forms);
     }
 
@@ -30,24 +26,19 @@ public class OvertimeFormListAdapter extends ArrayAdapter<OvertimeFormObject> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listItemView = convertView;
-        if(listItemView == null){
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.overtime_list_item, parent, false);
+        if (listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.travel_summary_list_item, parent, false);
         }
 
-        final OvertimeFormObject currentForm = getItem(position);
+        final TravelSummaryObject currentForm = getItem(position);
 
         View formContainer = listItemView.findViewById(R.id.formContainer);
 
         TextView nameOnForm = (TextView) listItemView.findViewById(R.id.name_on_form);
-        TextView date = (TextView) listItemView.findViewById(R.id.form_filled_date);
-        TextView shift = (TextView) listItemView.findViewById(R.id.shift_on_form);
-
-        // TextView actualStart = (TextView) listItemView.findViewById(R.id.actual_start_time);
-        // TextView actualEnd = (TextView) listItemView.findViewById(R.id.actual_end_time);
-
-        TextView extraHours = (TextView) listItemView.findViewById(R.id.extra_hours);
+        TextView category = (TextView) listItemView.findViewById(R.id.user_category);
+        TextView totalTravels = (TextView) listItemView.findViewById(R.id.total_travels);
+        TextView totalTravelHours = (TextView) listItemView.findViewById(R.id.total_travel_hours);
         TextView reason = (TextView) listItemView.findViewById(R.id.reason_on_form);
-        TextView shiftTime = (TextView) listItemView.findViewById(R.id.shift_time);
 
         Button verify = (Button) formContainer.findViewById(R.id.verify_form);
         Button undo = (Button) formContainer.findViewById(R.id.undo_form_action);
@@ -80,36 +71,13 @@ public class OvertimeFormListAdapter extends ArrayAdapter<OvertimeFormObject> {
         });
 
         nameOnForm.setText(currentForm.getName());
-        date.setText(currentForm.getDate());
-        shift.setText(currentForm.getShift());
-
-        // actualStart.setText(currentForm.getActualStart());
-        // actualEnd.setText(currentForm.getActualEnd());
-
-        extraHours.setText(currentForm.getExtraHours());
+        category.setText(currentForm.getCategory());
+        totalTravels.setText(currentForm.getTotalTravels());
+        totalTravelHours.setText(currentForm.getTotalTravelHours());
         reason.setText(currentForm.getReason());
         verificationStatus.setImageResource(currentForm.getVerificationStatusImageId());
 
-        /*switch (currentForm.getShift()) {
-
-            case "Morning":
-                shiftTime.setText(" (06:00 TO 14:00)");
-                break;
-
-            case "Evening":
-                shiftTime.setText(" (14:00 TO 22:00)");
-                break;
-
-            case "Night":
-                shiftTime.setText(" (22:00 TO 06:00)");
-                break;
-
-            default:
-                shiftTime.setText(" (00:00 TO 00:00)");
-        }*/
-
-        // formContainer.setBackgroundColor(color);
-
         return listItemView;
+
     }
 }

@@ -15,13 +15,9 @@ import com.example.akav.atom.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by ankit on 01-02-2018.
- */
+public class OvertimeSummaryListAdapter extends ArrayAdapter<OvertimeSummaryObject> {
 
-public class OvertimeFormListAdapter extends ArrayAdapter<OvertimeFormObject> {
-
-    public OvertimeFormListAdapter(Context context, ArrayList<OvertimeFormObject> forms){
+    public OvertimeSummaryListAdapter(Context context, ArrayList<OvertimeSummaryObject> forms){
         super(context, 0, forms);
     }
 
@@ -31,23 +27,21 @@ public class OvertimeFormListAdapter extends ArrayAdapter<OvertimeFormObject> {
 
         View listItemView = convertView;
         if(listItemView == null){
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.overtime_list_item, parent, false);
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.overtime_summary_list_item, parent, false);
         }
 
-        final OvertimeFormObject currentForm = getItem(position);
+        final OvertimeSummaryObject currentForm = getItem(position);
 
         View formContainer = listItemView.findViewById(R.id.formContainer);
 
         TextView nameOnForm = (TextView) listItemView.findViewById(R.id.name_on_form);
-        TextView date = (TextView) listItemView.findViewById(R.id.form_filled_date);
-        TextView shift = (TextView) listItemView.findViewById(R.id.shift_on_form);
-
-        // TextView actualStart = (TextView) listItemView.findViewById(R.id.actual_start_time);
-        // TextView actualEnd = (TextView) listItemView.findViewById(R.id.actual_end_time);
-
-        TextView extraHours = (TextView) listItemView.findViewById(R.id.extra_hours);
+        TextView category = (TextView) listItemView.findViewById(R.id.user_category);
+        TextView eightHourDuty = (TextView) listItemView.findViewById(R.id.eight_hours_duty);
+        TextView sixHourDuty = (TextView) listItemView.findViewById(R.id.six_hours_duty);
+        TextView totalRosteredDutyHours = (TextView) listItemView.findViewById(R.id.rostered_duty_hours);
+        TextView totalActualDutyHours = (TextView) listItemView.findViewById(R.id.actual_duty_hours);
+        TextView extraDutyHours = (TextView) listItemView.findViewById(R.id.extra_duty_hours);
         TextView reason = (TextView) listItemView.findViewById(R.id.reason_on_form);
-        TextView shiftTime = (TextView) listItemView.findViewById(R.id.shift_time);
 
         Button verify = (Button) formContainer.findViewById(R.id.verify_form);
         Button undo = (Button) formContainer.findViewById(R.id.undo_form_action);
@@ -80,35 +74,15 @@ public class OvertimeFormListAdapter extends ArrayAdapter<OvertimeFormObject> {
         });
 
         nameOnForm.setText(currentForm.getName());
-        date.setText(currentForm.getDate());
-        shift.setText(currentForm.getShift());
-
-        // actualStart.setText(currentForm.getActualStart());
-        // actualEnd.setText(currentForm.getActualEnd());
-
-        extraHours.setText(currentForm.getExtraHours());
+        category.setText(currentForm.getCategory());
+        eightHourDuty.setText(currentForm.getTotalEightHours() + " Hrs.");
+        sixHourDuty.setText(currentForm.getTotalSixHours() + " Hrs.");
+        totalRosteredDutyHours.setText(currentForm.getTotalRosteredDutyHours() + " Hrs."
+                                        + " (" + currentForm.getTotalEightHours() + "Hrs. + " + currentForm.getTotalSixHours() + " Hrs.)");
+        totalActualDutyHours.setText(currentForm.getTotalActualDutyHours() + " Hrs.");
+        extraDutyHours.setText(currentForm.getExtraDutyHours() + " Hrs.");
         reason.setText(currentForm.getReason());
         verificationStatus.setImageResource(currentForm.getVerificationStatusImageId());
-
-        /*switch (currentForm.getShift()) {
-
-            case "Morning":
-                shiftTime.setText(" (06:00 TO 14:00)");
-                break;
-
-            case "Evening":
-                shiftTime.setText(" (14:00 TO 22:00)");
-                break;
-
-            case "Night":
-                shiftTime.setText(" (22:00 TO 06:00)");
-                break;
-
-            default:
-                shiftTime.setText(" (00:00 TO 00:00)");
-        }*/
-
-        // formContainer.setBackgroundColor(color);
 
         return listItemView;
     }

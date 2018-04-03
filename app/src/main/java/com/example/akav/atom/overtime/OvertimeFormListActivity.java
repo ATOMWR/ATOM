@@ -1,6 +1,7 @@
 package com.example.akav.atom.overtime;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,8 +68,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
     private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getOtForms.php";
     private final String INTER_VERIFY_OT_FORMS = "http://atomwrapp.dx.am/interVerifyOtForms.php";
-    private final String PULL_REPORT = "http://atomwrapp.dx.am/temp.php";
-    private final String MAIL_REPORT = "http://atomwrapp.dx.am/mail.php";
+    private final String SEND_TO_TI = "http://atomwrapp.dx.am/sendToTi.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                         if (isOnline()) {
                             // Start the AsyncTask
                             MainAsyncTask3 task2 = new MainAsyncTask3();
-                            task2.execute(MAIL_REPORT);
+                            task2.execute(SEND_TO_TI);
                         } else {
                             Toast.makeText(OvertimeFormListActivity.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
                         }
@@ -222,7 +222,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                 String date = currentForm.getString("date1");
                 String platformNumber = currentForm.getString("pfno");
                 String name = currentForm.getString("name");
-                String shift = currentForm.getString("shift");
+                String shift = currentForm.getString("DutyType");
                 String actualStart = currentForm.getString("actualstart");
                 String actualEnd = currentForm.getString("actualend");
                 String extraHours = currentForm.getString("extrahours");
@@ -367,8 +367,8 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         Uri baseUri = Uri.parse(url);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("startDate", startDateTimestamp);
-        uriBuilder.appendQueryParameter("endDate", endDateTimeStamp);
+        uriBuilder.appendQueryParameter("startDate", sd);
+        uriBuilder.appendQueryParameter("endDate", ed);
         uriBuilder.appendQueryParameter("isPreviousCycle", isPreviousCycle.toString());
 
         String insertUrl = uriBuilder.toString();
@@ -461,6 +461,21 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                 checkPullReportStatus();
 
                 formListLayout.setVisibility(View.VISIBLE);
+
+                View emptyView = findViewById(R.id.empty_view);
+                listView.setEmptyView(emptyView);
+
+                if(formList.size() != 0){
+                    if(isPreviousCycle == 0){
+                        pullReport.setVisibility(View.GONE);
+                        verifyList.setVisibility(View.VISIBLE);
+                    } else {
+                        pullReport.setVisibility(View.VISIBLE);
+                        verifyList.setVisibility(View.VISIBLE);
+                    }
+
+                }
+
             }
 
         }
@@ -487,8 +502,8 @@ public class OvertimeFormListActivity extends AppCompatActivity {
                 v.setGravity(Gravity.CENTER);
                 toast.show();
             } else {
-                Toast.makeText(OvertimeFormListActivity.this, "Report Generated.", Toast.LENGTH_LONG).show();
-                openWebsite(result);
+                Toast.makeText(OvertimeFormListActivity.this, "Report Sent to TI.", Toast.LENGTH_LONG).show();
+                finish();
             }
 
 
@@ -500,34 +515,6 @@ public class OvertimeFormListActivity extends AppCompatActivity {
         }
     }
 
-    void openWebsite(final String result) {
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OvertimeFormListActivity.this);
-
-        alertDialogBuilder.setMessage("Report Generated. View Report?");
-
-        alertDialogBuilder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        updateFormProgressLayout.setVisibility(View.GONE);
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(result));
-                        startActivity(i);
-                        finish();
-                    }
-                });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
 
     private String pullReportFromDatabase(String url) {
 
@@ -537,6 +524,7 @@ public class OvertimeFormListActivity extends AppCompatActivity {
 
         uriBuilder.appendQueryParameter("sdate", sd);
         uriBuilder.appendQueryParameter("edate", ed);
+        uriBuilder.appendQueryParameter("formType", "OT");
 
         String insertUrl = uriBuilder.toString();
         URL finalInsertUrl = null;
@@ -585,23 +573,8 @@ public class OvertimeFormListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Create URI to view report
-        Uri baseUri2 = Uri.parse(PULL_REPORT);
-        Uri.Builder uriBuilder2 = baseUri2.buildUpon();
-
-        uriBuilder2.appendQueryParameter("sdate", sd);
-        uriBuilder2.appendQueryParameter("edate", ed);
-
-        String viewReportUrl = uriBuilder2.toString();
-        URL finalViewReport = null;
-
-        try {
-            finalViewReport = new URL(viewReportUrl);
-        } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
-        }
         if (status == 1) {
-            return finalViewReport.toString();
+            return status.toString();
         } else {
             return null;
         }
