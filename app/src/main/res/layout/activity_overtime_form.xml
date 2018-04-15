@@ -141,20 +141,32 @@
         android:layout_marginStart="234dp"
         android:layout_marginTop="94dp" />
 
-    <RadioButton
-        android:id="@+id/rb8hr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/rostertext"
-        android:layout_alignTop="@+id/selectshift"
-        android:text="8 Hrs Duty" />
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
 
-    <RadioButton
-        android:id="@+id/rb6hr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/rb8hr"
-        android:layout_below="@+id/rb8hr"
-        android:text="6 Hrs Duty" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rb8hr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/radioGroup"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="213dp"
+            android:text="8 Hrs Duty" />
+
+        <RadioButton
+            android:id="@+id/rb6hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/rb8hr"
+            android:layout_below="@+id/rb8hr"
+            android:text="6 Hrs Duty" />
+    </RadioGroup>
 
 </RelativeLayout>
