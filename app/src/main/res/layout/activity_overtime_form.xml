@@ -141,4 +141,20 @@
         android:layout_marginStart="234dp"
         android:layout_marginTop="94dp" />
 
+    <RadioButton
+        android:id="@+id/rb8hr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/rostertext"
+        android:layout_alignTop="@+id/selectshift"
+        android:text="8 Hrs Duty" />
+
+    <RadioButton
+        android:id="@+id/rb6hr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/rb8hr"
+        android:layout_below="@+id/rb8hr"
+        android:text="6 Hrs Duty" />
+
 </RelativeLayout>

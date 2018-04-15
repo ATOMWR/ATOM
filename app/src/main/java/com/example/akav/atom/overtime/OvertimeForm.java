@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -55,11 +56,11 @@ public class OvertimeForm extends AppCompatActivity {
     Button startbutt, endbutt, submit;
     String s1, e1, newe, news, newsm, newem, datestring;
     int s, e, dh, dm;
-    String status, jsonstring, JSON_STRING;
+    String status, jsonstring, JSON_STRING,hrs;
     boolean formfillingallowed = true;
     boolean confirmed = false;
     String update = "f";
-
+    RadioButton r8hr,r6hr;
     JSONObject jo, j;
     JSONArray ja;
     String retrieveshift, retrievestrt, retrieveend, retrievedesc;
@@ -90,11 +91,15 @@ public class OvertimeForm extends AppCompatActivity {
         endbutt = (Button) findViewById(R.id.endbutton);
         submit = (Button) findViewById(R.id.submitbutt);
         descp = (EditText) findViewById(R.id.descid);
+        r8hr=(RadioButton)findViewById(R.id.rb8hr);
+        r6hr=(RadioButton)findViewById(R.id.rb6hr);
 
         if (status.equals("ot filled") || status.equals("ot notify")) {
             formfillingallowed = false;
             startbutt.setEnabled(false);
             endbutt.setEnabled(false);
+            r8hr.setEnabled(false);
+            r6hr.setEnabled(false);
 
             submit.setBackground(ContextCompat.getDrawable(this,R.drawable.ot_button));
 
@@ -208,6 +213,8 @@ public class OvertimeForm extends AppCompatActivity {
 
                     shift.setEnabled(true);
                     descp.setEnabled(true);
+                    r8hr.setEnabled(true);
+                    r6hr.setEnabled(true);
                     formfillingallowed = true;
                     shiftvalue.setText("");
                     update = "t";
@@ -237,6 +244,11 @@ public class OvertimeForm extends AppCompatActivity {
                         dm += 60;
 
                     }
+                    if(r8hr.isChecked())
+                        hrs="8hr";
+                    else if(r6hr.isChecked())
+                            hrs="6hr";
+
                     //sample.setText(dm);
                     //msg();
                     open();
@@ -299,13 +311,14 @@ public class OvertimeForm extends AppCompatActivity {
         String actend = newe + ":" + newem;
         String extra = dh + ":" + dm;
         String reason = descp.getText().toString();
+        String hrstatus= hrs;
 
         // Toast.makeText(QRverification.this, "You clicked yes button", Toast.LENGTH_LONG).show();
 
         if (isOnline()) {
             // Start the AsyncTask
             OvertimeForm.Backgroundtask backgroundtask = new OvertimeForm.Backgroundtask(this);
-            backgroundtask.execute(method, pfno, name, shift, actstart, actend, extra, reason, datestr, update, datestring);
+            backgroundtask.execute(method, pfno, name, shift, actstart, actend, extra, reason, datestr, update, datestring,hrstatus);
         } else {
             Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
         }
@@ -338,6 +351,7 @@ public class OvertimeForm extends AppCompatActivity {
                 String reas = params[7];
                 String dat = params[8];
                 String upflag = params[9];
+                String hrflag=params[11];
 
 
                 try {
@@ -358,6 +372,7 @@ public class OvertimeForm extends AppCompatActivity {
                             URLEncoder.encode("extra", "UTF-8") + "=" + URLEncoder.encode(extra, "UTF-8") + "&" +
                             URLEncoder.encode("reason", "UTF-8") + "=" + URLEncoder.encode(reas, "UTF-8") + "&" +
                             URLEncoder.encode("updateflag", "UTF-8") + "=" + URLEncoder.encode(upflag, "UTF-8") + "&" +
+                            URLEncoder.encode("hrflag", "UTF-8") + "=" + URLEncoder.encode(hrflag, "UTF-8") + "&" +
                             URLEncoder.encode("curdate", "UTF-8") + "=" + URLEncoder.encode(datestring, "UTF-8");
 
                     bufferedwriter.write(newdata);
