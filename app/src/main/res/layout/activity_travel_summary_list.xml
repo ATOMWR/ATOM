@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.akav.atom.overtime.OvertimeFormListActivity">
+    tools:context=".travel.TravelSummaryListActivity">
 
     <LinearLayout
         android:id="@+id/update_form_list_progress_layout"
@@ -70,24 +71,35 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/verify_list"
+            android:id="@+id/detailed_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="Verify List"
+            android:text="Detailed Report"
             android:layout_margin="2dp"
             android:visibility="gone"
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/pull_report"
+            android:id="@+id/summary_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/fadeButtonColor"
+            android:background="@color/colorPrimary"
+            android:text="Summarised Report"
+            android:layout_margin="2dp"
+            android:visibility="gone"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/send_to_hq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
             android:tag="#B1BBF0"
-            android:text="Send to TI"
+            android:text="Send this to HQ"
             android:visibility="gone"
             android:layout_margin="2dp"
             android:textColor="#FFFFFF" />

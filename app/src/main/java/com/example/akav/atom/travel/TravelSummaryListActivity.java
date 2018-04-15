@@ -1,8 +1,6 @@
 package com.example.akav.atom.travel;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,18 +34,19 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-public class TravelFormListActiviy extends AppCompatActivity {
+public class TravelSummaryListActivity extends AppCompatActivity {
 
-    private Button pullReport;
-    private Button verifyList;
+    private Button sendToHq;
+    private Button detailedReport;
+    private Button summarisedReport;
 
     private String startDateTimestamp;
     private String endDateTimeStamp;
     private String jsonResponse;
-    private String buttonColor;
     private String sd, ed;
 
     private JSONObject jsonToSend;
@@ -58,20 +57,22 @@ public class TravelFormListActiviy extends AppCompatActivity {
     private TextView loadingFormTextView;
 
     private Integer isPreviousCycle;
-    private Integer numberOfVerifiedForms;
+
+    ListView listView;
+
+    TravelFormListAdapter formListAdapter;
+    TravelSummaryListAdapter summaryListAdapter;
 
     private ArrayList<TravelFormObject> formList;
+    private ArrayList<TravelSummaryObject> summaryList;
 
-    private final String ERROR_MESSAGE = "Can't Pull Report\nThere are UNVERIFIED forms in this list";
-
-    private final String GET_TA_FORMS_URL = "http://atomwrapp.dx.am/getTaForms.php";
-    private final String INTER_VERIFY_TA_FORMS = "http://atomwrapp.dx.am/interVerifyTaForms.php";
-    private final String SEND_TO_TI = "http://atomwrapp.dx.am/sendToTi.php";
+    private final String GET_OT_FORMS_URL = "http://atomwrapp.dx.am/getTaSummary.php";
+    private final String SEND_TO_HQ = "http://atomwrapp.dx.am/sendToHq1.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_travel_form_list_activiy);
+        setContentView(R.layout.activity_travel_summary_list);
 
         Intent intent = getIntent();
         startDateTimestamp = intent.getStringExtra("startDate");
@@ -80,12 +81,11 @@ public class TravelFormListActiviy extends AppCompatActivity {
         sd = getIntent().getExtras().getString("strt");
         ed = getIntent().getExtras().getString("enddt");
 
-        numberOfVerifiedForms = 0;
-
 
         if (isOnline()) {
+            // Start the AsyncTask
             MainAsyncTask2 task2 = new MainAsyncTask2();
-            task2.execute(GET_TA_FORMS_URL);
+            task2.execute(GET_OT_FORMS_URL);
         } else {
             Toast.makeText(this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
         }
@@ -94,92 +94,75 @@ public class TravelFormListActiviy extends AppCompatActivity {
         formListLayout = (RelativeLayout) findViewById(R.id.form_list_layout);
         loadingFormTextView = (TextView) findViewById(R.id.loading_forms_text);
 
-        verifyList = (Button) findViewById(R.id.verify_list);
-        pullReport = (Button) findViewById(R.id.pull_report);
+        sendToHq = (Button) findViewById(R.id.send_to_hq);
+        detailedReport = (Button) findViewById(R.id.detailed_list);
+        summarisedReport = (Button) findViewById(R.id.summary_list);
 
-        if (isPreviousCycle == 0) {
-            pullReport.setVisibility(View.GONE);
-        } else {
-            pullReport.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // TODO : Change Colors Later.
-                    buttonColor = (String) pullReport.getTag();
-                    if (buttonColor.equals("#B1BBF0")) {
+        listView = (ListView) findViewById(R.id.list);
 
-                        Toast errorToast = new Toast(getApplicationContext());
-                        errorToast.setGravity(Gravity.CENTER, 0, 0);
-
-                        TextView errorText = new TextView(getApplicationContext());
-                        errorText.setText(ERROR_MESSAGE);
-                        errorText.setGravity(Gravity.CENTER);
-                        errorText.setBackgroundColor(getResources().getColor(R.color.red));
-                        errorText.setPadding(48, 48, 48, 48);
-                        errorText.setTextColor(getResources().getColor(R.color.white));
-                        errorText.setTextSize(16);
-
-                        errorToast.setView(errorText);
-                        errorToast.setDuration(Toast.LENGTH_LONG);
-                        errorToast.show();
-
-                    } else {
-                        // TODO : Add code to pull report.
-                        // msg();
-
-                        loadingFormTextView.setText("Generating Report.");
-                        formListLayout.setVisibility(View.GONE);
-                        updateFormProgressLayout.setVisibility(View.VISIBLE);
-
-                        if(isOnline()) {
-                            MainAsyncTask3 task2 = new MainAsyncTask3();
-                            task2.execute(SEND_TO_TI);
-                        } else{
-                            Toast.makeText(getApplicationContext(), "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-
-        }
-
-        verifyList.setOnClickListener(new View.OnClickListener() {
+        sendToHq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jsonToSend = ArrayListToJson(formList);
 
-                loadingFormTextView.setText("Updating Forms, Please Wait.");
+                // TODO : Add code to pull report.
+                // msg();
+
+                jsonToSend = ArrayListToJson(summaryList);
+
+                loadingFormTextView.setText("Sending to Headquarters.");
                 formListLayout.setVisibility(View.GONE);
                 updateFormProgressLayout.setVisibility(View.VISIBLE);
 
 
                 if (isOnline()) {
                     // Start the AsyncTask
-                    MainAsyncTask task = new MainAsyncTask();
-                    task.execute(INTER_VERIFY_TA_FORMS);
+                    MainAsyncTask task2 = new MainAsyncTask();
+                    task2.execute(SEND_TO_HQ);
                 } else {
-                    Toast.makeText(TravelFormListActiviy.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TravelSummaryListActivity.this, "NO Internet Connection, Try again", Toast.LENGTH_SHORT).show();
                 }
+
+            }
+        });
+
+        detailedReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                detailedReport.setVisibility(View.GONE);
+                sendToHq.setVisibility(View.GONE);
+                summarisedReport.setVisibility(View.VISIBLE);
+
+                listView.setAdapter(formListAdapter);
+
+            }
+        });
+
+        summarisedReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                summarisedReport.setVisibility(View.GONE);
+                detailedReport.setVisibility(View.VISIBLE);
+                sendToHq.setVisibility(View.VISIBLE);
+
+                listView.setAdapter(summaryListAdapter);
             }
         });
     }
 
-    private JSONObject ArrayListToJson(ArrayList<TravelFormObject> formList) {
+    private JSONObject ArrayListToJson(ArrayList<TravelSummaryObject> formList) {
 
         JSONObject formsListJsonObject = new JSONObject();
         JSONArray formsArray = new JSONArray();
 
         for (int index = 0; index < formList.size(); index++) {
 
-            if (formList.get(index).getInterVerification() == 0) {
-                continue;
-            }
-
             JSONObject singleForm = new JSONObject();
             try {
                 singleForm.put("name", formList.get(index).getName());
-                singleForm.put("date", formList.get(index).getDateOfTravel());
-                singleForm.put("startTime", formList.get(index).getStartTime());
-                singleForm.put("endTime", formList.get(index).getEndTime());
+                singleForm.put("startDate", sd);
+                singleForm.put("endDate", ed);
                 singleForm.put("interVerification", formList.get(index).getInterVerification());
 
             } catch (JSONException e) {
@@ -197,7 +180,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
         return formsListJsonObject;
     }
 
-    private ArrayList<TravelFormObject> parseJson(String formListJson) {
+    private ArrayList<TravelFormObject> parseJson1(String formListJson) {
 
         ArrayList<TravelFormObject> formList = new ArrayList<>();
 
@@ -230,9 +213,6 @@ public class TravelFormListActiviy extends AppCompatActivity {
                         endDate, startTime, endTime, startStation, endStation, extraHours, reason,
                         percentageCategory, interVerification, finalVerification));
 
-                if (interVerification == 1) {
-                    numberOfVerifiedForms += 1;
-                }
             }
 
         } catch (JSONException e) {
@@ -242,7 +222,37 @@ public class TravelFormListActiviy extends AppCompatActivity {
         return formList;
     }
 
-    private String verifyTaForms(String url) {
+    private ArrayList<TravelSummaryObject> parseJson2(String formListJson) {
+
+        ArrayList<TravelSummaryObject> summaryList = new ArrayList<>();
+
+        try {
+            JSONObject root = new JSONObject(formListJson);
+            JSONArray forms = root.getJSONArray("summary");
+
+            for (int index = 0; index < forms.length(); index++) {
+
+                JSONObject currentForm = forms.getJSONObject(index);
+
+                String name = currentForm.getString("name");
+                String category = currentForm.getString("category");
+                String totalTravels = currentForm.getString("totalTravels");
+                String totalTravelHours = currentForm.getString("totalTravelHours");
+                String reason = currentForm.getString("reason");
+
+                summaryList.add(new TravelSummaryObject(name, category, totalTravels, totalTravelHours,
+                        reason, 0));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return summaryList;
+    }
+
+    private String sendToHq(String url) {
 
         URL finalInsertUrl = null;
 
@@ -250,8 +260,9 @@ public class TravelFormListActiviy extends AppCompatActivity {
             finalInsertUrl = new URL(url);
         } catch (MalformedURLException e) {
             Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
-            ;
         }
+
+        String status = null;
 
         //Perform HTTP request to the URL and receive a JSON response back
         jsonResponse = null;
@@ -296,6 +307,8 @@ public class TravelFormListActiviy extends AppCompatActivity {
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
             return null;
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -332,7 +345,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... urls) {
-            String result = verifyTaForms(urls[0]);
+            String result = sendToHq(urls[0]);
             return result;
         }
 
@@ -345,28 +358,20 @@ public class TravelFormListActiviy extends AppCompatActivity {
                 v.setGravity(Gravity.CENTER);
                 toast.show();
             } else {
-                Toast.makeText(TravelFormListActiviy.this, "Successfully updated TA forms", Toast.LENGTH_LONG).show();
-                if (isPreviousCycle == 0) {
-                    finish();
-                } else {
-                    //Reload activity
-                    finish();
-                    startActivity(getIntent());
-                }
+                Toast.makeText(TravelSummaryListActivity.this, "Forms eMailed to Headquarters", Toast.LENGTH_LONG).show();
+                finish();
             }
-
         }
     }
 
-    private String getTaForms(String url) {
+    private String getOtFroms(String url) {
 
         //Create URI
         Uri baseUri = Uri.parse(url);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("startDate",sd);
+        uriBuilder.appendQueryParameter("startDate", sd);
         uriBuilder.appendQueryParameter("endDate", ed);
-        uriBuilder.appendQueryParameter("fromAdmin", "1");
         uriBuilder.appendQueryParameter("isPreviousCycle", isPreviousCycle.toString());
 
         String insertUrl = uriBuilder.toString();
@@ -414,6 +419,8 @@ public class TravelFormListActiviy extends AppCompatActivity {
         } catch (SocketTimeoutException s) {
             s.printStackTrace();
             return null;
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException e) {
             Log.e(MainActivity.class.getName(), "Problem retrieving JSON.", e);
         } finally {
@@ -431,7 +438,7 @@ public class TravelFormListActiviy extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... urls) {
-            String result = getTaForms(urls[0]);
+            String result = getOtFroms(urls[0]);
             return result;
         }
 
@@ -446,144 +453,24 @@ public class TravelFormListActiviy extends AppCompatActivity {
                 v.setGravity(Gravity.CENTER);
                 toast.show();
             } else {
-                formList = parseJson(result);
 
-                TravelFormListAdapter formListAdapter = new TravelFormListAdapter(TravelFormListActiviy.this, formList);
-
-                ListView listView = (ListView) findViewById(R.id.list);
-                listView.setAdapter(formListAdapter);
-
-                checkPullReportStatus();
-
-                formListLayout.setVisibility(View.VISIBLE);
+                formList = parseJson1(result);
+                summaryList = parseJson2(result);
 
                 View emptyView = findViewById(R.id.empty_view);
                 listView.setEmptyView(emptyView);
 
-                if(formList.size() != 0){
-                    if(isPreviousCycle == 0){
-                        pullReport.setVisibility(View.GONE);
-                        verifyList.setVisibility(View.VISIBLE);
-                    } else {
-                        pullReport.setVisibility(View.VISIBLE);
-                        verifyList.setVisibility(View.VISIBLE);
-                    }
+                formListAdapter = new TravelFormListAdapter(TravelSummaryListActivity.this, formList);
+                summaryListAdapter = new TravelSummaryListAdapter(TravelSummaryListActivity.this, summaryList);
 
-                }
+                listView.setAdapter(summaryListAdapter);
+
+                formListLayout.setVisibility(View.VISIBLE);
+                updateFormProgressLayout.setVisibility(View.GONE);
+                detailedReport.setVisibility(View.VISIBLE);
+                sendToHq.setVisibility(View.VISIBLE);
+
             }
-
-        }
-    }
-
-
-    // Background Task to pull report.
-    private class MainAsyncTask3 extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            String result = pullReportFromDatabase(urls[0]);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            if (result == null) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Error connecting to the Internet, Try again", Toast.LENGTH_SHORT);
-                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                v.setGravity(Gravity.CENTER);
-                toast.show();
-            } else {
-                Toast.makeText(TravelFormListActiviy.this, "Report Sent to TI.", Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-            /*Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(result));
-            startActivity(i);
-
-            finish();*/
-        }
-    }
-
-
-    private String pullReportFromDatabase(String url) {
-
-        //Create URI
-        Uri baseUri = Uri.parse(url);
-        Uri.Builder uriBuilder = baseUri.buildUpon();
-
-        uriBuilder.appendQueryParameter("sdate", sd);
-        uriBuilder.appendQueryParameter("edate", ed);
-        uriBuilder.appendQueryParameter("formType", "TA");
-
-        String insertUrl = uriBuilder.toString();
-        URL finalInsertUrl = null;
-
-        try {
-            finalInsertUrl = new URL(insertUrl);
-        } catch (MalformedURLException e) {
-            Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
-        }
-
-        //Perform HTTP request to the URL
-        jsonResponse = null;
-
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-
-        try {
-            urlConnection = (HttpURLConnection) finalInsertUrl.openConnection();
-            urlConnection.setReadTimeout(30000);
-            urlConnection.setConnectTimeout(30000);
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
-
-        } catch (SocketTimeoutException s) {
-            s.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            Log.e(MainActivity.class.getName(), "Problem Connecting to Server.", e);
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-
-
-        Integer status = 0;
-
-        try {
-            JSONObject root = new JSONObject(jsonResponse);
-            status = root.getInt("Status");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (status == 1) {
-            return status.toString();
-        } else {
-            return null;
-        }
-    }
-
-
-    private void checkPullReportStatus() {
-        if (canPullReport()) {
-            // TODO : Change Colors later.
-            pullReport.setTag("#3F51B5");
-            pullReport.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        }
-    }
-
-    private Boolean canPullReport() {
-        if (numberOfVerifiedForms.intValue() == formList.size()) {
-            return true;
-        } else {
-            return false;
         }
     }
 

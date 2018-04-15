@@ -1,7 +1,6 @@
 package com.example.akav.atom;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -11,15 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.akav.atom.overtime.OvertimeFormListActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,14 +30,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class AdminNotification extends AppCompatActivity {
-//TODO:display cycle in which changes is to be done i.e. isVerified=2 in cyclelist table
-//TODO:on cycle list click,display users whose correction is needed by hq i.e. hq_verification =2 in ot_table and ta_table
+public class TiHomeActivity extends AppCompatActivity {
+
 
     private LinearLayout currentCycle;
 
@@ -54,12 +45,12 @@ public class AdminNotification extends AppCompatActivity {
 
     private ArrayList<CycleDateObject> errorCycleDateList;
 
-    public static final String GET_DATE_URL = "http://atomwrapp.dx.am/getErrorCycleDates.php";
+    public static final String GET_DATE_URL = "http://atomwrapp.dx.am/getTiCycleDates.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_notification);
+        setContentView(R.layout.activity_ti_home);
 
         progressBarLayout = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         cycleList = (RelativeLayout) findViewById(R.id.cycle_list_layout);
@@ -170,7 +161,7 @@ public class AdminNotification extends AppCompatActivity {
         Uri baseUri = Uri.parse(url);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("flag", "1");
+        uriBuilder.appendQueryParameter("flag", "2");
 
         String insertUrl = uriBuilder.toString();
         URL finalInsertUrl = null;
@@ -179,6 +170,7 @@ public class AdminNotification extends AppCompatActivity {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
             Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
+            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
@@ -210,7 +202,6 @@ public class AdminNotification extends AppCompatActivity {
 
                 errorCycleDateList.add(new CycleDateObject(startDate, endDate, flag));
             }
-
         } catch (JSONException e) {
             Log.e(MainActivity.class.getName(), "Error in Parsing", e);
         }

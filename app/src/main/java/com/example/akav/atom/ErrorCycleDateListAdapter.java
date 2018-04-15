@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.akav.atom.overtime.OvertimeFormListActivity;
+import com.example.akav.atom.overtime.OvertimeSummaryListActivity;
 import com.example.akav.atom.travel.TravelFormListActiviy;
+import com.example.akav.atom.travel.TravelSummaryListActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +49,14 @@ public class ErrorCycleDateListAdapter extends ArrayAdapter<CycleDateObject> {
         gotoOtForms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent gotoOtFormList = new Intent (getContext(), OvertimeFormListActivity.class);
+
+                Intent gotoOtFormList;
+
+                if(cycleDate.getFlag() == 1){
+                    gotoOtFormList = new Intent (getContext(), OvertimeFormListActivity.class);
+                } else {
+                    gotoOtFormList = new Intent (getContext(), OvertimeSummaryListActivity.class);
+                }
 
                 String errorCycleStartDate = cycleDate.getStartDate();
                 String errorCycleEndDate = cycleDate.getEndDate();
@@ -84,7 +93,14 @@ public class ErrorCycleDateListAdapter extends ArrayAdapter<CycleDateObject> {
         gotoTaForms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent gotoTaFormList = new Intent (getContext(), TravelFormListActiviy.class);
+
+                Intent gotoTaFormList;
+
+                if(cycleDate.getFlag() == 1){
+                    gotoTaFormList = new Intent (getContext(), TravelFormListActiviy.class);
+                } else {
+                    gotoTaFormList = new Intent (getContext(), TravelSummaryListActivity.class);
+                }
 
                 String errorCycleStartDate = cycleDate.getStartDate();
                 String errorCycleEndDate = cycleDate.getEndDate();
