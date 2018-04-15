@@ -4,9 +4,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <EditText
+        android:id="@+id/otptb"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView"/>
-
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter OTP"
+        android:inputType="textPersonName" />
 </LinearLayout>

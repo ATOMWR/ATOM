@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/linearLayout2">
 
             <EditText
                 android:id="@+id/full_name"
@@ -93,5 +94,14 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/enterotp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginEnd="118dp"
+        android:text="Entert otp" />
 
 </RelativeLayout>
