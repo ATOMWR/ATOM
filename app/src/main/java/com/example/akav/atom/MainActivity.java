@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private Boolean isValidUser;
-    private Boolean isAdmin;
+    private Integer isAdmin;
 
 
     String JSON_STRING, jsonstring, userId;
@@ -79,14 +79,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tiLogin = (Button) findViewById(R.id.button);
-        tiLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, TiHomeActivity.class);
-                startActivity(i);
-            }
-        });
 
         //notification contents
         //n=new NotificationCompat.Builder(this);
@@ -141,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Temperorary Buttons
 
-       // Button fillUser = (Button) findViewById(R.id.user_fill);
-      //  Button fillAdmin = (Button) findViewById(R.id.admin_fill);
+        // Button fillUser = (Button) findViewById(R.id.user_fill);
+        //  Button fillAdmin = (Button) findViewById(R.id.admin_fill);
 
        /* fillUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
         getUserDetails();
 
-        InputMethodManager i = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager i = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         i.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
 
         if (isOnline()) {
@@ -197,18 +189,20 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent gotoAdminHomeIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
                 Intent gotoUserHomeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                Intent gotoTiHomeIntent = new Intent(MainActivity.this, TiHomeActivity.class);
 
-                if (isAdmin) {
+                if (isAdmin == 1) {
                     gotoAdminHomeIntent.putExtra("userId", userId);
 
                     startActivity(gotoAdminHomeIntent);
+                } else if (isAdmin == 2) {
+
+                    gotoTiHomeIntent.putExtra("userId", userId);
+                    startActivity(gotoTiHomeIntent);
+
                 } else {
-
-
                     gotoUserHomeIntent.putExtra("userId", userId);
                     startActivity(gotoUserHomeIntent);
-
-
                 }
 
             } else {
@@ -272,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
             finalInsertUrl = new URL(insertUrl);
         } catch (MalformedURLException e) {
             Log.e(MainActivity.class.getName(), "Problem Building the URL", e);
-            ;
         }
 
         //Perform HTTP request to the URL and receive a JSON response back
@@ -292,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject root = new JSONObject(jsonResponse);
 
             isValidUser = root.getBoolean("isValidUser");
-            isAdmin = root.getBoolean("isAdmin");
+            isAdmin = root.getInt("isAdmin");
 
             result = isValidUser.toString() + ", " + isAdmin.toString();
 

@@ -1,6 +1,7 @@
 package com.example.akav.atom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -51,6 +52,13 @@ public class TiHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ti_home);
+
+
+        Intent loginInfo = getIntent();
+        String userId = loginInfo.getStringExtra("userId");
+
+        Toast.makeText(this, "Welcome TI, " + userId + "!", Toast.LENGTH_SHORT).show();
+
 
         progressBarLayout = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         cycleList = (RelativeLayout) findViewById(R.id.cycle_list_layout);
