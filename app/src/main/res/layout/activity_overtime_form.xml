@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView8"
+
         android:layout_marginTop="27dp"
         android:text="Shift:"
         android:textAppearance="@style/TextAppearance.AppCompat.Button" />
@@ -141,32 +141,35 @@
         android:layout_marginStart="234dp"
         android:layout_marginTop="94dp" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
 
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical">
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignStart="@+id/rostertext"
+        android:layout_alignTop="@+id/selectshift">
 
         <RadioButton
             android:id="@+id/rb8hr"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/radioGroup"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="213dp"
+            android:layout_height="30dp"
+
+            android:layout_alignStart="@+id/rostertext"
+            android:layout_below="@+id/selectshift"
+            android:layout_weight="1"
             android:text="8 Hrs Duty" />
 
         <RadioButton
             android:id="@+id/rb6hr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/rostertext"
+            android:layout_alignParentEnd="true"
             android:layout_alignStart="@+id/rb8hr"
-            android:layout_below="@+id/rb8hr"
+            android:layout_marginBottom="13dp"
+            android:layout_weight="1"
             android:text="6 Hrs Duty" />
+
     </RadioGroup>
+
 
 </RelativeLayout>
