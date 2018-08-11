@@ -13,7 +13,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+
+        <activity android:name=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <receiver
             android:name=".MyReceiver"
@@ -27,50 +35,61 @@
         <activity
             android:name=".RegistrationActivity"
             android:label="@string/register_activity_title" />
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/home_title" />
+
         <activity
             android:name=".overtime.OvertimeActivity"
             android:label="Overtime Allowance" />
+
         <activity
             android:name=".travel.TravelActivity"
             android:label="Travel Allowance" />
+
         <activity
             android:name=".overtime.OvertimeGridActivity"
             android:label="Select Date" />
+
         <activity
             android:name=".overtime.OvertimeForm"
             android:label="Fill OverTime Form" />
+
         <activity
             android:name=".AdminHomeActivity"
             android:label="Admin Home" />
+
         <activity android:name=".QRverification" />
+
         <activity android:name=".overtime.OvertimeFormListActivity" />
+
         <activity android:name=".overtime.AdminOvertimeActivity" />
+
         <activity android:name=".travel.AdminTravelActivity" />
+
         <activity android:name=".travel.TravelGridActivity" />
+
         <activity
             android:name=".travel.TravelForm"
             android:label="Travel Allowance Form" />
-        <activity android:name=".travel.TravelFormsActivity" />
-        <activity android:name=".travel.TravelFormListActiviy" />
-        <activity android:name=".Notification" />
-        <activity android:name=".AdminNotification" />
-        <activity android:name=".Salary" />
-        <activity
-            android:name=".Welcome"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".travel.TravelFormsActivity" />
+
+        <activity android:name=".travel.TravelFormListActiviy" />
+
+        <activity android:name=".Notification" />
+
+        <activity android:name=".AdminNotification" />
+
+        <activity android:name=".Salary" />
+
         <activity android:name=".TiHomeActivity" />
+
         <activity android:name=".overtime.OvertimeSummaryListActivity" />
+
         <activity android:name=".travel.TravelSummaryListActivity"></activity>
+
     </application>
 
 </manifest>
